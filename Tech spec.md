@@ -224,7 +224,142 @@ Apps that need database tables (models):
 
 ## 3.5. General file structure
 
-<!-- <pre></pre> -->
+<pre>
+LapZone
+│
+│   .gitattributes
+│   .gitignore
+│   Tech spec.md
+│
+├───lapzone
+│   │   .env
+│   │   manage.py
+│   │
+│   ├───cart
+│   │   │   __init__.py       
+│   │   │   admin.py
+│   │   │   apps.py
+│   │   │   forms.py
+│   │   │   models.py
+│   │   │   services.py       
+│   │   │   views.py
+│   │   │
+│   │   ├───migrations        
+│   │   │       __init__.py   
+│   │   │
+│   │   └───tests
+│   │           __init__.py   
+│   │           test_forms.py 
+│   │           test_models.py
+│   │           test_views.py 
+│   │
+│   ├───customer
+│   │   │   __init__.py
+│   │   │   admin.py
+│   │   │   apps.py
+│   │   │   forms.py
+│   │   │   models.py
+│   │   │   services.py
+│   │   │   views.py
+│   │   │
+│   │   ├───migrations
+│   │   │       __init__.py
+│   │   │
+│   │   └───tests
+│   │           __init__.py
+│   │           test_forms.py
+│   │           test_models.py
+│   │           test_views.py
+│   │
+│   ├───general
+│   │       __init__.py
+│   │       error_views.py
+│   │       models.py
+│   │       views.py
+│   │
+│   ├───lapzone
+│   │       __init__.py
+│   │       asgi.py
+│   │       settings.py
+│   │       urls.py
+│   │       wsgi.py
+│   │
+│   ├───mailing
+│   │   │   __init__.py
+│   │   │   admin.py
+│   │   │   apps.py
+│   │   │   forms.py
+│   │   │   models.py
+│   │   │   services.py
+│   │   │   views.py
+│   │   │
+│   │   ├───migrations
+│   │   │       __init__.py
+│   │   │
+│   │   └───tests
+│   │           __init__.py
+│   │           test_forms.py
+│   │           test_models.py
+│   │           test_views.py
+│   │
+│   ├───media
+│   ├───order
+│   │   │   __init__.py
+│   │   │   admin.py
+│   │   │   apps.py
+│   │   │   forms.py
+│   │   │   models.py
+│   │   │   services.py
+│   │   │   views.py
+│   │   │
+│   │   ├───migrations
+│   │   │       __init__.py
+│   │   │
+│   │   └───tests
+│   │           __init__.py
+│   │           test_forms.py
+│   │           test_models.py
+│   │           test_views.py
+│   │
+│   ├───shop
+│   │   │   __init__.py
+│   │   │   admin.py
+│   │   │   apps.py
+│   │   │   forms.py
+│   │   │   models.py
+│   │   │   services.py
+│   │   │   views.py
+│   │   │
+│   │   ├───migrations
+│   │   │       __init__.py
+│   │   │
+│   │   └───tests
+│   │           __init__.py
+│   │           test_forms.py
+│   │           test_models.py
+│   │           test_views.py
+│   │
+│   ├───static
+│   │   ├───css
+│   │   ├───images
+│   │   └───js
+│   └───templates
+│       │   _base.html
+│       │
+│       └───utils
+├───md_images
+│   │   header.png
+│   │
+│   └───apps_db
+│           mailing.jpg
+│           order.jpg
+│           shop.jpg
+│
+└───requirements
+        base.txt
+        development.txt
+        production.txt
+</pre>
 
 # 4. Non-functional requirements
 
