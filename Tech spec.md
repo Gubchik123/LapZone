@@ -1,4 +1,4 @@
-<img title="LapZone header" alt="LapZone header image" width="100%" src="./md_images/header.png">
+<img title="LapZone header" alt="LapZone header image" width="100%" src="./lapzone/static/images/site_header.webp">
 
 # 1. Introduction
 
