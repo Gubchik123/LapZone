@@ -7,25 +7,22 @@
 		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
-        <meta name="author" content="Nikita Hubariev" />
-        <meta name="keywords" content="LapZone, Shop, Laptop, IT">
+		<meta name="author" content="Nikita Hubariev" />
+		<meta name="keywords" content="LapZone, Shop, Laptop, IT" />
 		<meta
 			name="description"
 			content="Internet shop for selling laptops and accessories for them."
 		/>
 
-        <!-- og:title is empty and social networks will take the page title -->
-        <meta property="og:title" content="">
-        <meta property="og:site_name" content="LapZone" />
+		<!-- og:title is empty and social networks will take the page title -->
+		<meta property="og:title" content="" />
+		<meta property="og:site_name" content="LapZone" />
 		<meta property="og:type" content="Internet shop" />
 		<meta
 			property="og:image"
 			content="{% static 'images/site_header.webp' %}"
 		/>
-		<meta
-			property="og:url"
-			content="{{ request.build_absolute_uri }}"
-		/>
+		<meta property="og:url" content="{{ request.build_absolute_uri }}" />
 		<meta
 			property="og:description"
 			content="Internet shop for selling laptops and accessories for them."
@@ -43,13 +40,23 @@
 			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
 			integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
 		/>
+
+		<!-- General CSS file -->
+		<link
+			type="text/css"
+			rel="stylesheet"
+			href="{% static 'css/general.css' %} "
+		/>
+
+		{# My styles and CSS files #} 
+        {% block styles %}{% endblock styles %} 
 	</head>
 	<body>
-        <div class="wrapper">
-            <header></header>
-            <main></main>
-            <footer></footer>
-        </div>
+		<div class="wrapper d-flex flex-column min-vh-100">
+			<header></header>
+			<main></main>
+			<footer></footer>
+		</div>
 
 		<!-- Bootstrap5 script -->
 		<script

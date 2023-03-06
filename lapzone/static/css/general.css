@@ -1,0 +1,85 @@
+/* CSS variables */
+:root {
+    --text-color: var(--bs-dark);
+
+    --bg-color: #eee;
+}
+:root[theme="dark"] {
+    --text-color: #fafafa;
+
+    --bg-color: #343a40;
+}
+
+.text-color { color: var(--text-color); }
+
+.bg1 { background-color: var(--bg-color); }
+
+/* Custom scrollbar */
+::-webkit-scrollbar { 
+    width: 15px; 
+    background-color: var(--bs-dark);
+}
+::-webkit-scrollbar-track { 
+    background-color: var(--bs-dark); 
+}
+::-webkit-scrollbar-thumb {
+    opacity: 0.7;
+    background: darkgray; 
+}
+::-webkit-scrollbar-thumb:hover { opacity: 1; }
+
+/* Custom text selection */
+::-moz-selection {
+    color: white;
+    background: #2f3542;
+}
+
+::selection {
+    color: white;
+    background: #2f3542;
+}
+
+/* Global styles */
+html,
+body {
+	height: 100%;
+	font-size: 1.1em;
+    scroll-behavior: smooth;
+
+	color: var(--text-color);
+	background-color: var(--bg-color);
+}
+
+body, header, main, footer { transition: background 0.3s linear; }
+
+ion-icon { font-size: 2em; }
+
+.content-center {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+}
+
+.disabled { cursor: not-allowed; }
+
+.opacity-1 { opacity: 1; }
+
+a { 
+    opacity: 0.8; 
+    transition: 0.3s; 
+    text-decoration: none;
+    color: var(--text-color);
+}
+a:hover { 
+    opacity: 1; 
+    color: var(--text-color);
+}
+
+/* Header styles */
+
+/* Main styles */
+main { flex: 1 1 auto; }
+
+/* Footer styles */
+
+/* Media queries */
