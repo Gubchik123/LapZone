@@ -55,6 +55,12 @@
 		<div class="wrapper d-flex flex-column min-vh-100">
 			<header></header>
 			<main></main>
+
+            <!-- Go to top button -->
+            <button title="Go to top" id="go-to-top-btn">
+                <ion-icon name="arrow-up-outline"></ion-icon>
+            </button>
+
 			<footer></footer>
 		</div>
 
@@ -74,5 +80,10 @@
 			nomodule
 			src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
 		></script>
+
+        <!-- My scripts -->
+        <script src="{% static 'js/go_to_top_btn.js' %} "></script>
+
+        {% block scripts %}{% endblock %} 
 	</body>
 </html>
