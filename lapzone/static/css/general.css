@@ -100,3 +100,9 @@ main { height: 3000px; flex: 1 1 auto; }
 /* Footer styles */
 
 /* Media queries */
+@media screen and (max-width: 768px) {
+    #navbarSupportedContent {
+        padding-top: 15px;
+        padding-bottom: 15px;
+    }
+}

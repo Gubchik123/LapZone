@@ -49,11 +49,88 @@
 		/>
 
 		{# My styles and CSS files #} 
-        {% block styles %}{% endblock %} 
+        {% block styles %}{% endblock %}
 	</head>
 	<body>
 		<div class="wrapper d-flex flex-column min-vh-100">
-			<header></header>
+			<header class="bg-white">
+				<nav class="navbar content-center bg-white py-0">
+					<ul class="navbar-nav list-group-horizontal">
+						<li class="nav-item me-3">
+							<a href="/" class="nav-link"> Home </a>
+						</li>
+						<li class="nav-item me-3">
+							<a
+								target="_blank"
+								class="nav-link"
+								href="https://gubchik123.pythonanywhere.com/"
+							>
+								Blog
+							</a>
+						</li>
+						<li class="nav-item me-3">
+							<a href="{% url 'faq' %}" class="nav-link">
+								FAQs
+							</a>
+						</li>
+						<li class="nav-item">
+							<a href="{% url 'about' %}" class="nav-link">
+								About
+							</a>
+						</li>
+					</ul>
+				</nav>
+
+				<nav class="navbar navbar-expand-md bg-white">
+					<div class="container-fluid">
+						<a class="navbar-brand" href="/"><h4>LapZone</h4></a>
+
+						<!-- Burger button -->
+						<button
+							class="navbar-toggler"
+							type="button"
+							data-bs-toggle="collapse"
+							data-bs-target="#navbarSupportedContent"
+							aria-controls="navbarSupportedContent"
+							aria-expanded="false"
+							aria-label="Toggle navigation"
+						>
+							<span class="navbar-toggler-icon"></span>
+						</button>
+
+						<div
+							id="navbarSupportedContent"
+							class="collapse navbar-collapse"
+						>
+							<!-- Left navbar side -->
+							<ul
+								class="navbar-nav list-group-horizontal-md me-md-auto justify-content-center"
+							>
+								<li class="nav-item me-lg-2 me-sm-4">
+									{% block search_form %}{% endblock %}
+								</li>
+							</ul>
+							<!-- Right navbar side -->
+							<ul
+								class="navbar-nav list-group-horizontal justify-content-between"
+							>
+								<li class="nav-item me-3">
+									<!-- Theme toggler -->
+								</li>
+								<li class="nav-item">
+									<a href="#" class="btn btn-success me-2">
+										Log In
+									</a>
+									<a href="#" class="btn btn-primary">
+										Sign Up
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+			</header>
+
 			<main></main>
 
 			<!-- Go to top button -->
@@ -68,7 +145,10 @@
 							<h5>Section</h5>
 							<ul class="nav flex-column">
 								<li class="nav-item mb-2">
-									<a href="/" class="nav-link w-25 p-0 text-muted">
+									<a
+										href="/"
+										class="nav-link w-25 p-0 text-muted"
+									>
 										Home
 									</a>
 								</li>
@@ -114,8 +194,8 @@
 										for="newsletter1"
 										class="visually-hidden"
 									>
-                                        Email address
-                                    </label>
+										Email address
+									</label>
 									<input
 										id="newsletter1"
 										type="text"
