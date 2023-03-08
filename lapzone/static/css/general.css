@@ -3,16 +3,19 @@
     --text-color: var(--bs-dark);
 
     --bg-color: #eee;
+    --panel-bg-color: white;
 }
 :root[theme="dark"] {
     --text-color: #fafafa;
 
     --bg-color: #343a40;
+    --panel-bg-color: var(--bs-secondary);
 }
 
 .text-color { color: var(--text-color); }
 
-.bg1 { background-color: var(--bg-color); }
+.bg-color { background-color: var(--bg-color); }
+.panel-bg-color { background-color: var(--panel-bg-color); }
 
 /* Custom scrollbar */
 ::-webkit-scrollbar { 
@@ -58,7 +61,7 @@
     transform: scale(1.5);
 }
 #theme_toggler .label .ball {
-    background-color: #fff;
+    background-color: #fafafa;
     border-radius: 50%;
     position: absolute;
     top: 2px;
@@ -102,30 +105,28 @@ ion-icon { font-size: 2em; }
 .opacity-1, 
 #go-to-top-btn:hover { opacity: 1; }
 
-a, #go-to-top-btn { 
+a, a.text-color, #go-to-top-btn { 
     opacity: 0.8; 
     transition: 0.3s; 
     text-decoration: none;
     color: var(--text-color);
 }
-a:hover { 
+a:hover, a.text-color:hover { 
     opacity: 1; 
     color: var(--text-color);
 }
 
 /* Header styles */
-/* header ion-icon { font-size: 2.5em; } */
 
 /* Main styles */
-main { height: 3000px; flex: 1 1 auto; }
+main { flex: 1 1 auto; }
 
 #go-to-top-btn {
     border: none;
     outline: none;
     position: sticky;
-    margin-left: auto;
-    margin-bottom: 30px;
     border-radius: 10px;
+    margin: 30px 0 30px auto;
     width: 50px; height: 50px;
     right: 30px; bottom: 30px;
     display: none; /* Hidden by default */
@@ -138,9 +139,8 @@ main { height: 3000px; flex: 1 1 auto; }
 /* Footer styles */
 
 /* Media queries */
-@media screen and (max-width: 768px) {
+@media screen and (max-width: 768px) { /* Bootstrap5 .md breakpoint */
     #navbarSupportedContent {
-        padding-top: 15px;
-        padding-bottom: 15px;
+        padding: 15px 0 15px 15px;
     }
 }

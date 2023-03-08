@@ -52,37 +52,45 @@
 	</head>
 	<body>
 		<div class="wrapper d-flex flex-column min-vh-100">
-			<header class="bg-white">
-				<nav class="navbar content-center bg-white py-0">
+			<header class="panel-bg-color">
+				<nav class="navbar content-center panel-bg-color py-0">
 					<ul class="navbar-nav list-group-horizontal">
 						<li class="nav-item me-3">
-							<a href="/" class="nav-link"> Home </a>
+							<a href="/" class="nav-link text-color"> Home </a>
 						</li>
 						<li class="nav-item me-3">
 							<a
 								target="_blank"
-								class="nav-link"
+								class="nav-link text-color"
 								href="https://gubchik123.pythonanywhere.com/"
 							>
 								Blog
 							</a>
 						</li>
 						<li class="nav-item me-3">
-							<a href="{% url 'faq' %}" class="nav-link">
+							<a
+								href="{% url 'faq' %}"
+								class="nav-link text-color"
+							>
 								FAQs
 							</a>
 						</li>
 						<li class="nav-item">
-							<a href="{% url 'about' %}" class="nav-link">
+							<a
+								href="{% url 'about' %}"
+								class="nav-link text-color"
+							>
 								About
 							</a>
 						</li>
 					</ul>
 				</nav>
 
-				<nav class="navbar navbar-expand-md bg-white">
+				<nav class="navbar navbar-expand-md panel-bg-color">
 					<div class="container-fluid">
-						<a class="navbar-brand" href="/"><h4>LapZone</h4></a>
+						<a class="navbar-brand text-color" href="/">
+							<h4>LapZone</h4>
+						</a>
 
 						<!-- Burger button -->
 						<button
@@ -152,7 +160,7 @@
 			<main>
 				<div class="container-fluid">
 					<div class="row">
-						<h2 class="my-3">
+						<h2 class="my-4">
 							{% block content_title %}{% endblock %}
 						</h2>
 					</div>
@@ -165,7 +173,7 @@
 				<ion-icon name="arrow-up-outline"></ion-icon>
 			</button>
 
-			<footer class="bg-white pt-5 pb-4">
+			<footer class="panel-bg-color pt-5 pb-4">
 				<div class="container">
 					<div class="row d-flex justify-content-between">
 						<div class="col-6 mb-3">
@@ -174,7 +182,7 @@
 								<li class="nav-item mb-2">
 									<a
 										href="/"
-										class="nav-link w-25 p-0 text-muted"
+										class="nav-link text-color w-25 p-0"
 									>
 										Home
 									</a>
@@ -182,7 +190,7 @@
 								<li class="nav-item mb-2">
 									<a
 										target="_blank"
-										class="nav-link w-25 p-0 text-muted"
+										class="nav-link text-color w-25 p-0"
 										href="https://gubchik123.pythonanywhere.com/"
 									>
 										Blog
@@ -191,7 +199,7 @@
 								<li class="nav-item mb-2">
 									<a
 										href="{% url 'faq' %}"
-										class="nav-link w-25 p-0 text-muted"
+										class="nav-link text-color w-25 p-0"
 									>
 										FAQs
 									</a>
@@ -199,7 +207,7 @@
 								<li class="nav-item mb-2">
 									<a
 										href="{% url 'about' %}"
-										class="nav-link w-25 p-0 text-muted"
+										class="nav-link text-color w-25 p-0"
 									>
 										About
 									</a>
@@ -246,14 +254,13 @@
 						<p>&copy; {% now 'Y' %}</p>
 						<ul class="list-unstyled d-flex">
 							<li>
-								<a class="link-dark" href="#">
+								<a href="#">
 									<ion-icon name="logo-linkedin"></ion-icon>
 								</a>
 							</li>
 							<li class="ms-3">
 								<a
 									target="_blank"
-									class="link-dark"
 									href="https://github.com/Gubchik123"
 								>
 									<ion-icon name="logo-github"></ion-icon>
@@ -262,7 +269,6 @@
 							<li class="ms-3">
 								<a
 									target="_blank"
-									class="link-dark"
 									href="https://t.me/Gubchik123/"
 								>
 									<ion-icon name="navigate-circle"></ion-icon>
