@@ -48,8 +48,7 @@
 			href="{% static 'css/general.css' %} "
 		/>
 
-		{# My styles and CSS files #} 
-        {% block styles %}{% endblock %}
+		{# My styles and CSS files #} {% block styles %}{% endblock %}
 	</head>
 	<body>
 		<div class="wrapper d-flex flex-column min-vh-100">
@@ -112,10 +111,25 @@
 							</ul>
 							<!-- Right navbar side -->
 							<ul
-								class="navbar-nav list-group-horizontal justify-content-between"
+								class="navbar-nav list-group-horizontal justify-content-between align-items-center"
 							>
-								<li class="nav-item me-3">
+								<li class="nav-item me-5">
 									<!-- Theme toggler -->
+									<div id="theme_toggler">
+										<input
+											type="checkbox"
+											id="theme_toggler_btn"
+											class="checkbox opacity-0 position-absolute"
+										/>
+										<label
+											class="label"
+											for="theme_toggler_btn"
+										>
+											<ion-icon name="sunny"></ion-icon>
+											<ion-icon name="moon"></ion-icon>
+											<div class="ball"></div>
+										</label>
+									</div>
 								</li>
 								<li class="nav-item">
 									<!-- TODO: make condition about link to user profile or login page -->
@@ -124,6 +138,7 @@
 										class="d-block text-decoration-none"
 									>
 										<ion-icon
+											class="pt-1"
 											name="person-circle"
 										></ion-icon>
 									</a>
