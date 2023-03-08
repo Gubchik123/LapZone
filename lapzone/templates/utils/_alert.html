@@ -1,0 +1,28 @@
+<div
+    role="alert"
+	class="my-3 mx-1 alert alert-{{ category }} {% if dismissible %} alert-dismissible fade show {% endif %}"
+>
+	<div class="d-flex align-items-center">
+        <div class="me-3">
+            {% if category == "primary" %}
+            <ion-icon name="alert-circle"></ion-icon>
+            {% elif category == "success" %}
+            <ion-icon name="checkmark-circle"></ion-icon>
+            {% else %}
+            <ion-icon name="warning"></ion-icon>
+            {% endif %}
+        </div>
+        <div class="w-100 content-center overflow-auto">
+            <h5>{{ message }}</h5>
+        </div>
+    </div>
+
+    {% if dismissible %}
+	<button
+		type="button"
+		class="btn-close"
+		aria-label="Close"
+		data-bs-dismiss="alert"
+	></button>
+    {% endif %}
+</div>
