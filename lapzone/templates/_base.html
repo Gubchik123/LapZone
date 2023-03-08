@@ -149,7 +149,16 @@
 				</nav>
 			</header>
 
-			<main></main>
+			<main>
+				<div class="container-fluid">
+					<div class="row">
+						<h2 class="my-3">
+							{% block content_title %}{% endblock %}
+						</h2>
+					</div>
+					{% block content %}{% endblock %}
+				</div>
+			</main>
 
 			<!-- Go to top button -->
 			<button title="Go to top" id="go-to-top-btn">
