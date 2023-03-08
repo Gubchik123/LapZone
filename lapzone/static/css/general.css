@@ -31,17 +31,6 @@
 }
 ::-webkit-scrollbar-thumb:hover { opacity: 1; }
 
-/* Custom text selection */
-::-moz-selection {
-    color: white;
-    background: #2f3542;
-}
-
-::selection {
-    color: white;
-    background: #2f3542;
-}
-
 /* Theme toggler */
 #theme_toggler .checkbox {
     opacity: 0;
