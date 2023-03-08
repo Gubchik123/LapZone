@@ -2,6 +2,7 @@ import os
 from pathlib import Path
 
 from dotenv import load_dotenv
+from django.contrib.messages import constants as messages
 
 
 load_dotenv()
@@ -96,6 +97,8 @@ DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
+
+MESSAGE_TAGS = {messages.INFO: "primary", messages.ERROR: "danger"}
 
 SITE_ID = 1
 
