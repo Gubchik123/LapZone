@@ -1,0 +1,3 @@
+{% for message in messages %}
+{% include 'utils/_alert.html' with message=message category=message.level_tag dismissible=True only %} 
+{% endfor %}
