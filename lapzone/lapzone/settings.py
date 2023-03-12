@@ -103,9 +103,38 @@ MESSAGE_TAGS = {messages.INFO: "primary", messages.ERROR: "danger"}
 SITE_ID = 1
 
 EMAIL_PORT = int(os.getenv("EMAIL_PORT"))
-EMAIL_HOST = str(os.getenv("EMAIL_HOST_USER"))
+EMAIL_HOST = str(os.getenv("EMAIL_HOST"))
 EMAIL_USE_TLS = bool(os.getenv("EMAIL_USE_TLS"))
 EMAIL_USE_SSL = bool(os.getenv("EMAIL_USE_SSL"))
 EMAIL_HOST_USER = str(os.getenv("EMAIL_HOST_USER"))
 EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_HOST_PASSWORD"))
-EMAIL_BACKEND = str(os.getenv("EMAIL_HOST_USER"))
+EMAIL_BACKEND = str(os.getenv("EMAIL_BACKEND"))
+
+LOGGING = {
+    "version": 1,
+    "disable_existing_loggers": False,
+    "formatters": {
+        "verbose": {
+            "format": "{name}: [{asctime}] {levelname} - {message}",
+            "style": "{",
+        },
+    },
+    "handlers": {
+        "console": {
+            "level": "INFO",
+            "formatter": "verbose",
+            "class": "logging.StreamHandler",
+        },
+        "mail_admins": {
+            "level": "ERROR",
+            "class": "django.utils.log.AdminEmailHandler",
+        },
+    },
+    "loggers": {
+        "general.views": {
+            "level": "ERROR",
+            "propagate": False,
+            "handlers": ["console", "mail_admins"],
+        },
+    },
+}
