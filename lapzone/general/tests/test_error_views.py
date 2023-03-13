@@ -27,19 +27,19 @@ class RaiseExceptionView(View):
         raise self.exception
 
 
-class BadRequestView(RaiseExceptionView):
+class RaiseBadRequestView(RaiseExceptionView):
     """View that raises a 400 Bad Request exception."""
 
     exception = BadRequest
 
 
-class PermissionDeniedView(RaiseExceptionView):
+class RaisePermissionDeniedView(RaiseExceptionView):
     """View that raises a 403 Permission Denied exception."""
 
     exception = PermissionDenied
 
 
-class NotFoundView(RaiseExceptionView):
+class RaiseNotFoundView(RaiseExceptionView):
     """View that raises a 404 Not Found exception."""
 
     exception = Http404
@@ -58,9 +58,9 @@ class ServerErrorView(BaseView):
 # Because the custom error page extends _base.html,
 # where there are some links by view names such as "faq" and "about".
 urlpatterns += [
-    path("400/", BadRequestView.as_view()),
-    path("403/", PermissionDeniedView.as_view()),
-    path("404/", NotFoundView.as_view()),
+    path("400/", RaiseBadRequestView.as_view()),
+    path("403/", RaisePermissionDeniedView.as_view()),
+    path("404/", RaiseNotFoundView.as_view()),
     path("500/", ServerErrorView.as_view()),
 ]
 
