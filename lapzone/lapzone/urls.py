@@ -4,13 +4,16 @@ from django.contrib import admin
 from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
-from general.error_views import *
+from general.error_views import (
+    CustomBadRequestView,
+    CustomPermissionDeniedView,
+    CustomNotFoundView,
+)
 
 
 handler400 = CustomBadRequestView.as_view()
 handler403 = CustomPermissionDeniedView.as_view()
 handler404 = CustomNotFoundView.as_view()
-
 
 urlpatterns = [
     path("admin/", admin.site.urls),
