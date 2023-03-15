@@ -172,7 +172,7 @@ class Review(
     body = models.TextField(blank=False, verbose_name="Body")
 
     parent = models.ForeignKey(
-        "self", on_delete=models.CASCADE, verbose_name="Parent"
+        "self", null=True, on_delete=models.CASCADE, verbose_name="Parent"
     )
 
     def __str__(self) -> str:
