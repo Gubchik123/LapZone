@@ -8,7 +8,7 @@ from general.models import (
     ModelWithDescription,
     ModelWithImage,
     ModelWithCreatedDateTime,
-    ModelWithForeignKeyToProduct,
+    ModelWithFKToProduct,
 )
 
 
@@ -105,7 +105,7 @@ Product._meta.get_field("image").upload_to = "products/"
 class ProductShot(
     ModelWithName,
     ModelWithDescriptionAndImage,
-    ModelWithForeignKeyToProduct,
+    ModelWithFKToProduct,
     models.Model,
 ):
     """
@@ -126,8 +126,8 @@ ProductShot._meta.get_field("description").blank = True
 ProductShot._meta.get_field("image").upload_to = "product_shots/"
 
 
-class ModelWithCreatedDateTimeAndForeignKeyToProduct(
-    ModelWithCreatedDateTime, ModelWithForeignKeyToProduct, models.Model
+class ModelWithCreatedDateTimeAndFKToProduct(
+    ModelWithCreatedDateTime, ModelWithFKToProduct, models.Model
 ):
     """
     Abstract model with 'created' DateTimeField and 'product' ForeignKey field
@@ -137,7 +137,7 @@ class ModelWithCreatedDateTimeAndForeignKeyToProduct(
         abstract = True
 
 
-class Like(ModelWithCreatedDateTimeAndForeignKeyToProduct, models.Model):
+class Like(ModelWithCreatedDateTimeAndFKToProduct, models.Model):
     """
     A model representing a product like from user.
     Fields: created, user, product
@@ -161,7 +161,7 @@ class Like(ModelWithCreatedDateTimeAndForeignKeyToProduct, models.Model):
 
 class Review(
     ModelWithName,
-    ModelWithCreatedDateTimeAndForeignKeyToProduct,
+    ModelWithCreatedDateTimeAndFKToProduct,
     models.Model,
 ):
     """

@@ -76,7 +76,7 @@ class ModelWithCreatedDateTime(models.Model):
         abstract = True
 
 
-class ModelWithForeignKeyToProduct(models.Model):
+class ModelWithFKToProduct(models.Model):
     """Abstract model with 'product' ForeignKey field"""
 
     product = models.ForeignKey(
