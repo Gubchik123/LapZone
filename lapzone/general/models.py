@@ -74,3 +74,16 @@ class ModelWithCreatedDateTime(models.Model):
 
     class Meta:
         abstract = True
+
+
+class ModelWithForeignKeyToProduct(models.Model):
+    """Abstract model with 'product' ForeignKey field"""
+
+    product = models.ForeignKey(
+        "shop.Product",
+        on_delete=models.CASCADE,
+        verbose_name="For product",
+    )
+
+    class Meta:
+        abstract = True

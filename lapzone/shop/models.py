@@ -8,6 +8,7 @@ from general.models import (
     ModelWithDescription,
     ModelWithImage,
     ModelWithCreatedDateTime,
+    ModelWithForeignKeyToProduct,
 )
 
 
@@ -101,17 +102,6 @@ class Product(
 Product._meta.get_field("image").upload_to = "products/"
 
 
-class ModelWithForeignKeyToProduct(models.Model):
-    """Abstract model with 'product' ForeignKey field"""
-
-    product = models.ForeignKey(
-        Product, on_delete=models.CASCADE, verbose_name="For product"
-    )
-
-    class Meta:
-        abstract = True
-
-
 class ProductShot(
     ModelWithName,
     ModelWithDescriptionAndImage,
@@ -147,9 +137,7 @@ class ModelWithCreatedDateTimeAndForeignKeyToProduct(
         abstract = True
 
 
-class Like(
-    ModelWithCreatedDateTime, ModelWithForeignKeyToProduct, models.Model
-):
+class Like(ModelWithCreatedDateTimeAndForeignKeyToProduct, models.Model):
     """
     A model representing a product like from user.
     Fields: created, user, product
@@ -173,8 +161,7 @@ class Like(
 
 class Review(
     ModelWithName,
-    ModelWithForeignKeyToProduct,
-    ModelWithCreatedDateTime,
+    ModelWithCreatedDateTimeAndForeignKeyToProduct,
     models.Model,
 ):
     """
