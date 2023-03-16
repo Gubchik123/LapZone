@@ -1,4 +1,4 @@
-from django.db import models
+from django.db.models import Model
 
 from shop.models import Product
 
@@ -6,7 +6,7 @@ from shop.models import Product
 class ModelMetaOptionsTestMixin:
     """Mixin for testing the base meta options of models."""
 
-    model: models.Model
+    model: Model
     verbose_name: str
     verbose_name_plural: str
     ordering: list[str]
@@ -36,7 +36,6 @@ class ModelWithNameTestMixin:
     """Mixin for testing the 'name' field parameters
     for models that inherited from abstract ModelWithNameTest."""
 
-    model: models.Model
     # Default parameter values.
     name_blank = False
     name_unique = True
@@ -45,7 +44,7 @@ class ModelWithNameTestMixin:
 
     def test_model_string_representation(self):
         """Test the model string representation by __str__."""
-        obj = self.model.objects.get(id=1)
+        obj: self.model = self.model.objects.get(id=1)
         self.assertEqual(str(obj), obj.name)
 
     def test_name_verbose_name(self):
@@ -93,10 +92,10 @@ class ModelWithNameAndSlugTestMixin(ModelWithNameTestMixin):
     slug_verbose_name = "Slug"
 
     expected_slug: str
-    
+
     def test_slug_generating(self):
         """Test that the slug was generated correctly"""
-        obj: models.Model = self.model.objects.get(id=1)
+        obj: self.model = self.model.objects.get(id=1)
         self.assertEqual(obj.slug, self.expected_slug)
 
     def test_slug_verbose_name(self):
@@ -241,15 +240,6 @@ class ModelWithFKToProductTestMixin:
             self.product_verbose_name,
         )
 
-    # def test_product_on_delete(self):
-    #     """
-    #     Test that the product field's on_delete is equal to the product_on_delete attribute.
-    #     """
-    #     self.assertEqual(
-    #         self.model._meta.get_field("product").on_delete,
-    #         self.product_on_delete,
-    #     )
-
     def test_product_related_model(self):
         """
         Test that the product field's related model is equal to the product_related_model attribute.
@@ -258,3 +248,9 @@ class ModelWithFKToProductTestMixin:
             self.model._meta.get_field("product").related_model,
             self.product_related_model,
         )
+
+    def test_product_on_delete_cascade(self):
+        """Test that the product field's on_delete is CASCADE."""
+        Product.objects.get(name="Test laptop").delete()
+        with self.assertRaises(self.model.DoesNotExist):
+            self.model.objects.get(id=1)

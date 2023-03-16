@@ -127,6 +127,12 @@ class ProductModelTest(
             self.model._meta.get_field("brand").related_model, Brand
         )
 
+    def test_brand_on_delete_cascade(self):
+        """Test that the brand field's on_delete is CASCADE."""
+        Product.objects.get(name="Test laptop").delete()
+        with self.assertRaises(Brand.DoesNotExist):
+            Brand.objects.get(id=1)
+
     def test_category_verbose_name(self):
         """Test that the category field's verbose name is "Category"."""
         self.assertEqual(
@@ -138,6 +144,12 @@ class ProductModelTest(
         self.assertEqual(
             self.model._meta.get_field("category").related_model, Category
         )
+
+    def test_category_on_delete_cascade(self):
+        """Test that the category field's on_delete is CASCADE."""
+        # * The first Product instance have already deleted above
+        with self.assertRaises(Category.DoesNotExist):
+            Category.objects.get(id=1)
 
 
 class ProductShotModelTest(
@@ -272,3 +284,7 @@ class ReviewModelTest(
     def test_parent_blank(self):
         """Test that the parent field's blank is True."""
         self.assertEqual(self.model._meta.get_field("parent").blank, True)
+
+    def test_parent_null(self):
+        """Test that the parent field's null is True."""
+        self.assertEqual(self.model._meta.get_field("parent").null, True)
