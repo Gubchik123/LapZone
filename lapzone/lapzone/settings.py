@@ -147,3 +147,94 @@ LOGGING = {
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
+
+CKEDITOR_CONFIGS = {
+    "default": {
+        "skin": "moono",
+        "toolbar_YourCustomToolbarConfig": [
+            {
+                "name": "document",
+                "items": [
+                    "Preview",
+                    "Print",
+                ],
+            },
+            {
+                "name": "clipboard",
+                "items": [
+                    "PasteText",
+                    "-",
+                    "Undo",
+                    "Redo",
+                ],
+            },
+            {
+                "name": "editing",
+                "items": ["Find", "Replace"],
+            },
+            {
+                "name": "basicstyles",
+                "items": [
+                    "Bold",
+                    "Italic",
+                    "Underline",
+                    "Strike",
+                    "Subscript",
+                    "Superscript",
+                ],
+            },
+            {
+                "name": "paragraph",
+                "items": [
+                    "NumberedList",
+                    "BulletedList",
+                    "-",
+                    "JustifyLeft",
+                    "JustifyCenter",
+                    "JustifyRight",
+                    "JustifyBlock",
+                ],
+            },
+            "/",
+            {"name": "colors", "items": ["TextColor", "BGColor"]},
+            {"name": "links", "items": ["Link", "Unlink", "Anchor"]},
+            {
+                "name": "insert",
+                "items": [
+                    "Image",
+                    "Youtube",
+                    "Flash",
+                    "Table",
+                    "HorizontalRule",
+                    "Smiley",
+                    "SpecialChar",
+                    "PageBreak",
+                    "Iframe",
+                ],
+            },
+            "/",
+            {"name": "styles", "items": ["Format", "Font", "FontSize"]},
+            {"name": "tools", "items": ["Maximize"]},
+        ],
+        "toolbar": "YourCustomToolbarConfig",
+        "tabSpaces": 4,
+        "extraPlugins": ",".join(
+            [
+                "uploadimage",  # the upload image feature
+                # extra plugins
+                "div",
+                "autolink",
+                "autoembed",
+                "embedsemantic",
+                "autogrow",
+                "widget",
+                "lineutils",
+                "clipboard",
+                "dialog",
+                "dialogui",
+                "elementspath",
+                "youtube",
+            ]
+        ),
+    }
+}
