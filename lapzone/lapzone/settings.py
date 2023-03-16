@@ -144,3 +144,6 @@ LOGGING = {
         },
     },
 }
+
+CKEDITOR_UPLOAD_PATH = "uploads/"
+CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
