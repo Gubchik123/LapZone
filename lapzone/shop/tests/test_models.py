@@ -1,7 +1,7 @@
 from typing import NoReturn
 
+from django.test import TestCase
 from django.contrib.auth.models import User
-from django.test import TestCase, SimpleTestCase
 
 from general.test_mixins import (
     ModelMetaOptionsTestMixin,
@@ -192,7 +192,7 @@ class LikeModelTest(
     ModelMetaOptionsTestMixin,
     ModelWithCreatedDateTimeTestMixin,
     ModelWithFKToProductTestMixin,
-    SimpleTestCase,
+    TestCase,
 ):
     """Test cases for the Like model."""
 
@@ -200,6 +200,29 @@ class LikeModelTest(
     verbose_name = "Like"
     verbose_name_plural = "Likes"
     ordering = ["-created", "product_id"]
+
+    @classmethod
+    def setUpTestData(cls) -> NoReturn:
+        """Creates the first Like for testing."""
+        Like.objects.create(
+            user=User.objects.create(
+                username="Someone", email="test@test.com", password="123"
+            ),
+            product=Product.objects.create(
+                name="Test laptop",
+                description="Some content",
+                image="./some_image.jpg",
+                price=1000,
+                year=2023,
+                brand=Brand.objects.create(name="test brand"),
+                category=Category.objects.create(name="test category"),
+            ),
+        )
+
+    def test_model_string_representation(self):
+        """Test the model string representation by __str__."""
+        like = Like.objects.get(id=1)
+        self.assertEqual(str(like), f"From {like.user} for {like.product}")
 
     def test_user_verbose_name(self):
         """Test that the user field's verbose name is "User"."""
@@ -212,6 +235,12 @@ class LikeModelTest(
         self.assertEqual(
             self.model._meta.get_field("user").related_model, User
         )
+
+    def test_user_on_delete_cascade(self):
+        """Test that the user field's on_delete is CASCADE."""
+        User.objects.get(id=1).delete()
+        with self.assertRaises(self.model.DoesNotExist):
+            self.model.objects.get(id=1)
 
 
 class ReviewModelTest(
