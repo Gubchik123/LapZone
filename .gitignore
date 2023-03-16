@@ -9,3 +9,5 @@ venv/
 *.env
 
 media/
+lapzone/static/admin/
+lapzone/static/ckeditor/
