@@ -144,7 +144,7 @@ class Like(ModelWithCreatedDateTimeAndFKToProduct, models.Model):
     """
 
     user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="From user"
+        User, on_delete=models.CASCADE, verbose_name="User"
     )
 
     def __str__(self) -> str:
@@ -160,19 +160,26 @@ class Like(ModelWithCreatedDateTimeAndFKToProduct, models.Model):
 
 
 class Review(
-    ModelWithName,
     ModelWithCreatedDateTimeAndFKToProduct,
     models.Model,
 ):
     """
     A model representing a product review from someone.
-    Fields: name (username), body, created, parent, product
+    Fields: username, body, created, parent, product
     """
 
+    name = models.CharField(
+        max_length=30, blank=False, verbose_name="Username"
+    )
     body = models.TextField(blank=False, verbose_name="Body")
 
     parent = models.ForeignKey(
-        "self", null=True, on_delete=models.CASCADE, verbose_name="Parent"
+        "self",
+        null=True,
+        blank=True,
+        default=None,
+        on_delete=models.CASCADE,
+        verbose_name="Parent",
     )
 
     def __str__(self) -> str:
@@ -185,7 +192,3 @@ class Review(
         verbose_name = "Review"
         verbose_name_plural = "Reviews"
         ordering = ["-created", "name", "product_id"]
-
-
-# Redefining an abstract model field parameter
-Review._meta.get_field("name").verbose_name = "Username"

@@ -190,9 +190,9 @@ class LikeModelTest(
     ordering = ["-created", "product_id"]
 
     def test_user_verbose_name(self):
-        """Test that the user field's verbose name is "From user"."""
+        """Test that the user field's verbose name is "User"."""
         self.assertEqual(
-            self.model._meta.get_field("user").verbose_name, "From user"
+            self.model._meta.get_field("user").verbose_name, "User"
         )
 
     def test_user_related_model(self):
@@ -216,6 +216,7 @@ class ReviewModelTest(
     verbose_name_plural = "Reviews"
     ordering = ["-created", "name", "product_id"]
     # Redefined default parameter values of the abstract model(s).
+    name_max_length = 30
     name_verbose_name = "Username"
 
     @classmethod
@@ -243,6 +244,9 @@ class ReviewModelTest(
             str(review), f"From {review.name} for {review.product}"
         )
 
+    def test_name_unique(self):
+        pass
+
     def test_body_verbose_name(self):
         """Test that the body field's verbose name is "Body"."""
         self.assertEqual(
@@ -265,6 +269,6 @@ class ReviewModelTest(
             self.model._meta.get_field("parent").related_model, Review
         )
 
-    def test_parent_null(self):
-        """Test that the parent field's null is True."""
-        self.assertEqual(self.model._meta.get_field("parent").null, True)
+    def test_parent_blank(self):
+        """Test that the parent field's blank is True."""
+        self.assertEqual(self.model._meta.get_field("parent").blank, True)

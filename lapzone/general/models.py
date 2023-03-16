@@ -69,7 +69,7 @@ class ModelWithCreatedDateTime(models.Model):
     """Abstract model with 'created' DateTimeField"""
 
     created = models.DateTimeField(
-        auto_now_add=True, verbose_name="Created at"
+        auto_now_add=True, verbose_name="Created datetime"
     )
 
     class Meta:
@@ -82,7 +82,7 @@ class ModelWithFKToProduct(models.Model):
     product = models.ForeignKey(
         "shop.Product",
         on_delete=models.CASCADE,
-        verbose_name="For product",
+        verbose_name="Product",
     )
 
     class Meta:

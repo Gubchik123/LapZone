@@ -203,7 +203,7 @@ class ModelWithCreatedDateTimeTestMixin:
 
     # Default parameter values.
     created_auto_now_add = True
-    created_verbose_name = "Created at"
+    created_verbose_name = "Created datetime"
 
     def test_created_verbose_name(self):
         """
@@ -230,8 +230,7 @@ class ModelWithFKToProductTestMixin:
 
     # Default parameter values.
     product_related_model = Product
-    # product_on_delete = models.CASCADE
-    product_verbose_name = "For product"
+    product_verbose_name = "Product"
 
     def test_product_verbose_name(self):
         """
