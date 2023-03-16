@@ -44,7 +44,11 @@ class ModelWithNameTestMixin:
 
     def test_model_string_representation(self):
         """Test the model string representation by __str__."""
-        obj: self.model = self.model.objects.get(id=1)
+        # * Workaround to avoid the DoesNotExist during ProductModelTest
+        try:
+            obj: self.model = self.model.objects.get(id=1)
+        except self.model.DoesNotExist:
+            obj: Product = self.model.objects.get(name="Test laptop")
         self.assertEqual(str(obj), obj.name)
 
     def test_name_verbose_name(self):
@@ -95,7 +99,11 @@ class ModelWithNameAndSlugTestMixin(ModelWithNameTestMixin):
 
     def test_slug_generating(self):
         """Test that the slug was generated correctly"""
-        obj: self.model = self.model.objects.get(id=1)
+        # * Workaround to avoid the DoesNotExist during ProductModelTest
+        try:
+            obj: self.model = self.model.objects.get(id=1)
+        except self.model.DoesNotExist:
+            obj: Product = self.model.objects.get(name="Test laptop")
         self.assertEqual(obj.slug, self.expected_slug)
 
     def test_slug_verbose_name(self):
