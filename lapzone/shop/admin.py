@@ -6,15 +6,7 @@ from django.db.models import QuerySet
 from django.utils.safestring import mark_safe, SafeText
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
-from .models import (
-    Brand,
-    Category,
-    Product,
-    ProductShot,
-    Like,
-    Review,
-    CarouselImage,
-)
+from . import models
 
 
 admin.site.site_title = admin.site.site_header = "LapZone Admin"
@@ -42,7 +34,7 @@ class ModelWithNameAndSlugAdminMixin(ModelWithNameAdminMixin):
     prepopulated_fields = {"slug": ("name",)}
 
 
-@admin.register(Brand)
+@admin.register(models.Brand)
 class BrandAdmin(
     BaseModelAdmin, ModelWithNameAndSlugAdminMixin, admin.ModelAdmin
 ):
@@ -52,7 +44,7 @@ class BrandAdmin(
     list_display = ("id", "name", "slug")
 
 
-@admin.register(Category)
+@admin.register(models.Category)
 class CategoryAdmin(
     BaseModelAdmin, ModelWithNameAndSlugAdminMixin, admin.ModelAdmin
 ):
@@ -66,7 +58,7 @@ class ModelWithImageAdminMixin:
     """Admin mixin for managing instances
     that inherited from abstract ModeWithImage"""
 
-    def get_image(self, obj: Product | ProductShot) -> SafeText:
+    def get_image(self, obj: models.Product | models.ProductShot) -> SafeText:
         """Returns HTML image tag with product or product shot image url"""
         return mark_safe(
             f"<img src='{obj.image.url}' width='60' height='60' />"
@@ -85,7 +77,7 @@ class ProductAdminForm(forms.ModelForm):
     )
 
     class Meta:
-        model = Product
+        model = models.Product
         fields = "__all__"
 
 
@@ -94,12 +86,12 @@ class ProductShotInline(ModelWithImageAdminMixin, admin.TabularInline):
 
     extra = 0
     max_num = 5
-    model = ProductShot
+    model = models.ProductShot
     fields = ("name", "get_image")
     readonly_fields = ("get_image",)
 
 
-@admin.register(Product)
+@admin.register(models.Product)
 class ProductAdmin(
     BaseModelAdmin,
     ModelWithNameAndSlugAdminMixin,
@@ -138,13 +130,13 @@ class ProductAdmin(
     )
     inlines = (ProductShotInline,)
 
-    def get_price(self, product: Product) -> str:
+    def get_price(self, product: models.Product) -> str:
         """Returns string: price + '$'"""
         return f"{product.price} $"
 
     get_price.short_description = "Price"
 
-    def get_brand_link(self, product: Product) -> SafeText:
+    def get_brand_link(self, product: models.Product) -> SafeText:
         """Returns link to the admin page for product.brand"""
         link_to_brand = reverse(
             "admin:shop_brand_change", args=(product.brand.pk,)
@@ -153,7 +145,7 @@ class ProductAdmin(
 
     get_brand_link.short_description = "Brand"
 
-    def get_category_link(self, product: Product) -> SafeText:
+    def get_category_link(self, product: models.Product) -> SafeText:
         """Returns link to the admin page for product.category"""
         link_to_category = reverse(
             "admin:shop_category_change", args=(product.category.pk,)
@@ -171,7 +163,7 @@ class ModelWithFKToProductAdminMixin:
 
     list_filter = ("product",)
 
-    def get_product_link(self, shot: ProductShot) -> SafeText:
+    def get_product_link(self, shot: models.ProductShot) -> SafeText:
         """Returns link to the admin page for shot.product"""
         link_to_product = reverse(
             "admin:shop_product_change", args=(shot.product.pk,)
@@ -183,7 +175,7 @@ class ModelWithFKToProductAdminMixin:
     get_product_link.short_description = "For product"
 
 
-@admin.register(ProductShot)
+@admin.register(models.ProductShot)
 class ProductShotAdmin(
     BaseModelAdmin,
     ModelWithNameAdminMixin,
@@ -199,7 +191,7 @@ class ProductShotAdmin(
     fields = ("name", "description", "product", ("image", "get_image"))
 
 
-@admin.register(Like)
+@admin.register(models.Like)
 class LikeAdmin(
     BaseModelAdmin, ModelWithFKToProductAdminMixin, admin.ModelAdmin
 ):
@@ -212,7 +204,7 @@ class LikeAdmin(
     list_display = ("id", "get_user_link", "get_product_link", "created")
     fields = (("product", "get_product_link"), ("user", "get_user_link"))
 
-    def get_user_link(self, like: Like) -> SafeText:
+    def get_user_link(self, like: models.Like) -> SafeText:
         """Returns link to the admin page for like.user"""
         link_to_user = reverse("admin:auth_user_change", args=(like.user.pk,))
         return mark_safe(f"<a href='{link_to_user}'>{like.user.username}</a>")
@@ -227,7 +219,7 @@ class ReviewParentListFilter(admin.SimpleListFilter):
     parameter_name = "parent"
 
     def lookups(
-        self, request: HttpRequest, model_admin: Review
+        self, request: HttpRequest, model_admin: models.Review
     ) -> tuple[tuple[str, str]]:
         """Returns variants of filtering"""
         return (("Yes", "There is"), ("No", "There is not"))
@@ -241,7 +233,7 @@ class ReviewParentListFilter(admin.SimpleListFilter):
             return queryset.filter(parent__isnull=True)
 
 
-@admin.register(Review)
+@admin.register(models.Review)
 class ReviewAdmin(
     BaseModelAdmin, ModelWithFKToProductAdminMixin, admin.ModelAdmin
 ):
@@ -270,7 +262,7 @@ class ReviewAdmin(
         "created",
     )
 
-    def get_parent_link(self, review: Review) -> SafeText | str:
+    def get_parent_link(self, review: models.Review) -> SafeText | str:
         """
         Returns link to the admin page for parent review if this one has it
         """
@@ -286,7 +278,7 @@ class ReviewAdmin(
     get_parent_link.short_description = "Parent review"
 
 
-@admin.register(CarouselImage)
+@admin.register(models.CarouselImage)
 class CarouselImageAdmin(
     BaseModelAdmin,
     ModelWithNameAdminMixin,

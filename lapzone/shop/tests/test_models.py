@@ -3,15 +3,7 @@ from typing import NoReturn
 from django.test import TestCase
 from django.contrib.auth.models import User
 
-from shop.models import (
-    Brand,
-    Category,
-    Product,
-    ProductShot,
-    Like,
-    Review,
-    CarouselImage,
-)
+from shop import models
 from general.test_mixins import (
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
@@ -28,7 +20,7 @@ class BrandModelTest(
 ):
     """Test cases for the Brand model."""
 
-    model = Brand
+    model = models.Brand
     ordering = ["name"]
     verbose_name = "Brand"
     verbose_name_plural = "Brands"
@@ -41,7 +33,7 @@ class BrandModelTest(
     @classmethod
     def setUpTestData(cls) -> NoReturn:
         """Creates the first Brand for testing."""
-        Brand.objects.create(name="test brand")
+        models.Brand.objects.create(name="test brand")
 
 
 class CategoryModelTest(
@@ -49,7 +41,7 @@ class CategoryModelTest(
 ):
     """Test cases for the Category model."""
 
-    model = Category
+    model = models.Category
     ordering = ["name"]
     verbose_name = "Category"
     verbose_name_plural = "Categories"
@@ -62,7 +54,7 @@ class CategoryModelTest(
     @classmethod
     def setUpTestData(cls) -> NoReturn:
         """Creates the first Category for testing."""
-        Category.objects.create(name="test category")
+        models.Category.objects.create(name="test category")
 
 
 class ModelWithDescriptionAndImageTestMixin(
@@ -81,7 +73,7 @@ class ProductModelTest(
 ):
     """Test cases for the Product model."""
 
-    model = Product
+    model = models.Product
     verbose_name = "Product"
     verbose_name_plural = "Products"
     ordering = ["name", "-price"]
@@ -93,14 +85,14 @@ class ProductModelTest(
     @classmethod
     def setUpTestData(cls) -> NoReturn:
         """Creates the first Product for testing."""
-        Product.objects.create(
+        models.Product.objects.create(
             name="Test laptop",
             description="Some content",
             image="./some_image.jpg",
             price=1000,
             year=2023,
-            brand=Brand.objects.create(name="test brand"),
-            category=Category.objects.create(name="test category"),
+            brand=models.Brand.objects.create(name="test brand"),
+            category=models.Category.objects.create(name="test category"),
         )
 
     def test_price_verbose_name(self):
@@ -132,14 +124,14 @@ class ProductModelTest(
     def test_brand_related_model(self):
         """Test that the brand field's related model is Brand."""
         self.assertEqual(
-            self.model._meta.get_field("brand").related_model, Brand
+            self.model._meta.get_field("brand").related_model, models.Brand
         )
 
     def test_brand_on_delete_cascade(self):
         """Test that the brand field's on_delete is CASCADE."""
-        Product.objects.get(name="Test laptop").delete()
-        with self.assertRaises(Brand.DoesNotExist):
-            Brand.objects.get(id=1)
+        models.Product.objects.get(name="Test laptop").delete()
+        with self.assertRaises(models.Brand.DoesNotExist):
+            models.Brand.objects.get(id=1)
 
     def test_category_verbose_name(self):
         """Test that the category field's verbose name is "Category"."""
@@ -150,14 +142,15 @@ class ProductModelTest(
     def test_category_related_model(self):
         """Test that the category field's related model is Category."""
         self.assertEqual(
-            self.model._meta.get_field("category").related_model, Category
+            self.model._meta.get_field("category").related_model,
+            models.Category,
         )
 
     def test_category_on_delete_cascade(self):
         """Test that the category field's on_delete is CASCADE."""
         # * The first Product instance have already deleted above
-        with self.assertRaises(Category.DoesNotExist):
-            Category.objects.get(id=1)
+        with self.assertRaises(models.Category.DoesNotExist):
+            models.Category.objects.get(id=1)
 
 
 class ProductShotModelTest(
@@ -169,7 +162,7 @@ class ProductShotModelTest(
 ):
     """Test cases for the ProductShot model."""
 
-    model = ProductShot
+    model = models.ProductShot
     ordering = ["name"]
     verbose_name = "Product shot"
     verbose_name_plural = "Product shots"
@@ -180,18 +173,18 @@ class ProductShotModelTest(
     @classmethod
     def setUpTestData(cls) -> NoReturn:
         """Creates the first ProductShot for testing."""
-        ProductShot.objects.create(
+        models.ProductShot.objects.create(
             name="test product shot",
             description="For the first product",
             image="./some_image.jpg",
-            product=Product.objects.create(
+            product=models.Product.objects.create(
                 name="Test laptop",
                 description="Some content",
                 image="./some_image.jpg",
                 price=1000,
                 year=2023,
-                brand=Brand.objects.create(name="test brand"),
-                category=Category.objects.create(name="test category"),
+                brand=models.Brand.objects.create(name="test brand"),
+                category=models.Category.objects.create(name="test category"),
             ),
         )
 
@@ -204,7 +197,7 @@ class LikeModelTest(
 ):
     """Test cases for the Like model."""
 
-    model = Like
+    model = models.Like
     verbose_name = "Like"
     verbose_name_plural = "Likes"
     ordering = ["-created", "product_id"]
@@ -212,24 +205,24 @@ class LikeModelTest(
     @classmethod
     def setUpTestData(cls) -> NoReturn:
         """Creates the first Like for testing."""
-        Like.objects.create(
-            user=User.objects.create(
+        models.Like.objects.create(
+            user=models.User.objects.create(
                 username="Someone", email="test@test.com", password="123"
             ),
-            product=Product.objects.create(
+            product=models.Product.objects.create(
                 name="Test laptop",
                 description="Some content",
                 image="./some_image.jpg",
                 price=1000,
                 year=2023,
-                brand=Brand.objects.create(name="test brand"),
-                category=Category.objects.create(name="test category"),
+                brand=models.Brand.objects.create(name="test brand"),
+                category=models.Category.objects.create(name="test category"),
             ),
         )
 
     def test_model_string_representation(self):
         """Test the model string representation by __str__."""
-        like = Like.objects.get(id=1)
+        like = models.Like.objects.get(id=1)
         self.assertEqual(str(like), f"From {like.user} for {like.product}")
 
     def test_user_verbose_name(self):
@@ -246,9 +239,9 @@ class LikeModelTest(
 
     def test_user_on_delete_cascade(self):
         """Test that the user field's on_delete is CASCADE."""
-        User.objects.get(id=1).delete()
+        models.User.objects.get(id=1).delete()
         with self.assertRaises(self.model.DoesNotExist):
-            self.model.objects.get(id=1)
+            self.models.model.objects.get(id=1)
 
 
 class ReviewModelTest(
@@ -260,7 +253,7 @@ class ReviewModelTest(
 ):
     """Test cases for the Review model."""
 
-    model = Review
+    model = models.Review
     verbose_name = "Review"
     verbose_name_plural = "Reviews"
     ordering = ["-created", "name", "product_id"]
@@ -271,24 +264,24 @@ class ReviewModelTest(
     @classmethod
     def setUpTestData(cls) -> NoReturn:
         """Creates the first Review for testing."""
-        Review.objects.create(
+        models.Review.objects.create(
             name="Test user",
             body="Some content",
             parent=None,
-            product=Product.objects.create(
+            product=models.Product.objects.create(
                 name="Test laptop",
                 description="Some content",
                 image="./some_image.jpg",
                 price=1000,
                 year=2023,
-                brand=Brand.objects.create(name="test brand"),
-                category=Category.objects.create(name="test category"),
+                brand=models.Brand.objects.create(name="test brand"),
+                category=models.Category.objects.create(name="test category"),
             ),
         )
 
     def test_model_string_representation(self):
         """Test the model string representation by __str__."""
-        review = Review.objects.get(id=1)
+        review = models.Review.objects.get(id=1)
         self.assertEqual(
             str(review), f"From {review.name} for {review.product}"
         )
@@ -315,7 +308,7 @@ class ReviewModelTest(
     def test_parent_related_model(self):
         """Test that the parent field's related model is self (Review)."""
         self.assertEqual(
-            self.model._meta.get_field("parent").related_model, Review
+            self.model._meta.get_field("parent").related_model, models.Review
         )
 
     def test_parent_blank(self):
@@ -335,7 +328,7 @@ class CarouselImageModelTest(
 ):
     """Test cases for the CarouselImage model."""
 
-    model = CarouselImage
+    model = models.CarouselImage
     ordering = ["name"]
     verbose_name = "Carousel image"
     verbose_name_plural = "Carousel images"
@@ -346,6 +339,6 @@ class CarouselImageModelTest(
     @classmethod
     def setUpTestData(cls) -> NoReturn:
         """Creates the first CarouselImage for testing."""
-        CarouselImage.objects.create(
+        models.CarouselImage.objects.create(
             name="test carousel image", image="./some_image.jpg"
         )
