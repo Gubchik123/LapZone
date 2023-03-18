@@ -6,7 +6,15 @@ from django.db.models import QuerySet
 from django.utils.safestring import mark_safe, SafeText
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
-from .models import Brand, Category, Product, ProductShot, Like, Review
+from .models import (
+    Brand,
+    Category,
+    Product,
+    ProductShot,
+    Like,
+    Review,
+    CarouselImage,
+)
 
 
 admin.site.site_title = admin.site.site_header = "LapZone Admin"
@@ -71,6 +79,7 @@ class ProductAdminForm(forms.ModelForm):
     """
     Model form for adding 'ckeditor' uploading widget to 'description' field
     """
+
     description = forms.CharField(
         label="Description", widget=CKEditorUploadingWidget()
     )
@@ -82,6 +91,7 @@ class ProductAdminForm(forms.ModelForm):
 
 class ProductShotInline(ModelWithImageAdminMixin, admin.TabularInline):
     """Custom admin TabularInline for embedded product shots"""
+
     extra = 0
     max_num = 5
     model = ProductShot
@@ -240,10 +250,17 @@ class ReviewAdmin(
     search_help_text = "Searching by username"
     list_filter = ("product", "name", ReviewParentListFilter)
     readonly_fields = (
-        "name", "created", "get_product_link", "get_parent_link"
+        "name",
+        "created",
+        "get_product_link",
+        "get_parent_link",
     )
     list_display = (
-        "id", "name", "get_parent_link", "get_product_link", "created"
+        "id",
+        "name",
+        "get_parent_link",
+        "get_product_link",
+        "created",
     )
     fields = (
         ("product", "get_product_link"),
@@ -267,3 +284,18 @@ class ReviewAdmin(
         return "-"
 
     get_parent_link.short_description = "Parent review"
+
+
+@admin.register(CarouselImage)
+class CarouselImageAdmin(
+    BaseModelAdmin,
+    ModelWithNameAdminMixin,
+    ModelWithImageAdminMixin,
+    admin.ModelAdmin,
+):
+    """Admin class for managing CarouselImage instances."""
+
+    readonly_fields = ("get_image",)
+    list_display_links = ("id", "name")
+    list_display = ("id", "name", "get_image")
+    fields = ("name", "description", ("image", "get_image"))

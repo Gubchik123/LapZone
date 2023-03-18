@@ -192,3 +192,26 @@ class Review(
         verbose_name = "Review"
         verbose_name_plural = "Reviews"
         ordering = ["-created", "name", "product_id"]
+
+
+class CarouselImage(
+    ModelWithName,
+    ModelWithDescriptionAndImage,
+    models.Model,
+):
+    """
+    A model representing a carousel image.
+    Fields: name, description, image
+    """
+
+    class Meta:
+        """Meta options for the CarouselImage model."""
+
+        ordering = ["name"]
+        verbose_name = "Carousel image"
+        verbose_name_plural = "Carousel images"
+
+
+# Redefining an abstract model field parameters
+CarouselImage._meta.get_field("description").blank = True
+CarouselImage._meta.get_field("image").upload_to = "carousel_images/"
