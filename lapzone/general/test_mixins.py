@@ -90,7 +90,7 @@ class ModelWithNameAndSlugTestMixin(ModelWithNameTestMixin):
     for models that inherited from abstract ModelWithNameAndSlug."""
 
     # Default parameter values.
-    slug_blank = False
+    slug_blank = True
     slug_unique = True
     slug_max_length = 100
     slug_verbose_name = "Slug"

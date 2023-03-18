@@ -2,6 +2,7 @@ import re
 from typing import NoReturn
 
 from django.db import models
+from django.utils.text import slugify
 
 
 class ModelWithName(models.Model):
@@ -25,21 +26,16 @@ class ModelWithNameAndSlug(ModelWithName, models.Model):
     slug = models.SlugField(
         max_length=100,
         unique=True,
-        blank=False,
+        blank=True,
         db_index=True,
         verbose_name="Slug",
     )
 
-    def save(self, *args, **kwargs) -> None:
-        """Saves the current instance"""
-        self._generate_correct_slug()
+    def save(self, *args, **kwargs):
+        """Generates a slug for the instance if it does not already exist."""
+        if not self.slug:
+            self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
-
-    def _generate_correct_slug(self) -> NoReturn:
-        """Sets correct slug from name"""
-        self.slug = re.sub(
-            pattern=r"[^\w+]", repl="-", string=self.name
-        ).lower()
 
     class Meta:
         abstract = True
