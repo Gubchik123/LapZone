@@ -3,6 +3,15 @@ from typing import NoReturn
 from django.test import TestCase
 from django.contrib.auth.models import User
 
+from shop.models import (
+    Brand,
+    Category,
+    Product,
+    ProductShot,
+    Like,
+    Review,
+    CarouselImage,
+)
 from general.test_mixins import (
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
@@ -12,7 +21,6 @@ from general.test_mixins import (
     ModelWithCreatedDateTimeTestMixin,
     ModelWithFKToProductTestMixin,
 )
-from shop.models import Brand, Category, Product, ProductShot, Like, Review
 
 
 class BrandModelTest(
@@ -317,3 +325,27 @@ class ReviewModelTest(
     def test_parent_null(self):
         """Test that the parent field's null is True."""
         self.assertEqual(self.model._meta.get_field("parent").null, True)
+
+
+class CarouselImageModelTest(
+    ModelMetaOptionsTestMixin,
+    ModelWithNameTestMixin,
+    ModelWithDescriptionAndImageTestMixin,
+    TestCase,
+):
+    """Test cases for the CarouselImage model."""
+
+    model = CarouselImage
+    ordering = ["name"]
+    verbose_name = "Carousel image"
+    verbose_name_plural = "Carousel images"
+    # Redefined default parameter values of the abstract model(s).
+    description_blank = True
+    image_upload_to = "carousel_images/"
+
+    @classmethod
+    def setUpTestData(cls) -> NoReturn:
+        """Creates the first CarouselImage for testing."""
+        CarouselImage.objects.create(
+            name="test carousel image", image="./some_image.jpg"
+        )
