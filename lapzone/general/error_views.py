@@ -14,6 +14,23 @@ class Error(NamedTuple):
     description: str
 
 
+def render_error_page(request: HttpRequest, error: Error) -> HttpResponse:
+    """Renders error page (if template exist) by given error"""
+    try:
+        return render(
+            request, "pages/error.html", {"error": error}, status=error.code
+        )
+    except TemplateDoesNotExist:
+        return HttpResponse(
+            f"""
+            <title>{error.code} | LapZone</title>
+            <h1>{error.name}</h1>
+            <h4>{error.description}</h4>
+            """,
+            status=error.code,
+        )
+
+
 class ErrorView(View):
     """Base error view for rendering the custom error page."""
 
@@ -23,22 +40,9 @@ class ErrorView(View):
 
     def get(self, request: HttpRequest, exception=None) -> HttpResponse:
         """Returns the custom error page with the given error information."""
-        try:
-            return render(
-                request,
-                "pages/error.html",
-                {"error": Error(self.code, self.name, self.description)},
-                status=self.code,
-            )
-        except TemplateDoesNotExist:
-            return HttpResponse(
-                f"""
-                <title>{self.code} | LapZone</title>
-                <h1>{self.name}</h1>
-                <h4>{self.description}</h4>
-                """,
-                status=self.code,
-            )
+        return render_error_page(
+            request, Error(self.code, self.name, self.description)
+        )
 
 
 class CustomBadRequestView(ErrorView):

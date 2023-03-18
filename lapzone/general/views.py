@@ -3,13 +3,13 @@ import logging
 from django.views import View
 from django.http import HttpRequest, HttpResponse
 
-from general.error_views import CustomServerErrorView
+from general.error_views import Error, CustomServerErrorView, render_error_page
 
 
 logger = logging.getLogger(__name__)
 
 
-class BaseView(CustomServerErrorView, View):
+class BaseView(View):
     """Base view for all other views with exception handling"""
 
     def dispatch(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
@@ -19,5 +19,12 @@ class BaseView(CustomServerErrorView, View):
         except Exception as e:
             logger.error(f"{str(e)} during working with {request.path} URL")
 
-            # Returns the error page of CustomServerErrorView
-            return super().get(request)
+            server_error = CustomServerErrorView
+            return render_error_page(
+                request,
+                Error(
+                    server_error.code,
+                    server_error.name,
+                    server_error.description,
+                ),
+            )
