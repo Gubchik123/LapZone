@@ -31,3 +31,15 @@ class CategoryDetailListView(BaseView, generic.ListView):
         """Returns QuerySet or raises 404."""
         slug = self.kwargs["slug"]
         return services.get_all_products_or_404_by_category_(slug)
+
+
+class BrandDetailListView(BaseView, generic.ListView):
+    """View for displaying all products by brand"""
+
+    model = Product
+    context_object_name = "products"
+
+    def get_queryset(self) -> QuerySet:
+        """Returns QuerySet or raises 404."""
+        slug = self.kwargs["slug"]
+        return services.get_all_products_or_404_by_brand_(slug)

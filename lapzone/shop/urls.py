@@ -11,4 +11,9 @@ urlpatterns = [
         views.CategoryDetailListView.as_view(),
         name="category",
     ),
+    path(
+        "brand/<slug:slug>/",
+        views.BrandDetailListView.as_view(),
+        name="brand",
+    ),
 ]
