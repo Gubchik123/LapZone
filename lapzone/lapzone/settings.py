@@ -1,4 +1,6 @@
 import os
+import sys
+import logging
 from pathlib import Path
 
 from dotenv import load_dotenv
@@ -144,6 +146,9 @@ LOGGING = {
         },
     },
 }
+
+if len(sys.argv) > 1 and sys.argv[1] == 'test':
+    logging.disable(logging.CRITICAL)
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
 CKEDITOR_BASEPATH = "/static/ckeditor/ckeditor/"
