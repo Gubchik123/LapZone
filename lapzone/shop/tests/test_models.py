@@ -241,7 +241,7 @@ class LikeModelTest(
         """Test that the user field's on_delete is CASCADE."""
         models.User.objects.get(id=1).delete()
         with self.assertRaises(self.model.DoesNotExist):
-            self.models.model.objects.get(id=1)
+            self.model.objects.get(id=1)
 
 
 class ReviewModelTest(
