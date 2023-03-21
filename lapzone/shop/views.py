@@ -22,34 +22,35 @@ class HomeView(BaseView, generic.TemplateView):
         return context
 
 
-class SearchProductListView(BaseView, generic.ListView):
-    """View for displaying all products by user searching input"""
+class _ProductListView(BaseView, generic.ListView):
+    """Base ListView for displaying all products"""
 
     model = Product
     context_object_name = "products"
 
+
+class SearchProductListView(_ProductListView):
+    """View for displaying all products by user searching input"""
+
     def get_queryset(self) -> QuerySet:
         """Returns QuerySet or raises 404."""
         return services.get_all_products_that_contains_(self.request.GET["q"])
-    
+
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         """Adds page title in context data and returns it"""
         context = super().get_context_data(**kwargs)
         context["page_title"] = "Results"
         return context
-    
 
-class CategoryDetailListView(BaseView, generic.ListView):
+
+class CategoryDetailListView(_ProductListView):
     """View for displaying all products by category"""
-
-    model = Product
-    context_object_name = "products"
 
     def get_queryset(self) -> QuerySet:
         """Returns QuerySet or raises 404."""
         slug = self.kwargs["slug"]
         return services.get_all_products_or_404_by_category_(slug)
-    
+
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         """Adds page title in context data and returns it"""
         context = super().get_context_data(**kwargs)
@@ -60,14 +61,11 @@ class CategoryDetailListView(BaseView, generic.ListView):
 class BrandDetailListView(BaseView, generic.ListView):
     """View for displaying all products by brand"""
 
-    model = Product
-    context_object_name = "products"
-
     def get_queryset(self) -> QuerySet:
         """Returns QuerySet or raises 404."""
         slug = self.kwargs["slug"]
         return services.get_all_products_or_404_by_brand_(slug)
-    
+
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         """Adds page title in context data and returns it"""
         context = super().get_context_data(**kwargs)
