@@ -30,20 +30,20 @@ class _ProductListView(BaseView, generic.ListView):
 
 
 class SearchProductListView(_ProductListView):
-    """View for displaying all products by user searching input"""
+    """View for displaying all products that contain user search input"""
 
     def get_queryset(self) -> QuerySet:
-        """Returns QuerySet or raises 404."""
+        """Returns QuerySet."""
         return services.get_all_products_that_contains_(self.request.GET["q"])
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         """Adds page title in context data and returns it"""
         context = super().get_context_data(**kwargs)
-        context["page_title"] = "Results"
+        context["page_title"] = f"Search results for '{self.request.GET['q']}'"
         return context
 
 
-class CategoryDetailListView(_ProductListView):
+class ProductListByCategoryView(_ProductListView):
     """View for displaying all products by category"""
 
     def get_queryset(self) -> QuerySet:
@@ -58,7 +58,7 @@ class CategoryDetailListView(_ProductListView):
         return context
 
 
-class BrandDetailListView(BaseView, generic.ListView):
+class ProductListByBrandView(BaseView, generic.ListView):
     """View for displaying all products by brand"""
 
     def get_queryset(self) -> QuerySet:

@@ -9,12 +9,12 @@ urlpatterns = [
     path("search/", views.SearchProductListView.as_view(), name="search"),
     path(
         "category/<slug:slug>/",
-        views.CategoryDetailListView.as_view(),
+        views.ProductListByCategoryView.as_view(),
         name="category",
     ),
     path(
         "brand/<slug:slug>/",
-        views.BrandDetailListView.as_view(),
+        views.ProductListByBrandView.as_view(),
         name="brand",
     ),
 ]
