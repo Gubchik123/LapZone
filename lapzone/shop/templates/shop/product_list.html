@@ -1,0 +1,57 @@
+{% extends '_base.html' %} 
+{% load static %} 
+
+{% block title %}{{ page_title }}{% endblock %}
+{% block content_title %}{{ page_title }}{% endblock %} 
+
+
+{% block content %}
+<div class="row min-vh-100 px-3 d-flex justify-content-between">
+    <!-- Sidebar with form(s) for filtering -->
+    <div class="min-vh-100 panel-bg-color col-lg-3 col-md-12"></div>
+    <!-- Block with product cards -->
+    <div class="col-lg-9 col-md-12 ps-3 pe-0">
+        <div class="min-vh-100 row panel-bg-color px-3 mx-1">
+            {% for product in products %}
+            <div class="col-lg-4 col-md-6 col-sm-12">
+                <div class="product rounded mb-3">
+                    <div class="product__image w-100 d-flex justify-content-center align-items-center">
+                        <a href="#" class="w-100 opacity-1">
+                            <img
+                                class="img-fluid w-100 rounded"
+                                alt="{{ product.name }} image"
+                                src="{{ product.image.url }}"
+                            />
+                        </a>
+                    </div>
+                    <div class="product__details">
+                        <hr class="table-group-divider" />
+                        <h4 class="mb-2 product__title">
+                            <a href="#" class="text-decoration-none text-center">
+                                {{ product.name }}
+                            </a>
+                        </h4>
+                        <hr class="table-group-divider" />
+                        <p>
+                            <h3 class="d-inline"><b>{{ product.price }}$</b></h3>
+                        </p>
+                    </div>
+                    <div class="product__buttons d-flex justify-content-between">
+                        <a href="#" class="btn btn-danger me-auto">
+                            <ion-icon name="heart-outline"></ion-icon>
+                        </a>
+                        <a href="#" class="btn btn-success ms-auto">
+                            <ion-icon name="cart-outline"></ion-icon>
+                        </a>
+                    </div>
+                </div>
+            </div>
+            {% empty %}
+                <div>
+                    {% include 'utils/_alert.html' with message="There are no products that match your search criteria." category="primary" dismissible=False only %}
+                </div>
+            {% endfor %} 
+        </div>
+    </div>
+</div>
+{% endblock content %} 

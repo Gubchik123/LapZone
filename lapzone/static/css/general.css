@@ -2,13 +2,19 @@
 :root {
     --text-color: var(--bs-dark);
 
+    --shadow-color: var(--bs-secondary);
+
     --bg-color: #eee;
+    --card-bg-color: lightgray;
     --panel-bg-color: white;
 }
 :root[theme="dark"] {
     --text-color: #fafafa;
 
+    --shadow-color: var(--bs-light);
+
     --bg-color: #343a40;
+    --card-bg-color: var(--bs-dark);
     --panel-bg-color: var(--bs-secondary);
 }
 
@@ -109,6 +115,17 @@ a:hover, a.text-color:hover {
 
 /* Main styles */
 main { flex: 1 1 auto; }
+
+.btn { opacity: 1; }
+
+.product {
+    padding: 3%;
+    margin: 5% 0;
+    transition: all 0.3s;
+    background-color: var(--card-bg-color);
+    box-shadow: 0 0 10px var(--shadow-color);
+}
+.product:hover { box-shadow: 0 0 20px var(--shadow-color); }
 
 #go-to-top-btn {
     border: none;
