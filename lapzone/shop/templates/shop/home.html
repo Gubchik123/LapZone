@@ -6,33 +6,11 @@
 
 {% block styles %}
 <style>
-    @media screen and (max-width: 576px) { /* Bootstrap5 .sm breakpoint */
-        .search_form { margin-bottom: 20px; }
-    }
-
     .my-carousel .carousel-item img { max-height: 70vh; }
 
     .white-space-nowrap { white-space: nowrap; }
 </style>
 {% endblock styles %} 
-
-{% block search_form %}
-<div class="search_form d-flex justify-content-center">
-	<form role="search" class="search d-flex align-items-center">
-		<input
-			name="q"
-			type="search"
-			aria-label="Search..."
-			placeholder="Search..."
-			value=""
-			class="form-control search me-2 ms-lg-3 ms-sm-0"
-		/>
-		<button type="submit" class="btn btn-success mt-1">
-			Search
-		</button>
-	</form>
-</div>
-{% endblock search_form %} 
 
 
 {% block content %}

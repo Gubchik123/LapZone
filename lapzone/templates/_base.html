@@ -119,7 +119,25 @@
 								class="navbar-nav list-group-horizontal-md me-md-auto justify-content-center"
 							>
 								<li class="nav-item me-lg-2 me-sm-4">
-									{% block search_form %}{% endblock %}
+									<div class="search_form d-flex justify-content-center">
+                                        <form 
+                                            role="search" 
+                                            action="{% url 'shop:search' %}" 
+                                            class="search d-flex align-items-center"
+                                        >
+                                            <input
+                                                name="q"
+                                                type="search"
+                                                aria-label="Search..."
+                                                placeholder="Search..."
+                                                value="{{ request.GET.q }}"
+                                                class="form-control search me-2 ms-lg-3 ms-sm-0"
+                                            />
+                                            <button type="submit" class="btn btn-success mt-1">
+                                                Search
+                                            </button>
+                                        </form>
+                                    </div>
 								</li>
 							</ul>
 							<!-- Right navbar side -->
