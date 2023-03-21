@@ -21,6 +21,17 @@ class HomeView(BaseView, generic.TemplateView):
         return context
 
 
+class SearchProductListView(BaseView, generic.ListView):
+    """View for displaying all products by user searching input"""
+
+    model = Product
+    context_object_name = "products"
+
+    def get_queryset(self) -> QuerySet:
+        """Returns QuerySet or raises 404."""
+        return services.get_all_products_that_contains_(self.request.GET["q"])
+    
+
 class CategoryDetailListView(BaseView, generic.ListView):
     """View for displaying all products by category"""
 

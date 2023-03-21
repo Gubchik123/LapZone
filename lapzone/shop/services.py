@@ -21,6 +21,13 @@ def get_all_carousel_images() -> QuerySet[models.CarouselImage]:
     return models.CarouselImage.objects.all()
 
 
+def get_all_products_that_contains_(
+    user_input: str,
+) -> QuerySet[models.Product]:
+    """Returns QuerySet will all products that contain user search input"""
+    return models.Product.objects.filter(name__icontains=user_input)
+
+
 def _get_all_or_404_(
     products: QuerySet[models.Product],
 ) -> QuerySet[models.Product] | NoReturn:
