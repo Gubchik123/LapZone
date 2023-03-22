@@ -6,9 +6,41 @@
 
 
 {% block content %}
-<div class="row min-vh-100 px-3 d-flex justify-content-between">
+<div class="row px-3 d-flex justify-content-between">
     <!-- Sidebar with form(s) for filtering -->
-    <div class="min-vh-100 panel-bg-color col-lg-3 col-md-12"></div>
+    <div class="accordion col-lg-3 col-md-12 p-0">
+        <div class="accordion-item panel-bg-color text-color">
+            <h2 class="accordion-header" id="panelsStayOpen-headingOne">
+                <button
+                    type="button"
+                    aria-expanded="true"
+                    data-bs-toggle="collapse"
+                    aria-controls="panelsStayOpen-collapseOne"
+                    data-bs-target="#panelsStayOpen-collapseOne"
+                    class="accordion-button panel-bg-color text-color"
+                >
+                    Filtering
+                </button>
+            </h2>
+            <div
+                id="panelsStayOpen-collapseOne"
+                class="accordion-collapse collapse show"
+                aria-labelledby="panelsStayOpen-headingOne"
+            >
+                <div class="accordion-body">
+                    <form action="" method="post" name="filter">
+                        {% csrf_token %}
+                        {{ filter_form.as_div }}
+                        <input
+                            type="submit"
+                            value="Filter"
+                            class="btn btn-success btn-lg mt-3"
+                        />
+                    </form>
+                </div>
+            </div>
+        </div>
+    </div>
     <!-- Block with product cards -->
     <div class="col-lg-9 col-md-12 ps-3 pe-0">
         <div class="min-vh-100 row panel-bg-color px-3 mx-1">
