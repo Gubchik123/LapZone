@@ -3,9 +3,10 @@ from typing import Any
 from django.views import generic
 from django.db.models import QuerySet
 
+from general.views import BaseView
 from . import services
 from .models import Product
-from general.views import BaseView
+from .forms import ProductFilterForm
 
 
 class HomeView(BaseView, generic.TemplateView):
@@ -27,6 +28,11 @@ class _ProductListView(BaseView, generic.ListView):
 
     model = Product
     context_object_name = "products"
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["filter_form"] = ProductFilterForm(self.request.POST)
+        return context
 
 
 class SearchProductListView(_ProductListView):
