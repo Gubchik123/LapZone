@@ -128,10 +128,10 @@
                                             <input
                                                 name="q"
                                                 type="search"
-                                                aria-label="Search..."
-                                                placeholder="Search..."
-                                                value="{{ request.GET.q }}"
+                                                aria-label="Title..."
+                                                placeholder="Title..."
                                                 class="form-control search me-2 ms-lg-3 ms-sm-0"
+                                                {% if request.GET.q %} value="{{ request.GET.q }}" {% endif %}
                                             />
                                             <button type="submit" class="btn btn-success mt-1">
                                                 Search
