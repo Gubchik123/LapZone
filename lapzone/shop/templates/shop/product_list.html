@@ -4,6 +4,18 @@
 {% block title %}{{ page_title }}{% endblock %}
 {% block content_title %}{{ page_title }}{% endblock %} 
 
+{% block styles %}
+<style>
+    #products {
+        margin-left: 20px;
+        margin-right: 0px;
+    }
+    @media screen and (max-width: 768px) { /* Bootstrap5 .md breakpoint */
+        #products { margin-left: 0px; }
+    }
+</style>
+{% endblock styles %} 
+
 
 {% block content %}
 <div class="row px-3 d-flex justify-content-between">
@@ -42,8 +54,8 @@
         </div>
     </div>
     <!-- Block with product cards -->
-    <div class="col-lg-9 col-md-12 ps-3 pe-0">
-        <div class="min-vh-100 row panel-bg-color px-3 mx-1">
+    <div class="col-lg-9 col-md-12 px-0">
+        <div id="products" class="min-vh-100 row panel-bg-color px-3">
             {% for product in products %}
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="product rounded mb-3">
