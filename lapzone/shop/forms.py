@@ -1,18 +1,42 @@
 from django import forms
 from django.db.models import QuerySet
 
-from .models import Product, Brand
+from .models import Product, Category, Brand
 
 
 class ProductFilterForm(forms.Form):
-    """Form for filtering products by brand, and year."""
+    """Form for filtering products."""
 
-    brand = forms.ModelMultipleChoiceField(
-        queryset=Brand.objects.all(),
+    min_price = forms.DecimalField(
+        min_value=0,
+        decimal_places=2,
+        label="",
         required=False,
-        widget=forms.CheckboxSelectMultiple,
+        widget=forms.NumberInput(
+            attrs={"class": "form-control mb-2", "placeholder": "Min price"}
+        ),
     )
-    year = forms.MultipleChoiceField(
+    max_price = forms.DecimalField(
+        min_value=0,
+        decimal_places=2,
+        label="",
+        required=False,
+        widget=forms.NumberInput(
+            attrs={"class": "form-control mb-2", "placeholder": "Max price"}
+        ),
+    )
+    category = forms.ModelChoiceField(
+        queryset=Category.objects.all(),
+        widget=forms.RadioSelect,
+        required=False,
+    )
+    brands = forms.ModelMultipleChoiceField(
+        queryset=Brand.objects.all(),
+        widget=forms.CheckboxSelectMultiple,
+        label="Brand",
+        required=False,
+    )
+    years = forms.MultipleChoiceField(
         choices=[
             (year, year)
             for year in set(
@@ -22,16 +46,27 @@ class ProductFilterForm(forms.Form):
                 )
             )
         ],
-        required=False,
         widget=forms.CheckboxSelectMultiple,
+        label="Year",
+        required=False,
     )
 
     def get_filtered_products(self) -> QuerySet[Product]:
         """Returns a QuerySet with filtered products or all."""
 
         products = Product.objects.all()
-        if self.cleaned_data.get("brand"):
-            products = products.filter(brand__in=self.cleaned_data["brand"])
-        if self.cleaned_data.get("year"):
-            products = products.filter(year__in=self.cleaned_data["year"])
+        if self.cleaned_data.get("min_price"):
+            products = products.filter(
+                price__gte=self.cleaned_data.get("min_price")
+            )
+        if self.cleaned_data.get("max_price"):
+            products = products.filter(
+                price__lte=self.cleaned_data.get("max_price")
+            )
+        if self.cleaned_data.get("category"):
+            products = products.filter(category=self.cleaned_data["category"])
+        if self.cleaned_data.get("brands"):
+            products = products.filter(brand__in=self.cleaned_data["brands"])
+        if self.cleaned_data.get("years"):
+            products = products.filter(year__in=self.cleaned_data["years"])
         return products
