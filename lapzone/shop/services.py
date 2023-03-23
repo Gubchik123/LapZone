@@ -22,10 +22,10 @@ def get_all_carousel_images() -> QuerySet[models.CarouselImage]:
 
 
 def get_all_products_that_contains_(
-    user_input: str,
+    user_input: str, products: QuerySet[models.Product]
 ) -> QuerySet[models.Product]:
-    """Returns QuerySet will all products that contain user search input"""
-    return models.Product.objects.filter(name__icontains=user_input)
+    """Returns QuerySet with all products that contain user search input"""
+    return products.filter(name__icontains=user_input)
 
 
 def _get_all_or_404_(
@@ -40,10 +40,10 @@ def _get_all_or_404_(
 def get_all_products_or_404_by_category_(
     slug: str,
 ) -> QuerySet[models.Product]:
-    """Returns a QuerySet with all products by the given slug or raises 404."""
+    """Returns a QuerySet with all products by category slug or raises 404."""
     return _get_all_or_404_(models.Product.objects.filter(category__slug=slug))
 
 
 def get_all_products_or_404_by_brand_(slug: str) -> QuerySet[models.Product]:
-    """Returns a QuerySet with all products by the given slug or raises 404."""
+    """Returns a QuerySet with all products by brand slug or raises 404."""
     return _get_all_or_404_(models.Product.objects.filter(brand__slug=slug))
