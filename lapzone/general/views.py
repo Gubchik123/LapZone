@@ -10,7 +10,7 @@ from general.error_views import Error, CustomServerErrorView, render_error_page
 logger = logging.getLogger(__name__)
 
 
-class BaseView(View):
+class BaseView:
     """Base view for all other views with exception handling"""
 
     def dispatch(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
