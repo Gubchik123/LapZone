@@ -10,7 +10,7 @@
         margin-left: 20px;
         margin-right: 0px;
     }
-    @media screen and (max-width: 768px) { /* Bootstrap5 .md breakpoint */
+    @media screen and (max-width: 992px) { /* Bootstrap5 .lg breakpoint */
         #products { margin-left: 0px; }
     }
 </style>
@@ -40,14 +40,20 @@
                 aria-labelledby="panelsStayOpen-headingOne"
             >
                 <div class="accordion-body">
-                    <form action="" method="post" name="filter">
+                    <form action="{% url 'shop:products' %}" method="post" name="filter">
                         {% csrf_token %}
                         {{ filter_form.as_div }}
-                        <input
-                            type="submit"
-                            value="Filter"
-                            class="btn btn-success btn-lg mt-3"
-                        />
+                        <div class="d-flex justify-content-between">
+                            <button type="submit" class="btn btn-success btn-lg mt-3">
+                                Filter
+                            </button>
+                            <a 
+                                href="{% url 'shop:products' %}" 
+                                class="btn btn-danger btn-lg mt-3"
+                            >
+                                Clear
+                            </a>
+                        </div>
                     </form>
                 </div>
             </div>
@@ -72,7 +78,7 @@
                         <hr class="table-group-divider" />
                         <h4 class="mb-2 product__title">
                             <a href="#" class="text-decoration-none text-center">
-                                {{ product.name }}
+                                {{ product.name |truncatechars:30 }}
                             </a>
                         </h4>
                         <hr class="table-group-divider" />
