@@ -45,7 +45,7 @@ class RaiseNotFoundView(RaiseExceptionView):
     exception = Http404
 
 
-class ServerErrorView(BaseView):
+class ServerErrorView(BaseView, View):
     """View that has error"""
 
     def get(self, request: HttpRequest) -> HttpResponse:
