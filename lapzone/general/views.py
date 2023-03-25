@@ -18,18 +18,20 @@ class BaseView:
         try:
             return super().dispatch(request, *args, **kwargs)
         except Exception as e:
+            exception_type = type(e)
+
             # Check if it's an exception for which there is an error handler.
-            if type(e) in (Http404, BadRequest, PermissionDenied):
+            if exception_type in (Http404, BadRequest, PermissionDenied):
                 raise e
 
-            logger.error(f"{str(e)} during working with {request.path} URL")
+            logger.error(
+                f"{exception_type}('{str(e)}') during working with {request.path} URL"
+            )
 
-            server_error = CustomServerErrorView
+            error_view = CustomServerErrorView
             return render_error_page(
                 request,
                 Error(
-                    server_error.code,
-                    server_error.name,
-                    server_error.description,
+                    error_view.code, error_view.name, error_view.description
                 ),
             )
