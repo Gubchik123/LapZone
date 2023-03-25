@@ -1,6 +1,3 @@
-from typing import NoReturn
-
-from django.http import Http404
 from django.db.models import QuerySet
 
 from . import models
@@ -28,22 +25,11 @@ def get_all_products_that_contains_(
     return products.filter(name__icontains=user_input)
 
 
-def _get_all_or_404_(
-    products: QuerySet[models.Product],
-) -> QuerySet[models.Product] | NoReturn:
-    """Return the given QuerySet if exist or raises 404."""
-    if products.exists():
-        return products
-    raise Http404
+def get_all_products_by_category_(slug: str) -> QuerySet[models.Product]:
+    """Returns a QuerySet with all products by category slug."""
+    return models.Product.objects.filter(category__slug=slug)
 
 
-def get_all_products_or_404_by_category_(
-    slug: str,
-) -> QuerySet[models.Product]:
-    """Returns a QuerySet with all products by category slug or raises 404."""
-    return _get_all_or_404_(models.Product.objects.filter(category__slug=slug))
-
-
-def get_all_products_or_404_by_brand_(slug: str) -> QuerySet[models.Product]:
-    """Returns a QuerySet with all products by brand slug or raises 404."""
-    return _get_all_or_404_(models.Product.objects.filter(brand__slug=slug))
+def get_all_products_by_brand_(slug: str) -> QuerySet[models.Product]:
+    """Returns a QuerySet with all products by brand slug."""
+    return models.Product.objects.filter(brand__slug=slug)
