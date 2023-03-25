@@ -2,6 +2,7 @@ from typing import Any
 
 from django.views import generic
 from django.db.models import QuerySet
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpRequest
 
 from general.views import BaseView
@@ -31,20 +32,31 @@ class _ProductListView(BaseView, generic.ListView):
     context_object_name = "products"
     object_list = Product.objects.all()
 
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
-        """Adds filter form in context data and returns it."""
-        context = super().get_context_data(**kwargs)
-        context["filter_form"] = ProductFilterForm(self.request.POST)
-        return context
-
 
 class AllProductsListView(_ProductListView):
     """View for displaying all or filtered products."""
+
+    def get_queryset(self) -> QuerySet[Product]:
+        """Returns QuerySet with products."""
+        user_search_input = self.request.GET.get("q", None)
+        products = super().get_queryset()
+
+        if user_search_input is not None:
+            products = services.get_all_products_that_contains_(
+                user_search_input, products
+            )
+        return products
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         """Adds page title in context data and returns it."""
         context = super().get_context_data(**kwargs)
         context["page_title"] = f"All products"
+        context["filter_form"] = ProductFilterForm(self.request.POST)
+
+        user_search_input = self.request.GET.get("q", None)
+
+        if user_search_input is not None:
+            context["page_title"] = f"Search results for '{user_search_input}'"
         return context
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
@@ -58,37 +70,19 @@ class AllProductsListView(_ProductListView):
         return self.render_to_response(context)
 
 
-class SearchProductListView(_ProductListView):
-    """View for displaying all products that contain user search input."""
-
-    def get_queryset(self) -> QuerySet:
-        """Returns QuerySet with products that contain user search input."""
-        products = super().get_queryset()
-        return services.get_all_products_that_contains_(
-            self.request.GET["q"], products
-        )
-
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
-        """Adds page title in context data and returns it."""
-        context = super().get_context_data(**kwargs)
-        context["page_title"] = f"Search results for '{self.request.GET['q']}'"
-        return context
-
-
 class ProductListByCategoryView(_ProductListView):
     """View for displaying all products by category."""
 
-    def get_queryset(self) -> QuerySet:
-        """Returns QuerySet with products by category or raises 404."""
-        slug = self.kwargs["slug"]
-        return services.get_all_products_or_404_by_category_(slug)
+    def get_queryset(self) -> QuerySet[Product]:
+        """Returns QuerySet with all products by category."""
+        return services.get_all_products_by_category_(self.kwargs["slug"])
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         """Adds some content in context data and returns it."""
         context = super().get_context_data(**kwargs)
         context["page_title"] = self.kwargs["slug"].capitalize()
         context["filter_form"] = ProductFilterForm(
-            {"category": Category.objects.get(slug=self.kwargs["slug"])}
+            {"category": get_object_or_404(Category, slug=self.kwargs["slug"])}
         )
         return context
 
@@ -96,16 +90,15 @@ class ProductListByCategoryView(_ProductListView):
 class ProductListByBrandView(_ProductListView):
     """View for displaying all products by brand."""
 
-    def get_queryset(self) -> QuerySet:
-        """Returns QuerySet with products by brand or raises 404."""
-        slug = self.kwargs["slug"]
-        return services.get_all_products_or_404_by_brand_(slug)
+    def get_queryset(self) -> QuerySet[Product]:
+        """Returns QuerySet with all products by brand."""
+        return services.get_all_products_by_brand_(self.kwargs["slug"])
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         """Adds some content in context data and returns it."""
         context = super().get_context_data(**kwargs)
         context["page_title"] = f"{self.kwargs['slug'].capitalize()} products"
         context["filter_form"] = ProductFilterForm(
-            {"brands": Brand.objects.filter(slug=self.kwargs["slug"])}
+            {"brands": [get_object_or_404(Brand, slug=self.kwargs["slug"])]}
         )
         return context
