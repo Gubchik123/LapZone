@@ -2,8 +2,8 @@ from typing import Any
 
 from django.views import generic
 from django.db.models import QuerySet
-from django.shortcuts import get_object_or_404
-from django.http import HttpResponse, HttpRequest
+from django.shortcuts import get_object_or_404, redirect
+from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 
 from general.views import BaseView
 from . import services
@@ -66,6 +66,11 @@ class AllProductsListView(_ProductListView):
         context["page_title"] = "Filtered products"
 
         if form.is_valid():
+            response: HttpResponseRedirect | None = (
+                services.check_and_get_redirect_response_by_(form)
+            )
+            if response is not None:
+                return response
             context["products"] = form.get_filtered_products()
         return self.render_to_response(context)
 
