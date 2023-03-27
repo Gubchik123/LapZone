@@ -62,6 +62,42 @@
     <!-- Block with product cards -->
     <div class="col-lg-9 col-md-12 px-0">
         <div id="products" class="min-vh-100 row panel-bg-color px-3">
+            <!-- Dropdown list with links for ordering -->
+            <div class="dropdown mt-3 mb-2">
+                <button 
+                    aria-expanded="false"
+                    data-bs-toggle="dropdown" 
+                    class="btn btn-secondary btn-lg border-1 border-light dropdown-toggle" 
+                >
+                    Ordering
+                </button>
+                <ul class="dropdown-menu">
+                    <li>
+                        <a 
+                            class="dropdown-item"
+                            href="{{ request.path }}?orderby=name&orderdir=asc&q={{ request.GET.q }}" 
+                        >
+                            By name
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                            class="dropdown-item"
+                            href="{{ request.path }}?orderby=price&orderdir=asc&q={{ request.GET.q }}" 
+                        >
+                            From cheap
+                        </a>
+                    </li>
+                    <li>
+                        <a 
+                            class="dropdown-item"
+                            href="{{ request.path }}?orderby=price&orderdir=desc&q={{ request.GET.q }}" 
+                        >
+                            From expensive
+                        </a>
+                    </li>
+                </ul>
+            </div>
             {% for product in products %}
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="product rounded mb-3">
@@ -105,3 +141,23 @@
     </div>
 </div>
 {% endblock content %} 
+
+
+{% block scripts %}
+<!-- Script to add .active class for dropdown-item -->
+<script>
+    const url_params = new URLSearchParams(window.location.search);
+
+    const order_by = url_params.get("orderby");
+    const order_dir = url_params.get("orderdir");
+    
+    if (order_by && order_dir) {
+        for (let link of document.querySelectorAll(".dropdown-item")) {
+            if (link.href.includes(order_by) && link.href.includes(order_dir)) {
+                link.classList.add("active");
+                break;
+            }
+        }
+    }
+</script>
+{% endblock scripts %} 
