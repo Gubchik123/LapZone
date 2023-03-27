@@ -2,7 +2,8 @@ from typing import Any
 
 from django.views import generic
 from django.db.models import QuerySet
-from django.shortcuts import get_object_or_404, redirect
+from django.core.exceptions import FieldError
+from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 
 from general.views import BaseView
@@ -31,6 +32,29 @@ class _ProductListView(BaseView, generic.ListView):
     model = Product
     context_object_name = "products"
     object_list = Product.objects.all()
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        """Redefines context["products"] with ordered ones or the same"""
+        context = super().get_context_data(**kwargs)
+        context["products"] = self._get_ordered_(context["products"])
+        return context
+
+    def _get_ordered_(self, products: QuerySet[Product]) -> QuerySet[Product]:
+        """
+        Returns a sorted QuerySet of products based on GET parameters.
+        If there are some exceptions, returns the original QuerySet.
+        """
+        order_by = self.request.GET.get("orderby")
+        order_dir = self.request.GET.get("orderdir")
+
+        if order_by and order_dir:
+            try:
+                return services.get_ordered_products_by_(
+                    order_by, order_dir, products
+                )
+            except (FieldError, services.UnknownOrderDirection):
+                return []
+        return products
 
 
 class AllProductsListView(_ProductListView):
@@ -71,7 +95,9 @@ class AllProductsListView(_ProductListView):
             )
             if response is not None:
                 return response
-            context["products"] = form.get_filtered_products()
+            context["products"] = self._get_ordered_(
+                products=form.get_filtered_products()
+            )
         return self.render_to_response(context)
 
 
