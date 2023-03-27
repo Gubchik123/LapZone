@@ -79,7 +79,7 @@ class AllProductsListView(_ProductListView):
 
         user_search_input = self.request.GET.get("q", None)
 
-        if user_search_input is not None:
+        if user_search_input:
             context["page_title"] = f"Search results for '{user_search_input}'"
         return context
 
