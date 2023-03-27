@@ -1,3 +1,5 @@
+from typing import NoReturn
+
 from django.shortcuts import redirect
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
@@ -6,25 +8,48 @@ from . import models
 from .forms import ProductFilterForm
 
 
+class UnknownOrderDirection(Exception):
+    """Exception that occurs when an unrecognized order direction is given."""
+
+
 def get_all_brands() -> QuerySet[models.Brand]:
-    """Returns QuerySet with all brands."""
+    """Returns a QuerySet with all brands."""
     return models.Brand.objects.all()
 
 
 def get_all_categories() -> QuerySet[models.Category]:
-    """Returns QuerySet with all categories."""
+    """Returns a QuerySet with all categories."""
     return models.Category.objects.all()
 
 
 def get_all_carousel_images() -> QuerySet[models.CarouselImage]:
-    """Returns QuerySet with all carousel images."""
+    """Returns a QuerySet with all carousel images."""
     return models.CarouselImage.objects.all()
+
+
+def _get_order_symbol_by_(order_dir: str) -> str | NoReturn:
+    """Returns the order symbol or raises exception if order_dir is invalid."""
+    if order_dir not in ("desc", "asc"):
+        raise UnknownOrderDirection
+    return "-" if order_dir == "desc" else ""
+
+
+def get_ordered_products_by_(
+    order_by: str, order_dir: str, products: QuerySet[models.Product]
+) -> QuerySet[models.Product]:
+    """Returns a QuerySet of ordered products or the given one"""
+    order_dir: str | None = _get_order_symbol_by_(order_dir)
+    return (
+        products.order_by(order_dir + order_by)
+        if order_dir is not None
+        else products
+    )
 
 
 def get_all_products_that_contains_(
     user_input: str, products: QuerySet[models.Product]
 ) -> QuerySet[models.Product]:
-    """Returns QuerySet with all products that contain user search input"""
+    """Returns a QuerySet with all products that contain user search input"""
     return products.filter(name__icontains=user_input)
 
 
