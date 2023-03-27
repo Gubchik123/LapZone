@@ -40,7 +40,11 @@
                 aria-labelledby="panelsStayOpen-headingOne"
             >
                 <div class="accordion-body">
-                    <form action="{% url 'shop:products' %}" method="post" name="filter">
+                    <form 
+                        method="post" 
+                        name="filter"
+                        action="{% url 'shop:products' %}?{{ request.GET.urlencode }}" 
+                    >
                         {% csrf_token %}
                         {{ filter_form.as_div }}
                         <div class="d-flex justify-content-between">
