@@ -1,8 +1,12 @@
 {% extends '_base.html' %} 
 {% load static %} 
 
-{% block title %}{{ page_title }}{% endblock %}
-{% block content_title %}{{ page_title }}{% endblock %} 
+{% block title %}
+{{ page_title }}{% if request.GET.orderby %} ordered by {{ request.GET.orderby }} {% endif %} 
+{% endblock %}
+{% block content_title %}
+{{ page_title }}{% if request.GET.orderby %} ordered by {{ request.GET.orderby }} {% endif %} 
+{% endblock %} 
 
 {% block styles %}
 <style>
