@@ -2,7 +2,6 @@ from typing import Any
 
 from django.views import generic
 from django.db.models import QuerySet
-from django.core.exceptions import FieldError
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 
@@ -27,67 +26,50 @@ class HomeView(BaseView, generic.TemplateView):
 
 
 class _ProductListView(BaseView, generic.ListView):
-    """Base ListView for displaying all products with filter form."""
+    """Base ListView for displaying products."""
 
     model = Product
     context_object_name = "products"
     object_list = Product.objects.all()
 
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
-        """Redefines context["products"] with ordered ones or the same"""
-        context = super().get_context_data(**kwargs)
-        context["products"] = self._get_ordered_(context["products"])
-        return context
-
-    def _get_ordered_(self, products: QuerySet[Product]) -> QuerySet[Product]:
-        """
-        Returns a sorted QuerySet of products based on GET parameters.
-        If there are some exceptions, returns the original QuerySet.
-        """
+    def get_ordering(self) -> list[str]:
+        """Returns list of ordering after checking GET parameters"""
         order_by = self.request.GET.get("orderby")
         order_dir = self.request.GET.get("orderdir")
 
-        if order_by and order_dir:
-            try:
-                return services.get_ordered_products_by_(
-                    order_by, order_dir, products
-                )
-            except (FieldError, services.UnknownOrderDirection):
-                return []
-        return products
+        if services.are_ordering_parameters_valid(order_by, order_dir):
+            return [services.get_order_symbol_by_(order_dir) + order_by]
+        return []
 
 
 class AllProductsListView(_ProductListView):
-    """View for displaying all or filtered products."""
+    """View for displaying all or filtered or searched products."""
 
     def get_queryset(self) -> QuerySet[Product]:
-        """Returns QuerySet with products."""
+        """Returns QuerySet with either searched or filtered products."""
         user_search_input = self.request.GET.get("q", None)
+        form = ProductFilterForm(self.request.POST)
         products = super().get_queryset()
 
         if user_search_input is not None:
-            products = services.get_all_products_that_contains_(
+            products = services.get_products_that_contains_(
                 user_search_input, products
             )
+        if form.is_valid():
+            products = form.get_filtered_(products)
+
         return products
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
-        """Adds page title in context data and returns it."""
+        """Adds page title and filter form in context data and returns it."""
         context = super().get_context_data(**kwargs)
-        context["page_title"] = f"All products"
+        context["page_title"] = "All products"
         context["filter_form"] = ProductFilterForm(self.request.POST)
-
-        user_search_input = self.request.GET.get("q", None)
-
-        if user_search_input:
-            context["page_title"] = f"Search results for '{user_search_input}'"
         return context
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """Checks form is valid and renders page with products."""
         form = ProductFilterForm(request.POST)
-        context = self.get_context_data(**kwargs)
-        context["page_title"] = "Filtered products"
 
         if form.is_valid():
             response: HttpResponseRedirect | None = (
@@ -95,21 +77,20 @@ class AllProductsListView(_ProductListView):
             )
             if response is not None:
                 return response
-            context["products"] = self._get_ordered_(
-                products=form.get_filtered_products()
-            )
-        return self.render_to_response(context)
+        return self.get(request, *args, **kwargs)
 
 
 class ProductListByCategoryView(_ProductListView):
-    """View for displaying all products by category."""
+    """View for displaying products by category."""
 
     def get_queryset(self) -> QuerySet[Product]:
-        """Returns QuerySet with all products by category."""
-        return services.get_all_products_by_category_(self.kwargs["slug"])
+        """Returns QuerySet with products by category slug."""
+        return services.get_products_filtered_by_category_(
+            self.kwargs["slug"], products=super().get_queryset()
+        )
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
-        """Adds some content in context data and returns it."""
+        """Adds page title and filter form in context data and returns it."""
         context = super().get_context_data(**kwargs)
         context["page_title"] = self.kwargs["slug"].capitalize()
         context["filter_form"] = ProductFilterForm(
@@ -119,14 +100,16 @@ class ProductListByCategoryView(_ProductListView):
 
 
 class ProductListByBrandView(_ProductListView):
-    """View for displaying all products by brand."""
+    """View for displaying products by brand."""
 
     def get_queryset(self) -> QuerySet[Product]:
-        """Returns QuerySet with all products by brand."""
-        return services.get_all_products_by_brand_(self.kwargs["slug"])
+        """Returns QuerySet with products by brand slug."""
+        return services.get_products_filtered_by_brand_(
+            self.kwargs["slug"], products=super().get_queryset()
+        )
 
     def get_context_data(self, **kwargs) -> dict[str, Any]:
-        """Adds some content in context data and returns it."""
+        """Adds page title and filter form in context data and returns it."""
         context = super().get_context_data(**kwargs)
         context["page_title"] = f"{self.kwargs['slug'].capitalize()} products"
         context["filter_form"] = ProductFilterForm(
