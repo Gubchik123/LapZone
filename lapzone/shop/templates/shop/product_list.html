@@ -2,10 +2,27 @@
 {% load static %} 
 
 {% block title %}
-{{ page_title }}{% if request.GET.orderby %} ordered by {{ request.GET.orderby }} {% endif %} 
+    {% if request.GET.q %}
+        Search results for "{{ request.GET.q }}"
+    {% else %}
+        {{ page_title }} 
+    {% endif %}
+
+    {% if request.GET.orderby and request.GET.orderdir %} 
+    ordered by {{ request.GET.orderby }} 
+    {% endif %}
 {% endblock %}
+
 {% block content_title %}
-{{ page_title }}{% if request.GET.orderby %} ordered by {{ request.GET.orderby }} {% endif %} 
+    {% if request.GET.q %}
+        Search results for "{{ request.GET.q }}"
+    {% else %}
+        {{ page_title }}
+    {% endif %}
+
+    {% if request.GET.orderby and request.GET.orderdir %} 
+    ordered by {{ request.GET.orderby }} 
+    {% endif %}
 {% endblock %} 
 
 {% block styles %}
@@ -152,8 +169,8 @@
 
 
 {% block scripts %}
-<!-- Script to add .active class for dropdown-item -->
-<script>
+<script defer>
+    // Script to add .active class for dropdown-item
     const url_params = new URLSearchParams(window.location.search);
 
     const order_by = url_params.get("orderby");
