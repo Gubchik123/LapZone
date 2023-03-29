@@ -123,7 +123,7 @@
                     </li>
                 </ul>
             </div>
-            {% for product in products %}
+            {% for product in page_obj %}
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="product rounded mb-3">
                     <div class="product__image w-100 d-flex justify-content-center align-items-center">
@@ -162,6 +162,14 @@
                     {% include 'utils/_alert.html' with message="There are no products that match your search criteria." category="primary" dismissible=False only %}
                 </div>
             {% endfor %} 
+
+            {% if page_obj.paginator.num_pages > 1 %} 
+                {% if "page" in request.GET.urlencode %}
+                    {% include 'utils/_pagination_nav.html' with page_obj=page_obj other_get_parameters=request.GET.urlencode|slice:"7:" only %}
+                {% else %}
+                    {% include 'utils/_pagination_nav.html' with page_obj=page_obj other_get_parameters=request.GET.urlencode only %}
+                {% endif %} 
+            {% endif %}
         </div>
     </div>
 </div>
@@ -184,5 +192,21 @@
             }
         }
     }
+
+    // Script to check window size and resize pagination nav
+    const pagination = document.querySelector(".pagination");
+
+	function resize_pagination_nav() {
+		window.outerWidth >= 992
+			? pagination.classList.add("pagination-lg")
+			: pagination.classList.remove("pagination-lg");
+
+		window.outerWidth <= 768
+			? pagination.classList.add("pagination-sm")
+			: pagination.classList.remove("pagination-sm");
+	}
+
+	resize_pagination_nav();
+	window.addEventListener("resize", resize_pagination_nav);
 </script>
 {% endblock scripts %} 
