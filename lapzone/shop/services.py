@@ -27,29 +27,31 @@ def get_all_carousel_images() -> QuerySet[models.CarouselImage]:
     return models.CarouselImage.objects.all()
 
 
-def _get_order_symbol_by_(order_dir: str) -> str | NoReturn:
-    """Returns the order symbol or raises exception if order_dir is invalid."""
-    if order_dir not in ("desc", "asc"):
-        raise UnknownOrderDirection
+def are_ordering_parameters_valid(order_by: str, order_dir: str) -> bool:
+    """Checks if the given order_by and order_dir are valid"""
+    if (
+        # there are not order_by and order_dir
+        (not order_by and not order_dir)
+        # there is order_by but there is not order_dir
+        or (order_by and not order_dir)
+        # there is order_dir but there is not order_by
+        or (order_dir and not order_by)
+        or (order_dir not in ("asc", "desc"))
+        or (order_by not in ("name", "price"))
+    ):
+        return False
+    return True
+
+
+def get_order_symbol_by_(order_dir: str) -> str | NoReturn:
+    """Returns the Django order symbol."""
     return "-" if order_dir == "desc" else ""
 
 
-def get_ordered_products_by_(
-    order_by: str, order_dir: str, products: QuerySet[models.Product]
-) -> QuerySet[models.Product]:
-    """Returns a QuerySet of ordered products or the given one"""
-    order_dir: str | None = _get_order_symbol_by_(order_dir)
-    return (
-        products.order_by(order_dir + order_by)
-        if order_dir is not None
-        else products
-    )
-
-
-def get_all_products_that_contains_(
+def get_products_that_contains_(
     user_input: str, products: QuerySet[models.Product]
 ) -> QuerySet[models.Product]:
-    """Returns a QuerySet with all products that contain user search input"""
+    """Returns the given products filtered by user search input"""
     return products.filter(name__icontains=user_input)
 
 
@@ -77,11 +79,15 @@ def check_and_get_redirect_response_by_(
     return None
 
 
-def get_all_products_by_category_(slug: str) -> QuerySet[models.Product]:
-    """Returns a QuerySet with all products by category slug."""
-    return models.Product.objects.filter(category__slug=slug)
+def get_products_filtered_by_category_(
+    slug: str, products: QuerySet[models.Product]
+) -> QuerySet[models.Product]:
+    """Returns the given products filtered by category slug."""
+    return products.filter(category__slug=slug)
 
 
-def get_all_products_by_brand_(slug: str) -> QuerySet[models.Product]:
-    """Returns a QuerySet with all products by brand slug."""
-    return models.Product.objects.filter(brand__slug=slug)
+def get_products_filtered_by_brand_(
+    slug: str, products: QuerySet[models.Product]
+) -> QuerySet[models.Product]:
+    """Returns the given products filtered by brand slug."""
+    return products.filter(brand__slug=slug)
