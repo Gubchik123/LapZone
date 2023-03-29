@@ -51,10 +51,8 @@ class ProductFilterForm(forms.Form):
         required=False,
     )
 
-    def get_filtered_products(self) -> QuerySet[Product]:
-        """Returns a QuerySet with filtered products or all."""
-
-        products = Product.objects.all()
+    def get_filtered_(self, products: QuerySet[Product]) -> QuerySet[Product]:
+        """Returns the filtered given products."""
         if self.cleaned_data.get("min_price"):
             products = products.filter(
                 price__gte=self.cleaned_data.get("min_price")
