@@ -29,7 +29,7 @@ class _ProductListView(BaseView, generic.ListView):
     """Base ListView for displaying products."""
 
     model = Product
-    context_object_name = "products"
+    paginate_by = 12
     object_list = Product.objects.all()
 
     def get_ordering(self) -> list[str]:
