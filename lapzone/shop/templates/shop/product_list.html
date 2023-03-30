@@ -64,7 +64,7 @@
                     <form 
                         method="post" 
                         name="filter"
-                        action="{% url 'shop:products' %}?{{ request.GET.urlencode }}" 
+                        action="{% url 'shop:product_list' %}?{{ request.GET.urlencode }}" 
                     >
                         {% csrf_token %}
                         {{ filter_form.as_div }}
@@ -73,7 +73,7 @@
                                 Filter
                             </button>
                             <a 
-                                href="{% url 'shop:products' %}" 
+                                href="{% url 'shop:product_list' %}" 
                                 class="btn btn-danger btn-lg mt-3"
                             >
                                 Clear
