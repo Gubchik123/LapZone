@@ -127,7 +127,10 @@
             <div class="col-lg-4 col-md-6 col-sm-12">
                 <div class="product rounded mb-3">
                     <div class="product__image w-100 d-flex justify-content-center align-items-center">
-                        <a href="#" class="w-100 opacity-1">
+                        <a 
+                            class="w-100 opacity-1"
+                            href="{% url 'shop:product_detail' product.slug %}" 
+                        >
                             <img
                                 class="img-fluid w-100 rounded"
                                 alt="{{ product.name }} image"
@@ -138,7 +141,10 @@
                     <div class="product__details">
                         <hr class="table-group-divider" />
                         <h4 class="mb-2 product__title">
-                            <a href="#" class="text-decoration-none text-center">
+                            <a 
+                                class="text-decoration-none text-center"
+                                href="{% url 'shop:product_detail' product.slug %}" 
+                            >
                                 {{ product.name |truncatechars:30 }}
                             </a>
                         </h4>
