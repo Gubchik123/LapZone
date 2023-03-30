@@ -116,3 +116,9 @@ class ProductListByBrandView(_ProductListView):
             {"brands": [get_object_or_404(Brand, slug=self.kwargs["slug"])]}
         )
         return context
+
+
+class ProductDetailView(generic.DetailView):
+    """View for displaying detailed information about a single product."""
+
+    model = Product
