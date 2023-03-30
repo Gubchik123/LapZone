@@ -1,0 +1,171 @@
+{% extends '_base.html' %} 
+
+{% block title %}{{ product.name }}{% endblock %} 
+{% block content_title %}{{ product.name }}{% endblock %}
+
+{% block styles %}
+<style>
+    #productCarousel { width: 85%; }
+
+    .share-links ion-icon[name="logo-facebook"],
+    .share-links ion-icon[name="navigate-circle"] { border-radius: 50%; }
+    .share-links ion-icon[name="logo-linkedin"],
+    .share-links ion-icon[name="mail-outline"] { border-radius: 5px; }
+    .share-links ion-icon[name="logo-linkedin"],
+    .share-links ion-icon[name="logo-facebook"] { 
+        color: #fff; background: darkblue; 
+    }
+    .share-links ion-icon[name="mail-outline"] { 
+        color: red; background-color: #fff; 
+    }
+    .share-links ion-icon[name="navigate-circle"] { 
+        color: #28a8e9; background-color: #fff; 
+    }
+
+    #description, #reviews { scroll-margin-top: 10px; }
+</style>
+{% endblock styles %} 
+
+
+{% block content %}
+<!-- Row with product shots and the main buttons -->
+<div class="row px-3">
+	<!-- Col with Bootstrap5 carousel with product shots -->
+	<div class="col-lg-6 col-md-12 panel-bg-color py-3">
+		<div class="w-100 h-100 d-flex content-center">
+			<div
+				id="productCarousel"
+				class="carousel slide"
+				data-bs-ride="carousel"
+			>
+				<div class="carousel-inner">
+                    <div class="carousel-item active" data-bs-interval="5000">
+                        <img
+                            class="d-block w-100"
+                            src="{{ product.image.url }}"
+                            alt="{{ product.name }} image"
+                        />
+                    </div>
+					{% for shot in product.productshot_set.all %}
+					<div
+						class="carousel-item" data-bs-interval="3000"
+					>
+						<img
+                            class="d-block w-100"
+							alt="{{ shot.name }}"
+							src="{{ shot.image.url }}"
+						/>
+					</div>
+					{% endfor %}
+				</div>
+                <!-- Carousel control to previous image -->
+				<button
+                    type="button"
+                    data-bs-slide="prev"
+					class="carousel-control-prev"
+					data-bs-target="#productCarousel"
+				>
+					<span
+                        aria-hidden="true"
+						class="carousel-control-prev-icon"
+					></span>
+				</button>
+                <!-- Carousel control to next image -->
+				<button
+                    type="button"
+					data-bs-slide="next"
+					class="carousel-control-next"
+					data-bs-target="#productCarousel"
+				>
+					<span
+                        aria-hidden="true"
+						class="carousel-control-next-icon"
+					></span>
+				</button>
+			</div>
+		</div>
+	</div>
+	<!-- Col with short product description and the main buttons -->
+	<div
+		class="col-lg-6 col-md-12 d-flex flex-column justify-content-between panel-bg-color py-4"
+	>
+		<!-- "Like" and "Cart" buttons -->
+		<div class="d-flex mb-4">
+			<a href="#" class="btn btn-danger ms-auto">
+				<ion-icon name="heart-outline"></ion-icon>
+			</a>
+			<a href="#" class="btn btn-success ms-2">
+				<ion-icon name="cart-outline"></ion-icon>
+			</a>
+		</div>
+		<!-- Price and link to reviews -->
+		<div class="d-flex justify-content-between align-items-center">
+			<h4>{{ product.price }}$</h4>
+			<a href="#reviews">Reviews</a>
+		</div>
+		<hr />
+		<!-- Short description -->
+		<div>
+			<h5>Short description</h5>
+			<p>{{ product.description |safe|truncatewords:25 }}</p>
+			<a
+				href="#description"
+				class="btn btn-outline-info d-block text-center"
+			>
+				Read more...
+			</a>
+		</div>
+		<hr />
+		<!-- Share buttons -->
+		<div>
+			<h5 class="mb-4">Share</h5>
+			<div
+				class="share-links d-flex justify-content-center align-items-center"
+			>
+				{% with current_url=request.build_absolute_uri %}
+				<!-- Share link for Telegram -->
+				<a
+					target="_blank"
+					class="float_left me-4"
+					href="https://t.me/share/url?url={{ current_url }}"
+				>
+					<ion-icon name="navigate-circle"></ion-icon>
+				</a>
+				<!-- Share link for Facebook -->
+				<a
+					target="_blank"
+					class="float_left me-4"
+					href="https://www.facebook.com/sharer.php?u={{ current_url }}"
+				>
+					<ion-icon name="logo-facebook"></ion-icon>
+				</a>
+				<!-- Share link for LinkedIn -->
+				<a
+					target="_blank"
+					class="float_left me-4"
+					href="https://www.linkedin.com/sharing/share-offsite/?url={{ current_url }}"
+				>
+					<ion-icon name="logo-linkedin"></ion-icon>
+				</a>
+				<!-- Share link for Email -->
+				<a
+					target="_blank"
+					href="mailto:?subject=Check-{{ product.name }}&body={{ current_url }}"
+				>
+					<ion-icon name="mail-outline"></ion-icon>
+				</a>
+				{% endwith %}
+			</div>
+		</div>
+	</div>
+</div>
+
+<h3 id="description" class="my-3">Description</h3>
+
+<!-- Row with product description -->
+<div class="row px-3">
+	<div class="panel-bg-color col-12 pt-4 pb-3">
+		<p>{{ product.description |safe }}</p>
+	</div>
+</div>
+{% endblock content %}
