@@ -8,24 +8,27 @@
 		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
 
 		<meta name="author" content="Nikita Hubariev" />
-		<meta name="keywords" content="LapZone, Shop, Laptop, IT" />
+		<meta 
+            name="keywords" 
+            content="LapZone, Nikita Hubariev, Shop, Laptop, IT" 
+        />
 		<meta
 			name="description"
-			content="Internet shop for selling laptops and accessories for them."
+			content="{% block page_description %}Internet shop for selling laptops and accessories for them.{% endblock %}"
 		/>
 
 		<!-- og:title is empty and social networks will take the page title -->
 		<meta property="og:title" content="" />
 		<meta property="og:site_name" content="LapZone" />
 		<meta property="og:type" content="Internet shop" />
+        <meta property="og:url" content="{{ request.build_absolute_uri }}" />
 		<meta
 			property="og:image"
-			content="{% static 'images/site_header.webp' %}"
+			content="{% block social_image %}{% static 'images/site_header.webp' %}{% endblock %}"
 		/>
-		<meta property="og:url" content="{{ request.build_absolute_uri }}" />
 		<meta
 			property="og:description"
-			content="Internet shop for selling laptops and accessories for them."
+			content="{% block social_description %}Internet shop for selling laptops and accessories for them.{% endblock %}"
 		/>
 
 		<meta name="twitter:card" content="summary_large_image" />
