@@ -129,7 +129,7 @@
                     <div class="product__image w-100 d-flex justify-content-center align-items-center">
                         <a 
                             class="w-100 opacity-1"
-                            href="{% url 'shop:product_detail' product.slug %}" 
+                            href="{{ product.get_absolute_url }}" 
                         >
                             <img
                                 class="img-fluid w-100 rounded"
@@ -143,7 +143,7 @@
                         <h4 class="mb-2 product__title">
                             <a 
                                 class="text-decoration-none text-center"
-                                href="{% url 'shop:product_detail' product.slug %}" 
+                                href="{{ product.get_absolute_url }}" 
                             >
                                 {{ product.name |truncatechars:30 }}
                             </a>
