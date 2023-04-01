@@ -100,6 +100,9 @@ class ModelWithNameAndSlugTestMixin(ModelWithNameTestMixin):
     slug_max_length = 100
     slug_verbose_name = "Slug"
 
+    url_pattern_name: str
+
+    expected_url: str
     expected_slug: str
 
     def test_slug_generating(self):
@@ -139,6 +142,20 @@ class ModelWithNameAndSlugTestMixin(ModelWithNameTestMixin):
         self.assertEqual(
             self.model._meta.get_field("slug").blank, self.slug_blank
         )
+
+    def test_url_pattern_name(self):
+        """
+        Test that the instance's url_pattern_name is equal to the url_pattern_name attribute.
+        """
+        obj: Model = self._get_first_model()
+        self.assertEqual(obj.url_pattern_name, self.url_pattern_name)
+
+    def test_get_absolute_url(self):
+        """
+        Test that the instance's get_absolute_url is equal to the expected_url attribute.
+        """
+        obj: Model = self._get_first_model()
+        self.assertEqual(obj.get_absolute_url(), self.expected_url)
 
 
 class ModelWithDescriptionTestMixin:

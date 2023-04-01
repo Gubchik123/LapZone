@@ -28,7 +28,10 @@ class BrandModelTest(
     name_max_length = 30
     slug_max_length = 30
 
+    url_pattern_name = "brand"
+
     expected_slug = "test-brand"
+    expected_url = "/brand/test-brand/"
 
     @classmethod
     def setUpTestData(cls) -> NoReturn:
@@ -49,7 +52,10 @@ class CategoryModelTest(
     name_max_length = 50
     slug_max_length = 50
 
+    url_pattern_name = "category"
+
     expected_slug = "test-category"
+    expected_url = "/category/test-category/"
 
     @classmethod
     def setUpTestData(cls) -> NoReturn:
@@ -80,7 +86,10 @@ class ProductModelTest(
     # Redefined default parameter values of the abstract model(s).
     image_upload_to = "products/"
 
+    url_pattern_name = "product_detail"
+
     expected_slug = "test-laptop"
+    expected_url = "/product/test-laptop/"
 
     @classmethod
     def setUpTestData(cls) -> NoReturn:
