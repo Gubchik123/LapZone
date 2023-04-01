@@ -5,7 +5,7 @@ from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 
 from . import models
-from .forms import ProductFilterForm
+from .forms import ProductFilterForm, ReviewForm
 
 
 class UnknownOrderDirection(Exception):
@@ -43,7 +43,7 @@ def are_ordering_parameters_valid(order_by: str, order_dir: str) -> bool:
     return True
 
 
-def get_order_symbol_by_(order_dir: str) -> str | NoReturn:
+def get_order_symbol_by_(order_dir: str) -> str:
     """Returns the Django order symbol."""
     return "-" if order_dir == "desc" else ""
 
@@ -91,3 +91,10 @@ def get_products_filtered_by_brand_(
 ) -> QuerySet[models.Product]:
     """Returns the given products filtered by brand slug."""
     return products.filter(brand__slug=slug)
+
+
+def create_review_with_data_from_(form: ReviewForm, product_slug: str) -> None:
+    """Saves model form (creates review) with product by the given slug."""
+    review: models.Review = form.save(commit=False)
+    review.product = models.Product.objects.get(slug=product_slug)
+    review.save()

@@ -24,4 +24,9 @@ urlpatterns = [
         views.ProductDetailView.as_view(),
         name="product_detail",
     ),
+    path(
+        "product/<slug:slug>/review/",
+        views.ReviewFormView.as_view(),
+        name="add_review_to_product",
+    ),
 ]

@@ -128,3 +128,30 @@ class ProductDetailView(BaseView, generic.DetailView):
         context = super().get_context_data(**kwargs)
         context["review_form"] = ReviewForm()
         return context
+
+
+class ReviewFormView(generic.FormView):
+    """Form view for adding review to product."""
+
+    form_class = ReviewForm
+
+    def get_success_url(self) -> str:
+        """Returns the URL to the product_detail page
+        from which the POST request was made."""
+        return self.request.path[:-7]  # path - "review/"
+
+    def form_valid(self, form: ReviewForm) -> HttpResponseRedirect:
+        """Adds success message, creates review and returns redirect."""
+        services.create_review_with_data_from_(
+            form, product_slug=self.kwargs["slug"]
+        )
+        messages.success(self.request, "Review has added successfully.")
+        return super().form_valid(form)
+
+    def form_invalid(self, form: ReviewForm) -> HttpResponseRedirect:
+        """Adds error message and returns redirect to product_detail page."""
+        messages.error(
+            self.request,
+            "Data in form is invalid! Review has not added successfully.",
+        )
+        return HttpResponseRedirect(self.get_success_url())
