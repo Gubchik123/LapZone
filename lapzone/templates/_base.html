@@ -1,6 +1,5 @@
-{% load static %}
-
 <!DOCTYPE html>
+{% load static recaptcha3 %}
 <html lang="en">
 	<head>
 		<meta charset="UTF-8" />
@@ -57,6 +56,9 @@
 
 		{# My styles and CSS files #} 
         {% block styles %}{% endblock %}
+
+        {% recaptcha_init %}
+        {% recaptcha_ready action_name='homepage' %}
 	</head>
 	<body>
 		<div class="wrapper d-flex flex-column min-vh-100">
