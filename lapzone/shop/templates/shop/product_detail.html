@@ -28,6 +28,13 @@
     }
 
     #description, #reviews { scroll-margin-top: 10px; }
+
+    textarea.form-control { height: 150px; }
+    @media screen and (max-width: 576px) { /* Bootstrap5 .sm breakpoint */
+        #review_form .form-control,
+        #review_form .btn { width: 100%!important; }
+        .review ._header { flex-direction: column; }
+    }
 </style>
 {% endblock styles %} 
 
@@ -172,5 +179,41 @@
 	<div class="panel-bg-color col-12 pt-4 pb-3">
 		<p>{{ product.description |safe }}</p>
 	</div>
+</div>
+
+<h3 id="reviews" class="my-3">Reviews</h3>
+
+<!-- Row with review form and product reviews -->
+<div class="row px-3">
+	<div class="panel-bg-color col-12 py-3">
+        <form 
+            class="mb-3"
+            method="post" 
+            id="review_form" 
+            action="{{ request.path }}review/" 
+        >
+            {% csrf_token %}
+            {{ review_form.as_div }}
+            <input 
+                type="submit" 
+                value="Add review" 
+                class="btn btn-success btn-lg mb-3"
+            >
+        </form>
+
+        {% for review in product.review_set.all %}
+        <div class="review mb-4">
+            <div 
+                class="_header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
+            >
+                <b>{{ review.name }}</b>
+                {{ review.created |date:"d.m.Y | H:i" }}
+            </div>
+            <p><b>Review:</b> {{ review.body }}</p>
+        </div>
+        {% empty %}
+        {% include 'utils/_alert.html' with message="There are no reviews yet." category="primary" dismissible=False only %}
+        {% endfor %}
+    </div>
 </div>
 {% endblock content %}
