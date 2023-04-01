@@ -1,14 +1,15 @@
 from typing import Any
 
 from django.views import generic
+from django.contrib import messages
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 
 from general.views import BaseView
 from . import services
-from .forms import ProductFilterForm
 from .models import Product, Category, Brand
+from .forms import ProductFilterForm, ReviewForm
 
 
 class HomeView(BaseView, generic.TemplateView):
@@ -118,7 +119,12 @@ class ProductListByBrandView(_ProductListView):
         return context
 
 
-class ProductDetailView(generic.DetailView):
+class ProductDetailView(BaseView, generic.DetailView):
     """View for displaying detailed information about a single product."""
 
     model = Product
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        context = super().get_context_data(**kwargs)
+        context["review_form"] = ReviewForm()
+        return context
