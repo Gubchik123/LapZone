@@ -1,5 +1,10 @@
 {% extends '_base.html' %} 
 
+{# Redefining content of meta tags #}
+{% block social_image %}{{ product.image.url }}{% endblock %}
+{% block page_description %}{{ product.description |striptags|truncatewords:25 }}{% endblock %}
+{% block social_description %}{{ product.description |striptags|truncatewords:25 }}{% endblock %}
+
 {% block title %}{{ product.name }}{% endblock %} 
 {% block content_title %}{{ product.name }}{% endblock %}
 
