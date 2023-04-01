@@ -1,5 +1,4 @@
 from django.db import models
-from django.urls import reverse
 from django.contrib.auth.models import User
 
 from general.models import (
@@ -18,10 +17,7 @@ class Brand(ModelWithNameAndSlug, models.Model):
     Fields: name, slug
     """
 
-    # TODO: For now, there is no such view name.
-    # def get_absolute_url(self):
-    #     """Gets the URL to page for displaying the detail of a brand."""
-    #     return reverse("shop:brand_detail", args=[self.slug])
+    url_pattern_name = "brand"
 
     class Meta:
         """Meta options for the Brand model."""
@@ -42,10 +38,7 @@ class Category(ModelWithNameAndSlug, models.Model):
     Fields: name, slug
     """
 
-    # TODO: For now, there is no such view name.
-    # def get_absolute_url(self):
-    #     """Gets the URL to page for displaying the detail of a category."""
-    #     return reverse("shop:category_detail", args=[self.slug])
+    url_pattern_name = "category"
 
     class Meta:
         """Meta options for the Category model."""
@@ -75,6 +68,10 @@ class Product(
     Fields: name, slug, description, image, price, year, brand, category
     """
 
+    # Class attribute
+    url_pattern_name = "product_detail"
+
+    # Model fields
     price = models.FloatField(blank=False, verbose_name="Price")
     year = models.IntegerField(blank=False, verbose_name="Year")
 
@@ -84,11 +81,6 @@ class Product(
     category = models.ForeignKey(
         Category, on_delete=models.CASCADE, verbose_name="Category"
     )
-
-    # TODO: For now, there is no such view name.
-    # def get_absolute_url(self):
-    #     """Gets the URL to page for displaying the detail of a product."""
-    #     return reverse("shop:product_detail", args=[self.slug])
 
     class Meta:
         """Meta options for the Product model."""
