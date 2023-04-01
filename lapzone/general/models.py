@@ -1,7 +1,5 @@
-import re
-from typing import NoReturn
-
 from django.db import models
+from django.urls import reverse
 from django.utils.text import slugify
 
 
@@ -23,6 +21,10 @@ class ModelWithName(models.Model):
 class ModelWithNameAndSlug(ModelWithName, models.Model):
     """Abstract model with 'name' CharField and 'slug' SlugField"""
 
+    # Class attribute
+    url_pattern_name: str
+
+    # Model field.
     slug = models.SlugField(
         max_length=100,
         unique=True,
@@ -36,6 +38,10 @@ class ModelWithNameAndSlug(ModelWithName, models.Model):
         if not self.slug:
             self.slug = slugify(self.name)
         return super().save(*args, **kwargs)
+
+    def get_absolute_url(self) -> str:
+        """Returns the URL to page to display the detail of the instance."""
+        return reverse(f"shop:{self.url_pattern_name}", args=[self.slug])
 
     class Meta:
         abstract = True
