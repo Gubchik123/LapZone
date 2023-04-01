@@ -44,11 +44,7 @@ class ModelWithNameTestMixin:
 
     def test_model_string_representation(self):
         """Test the model string representation by __str__."""
-        # * Workaround to avoid the DoesNotExist during ProductModelTest
-        try:
-            obj: self.model = self.model.objects.get(id=1)
-        except self.model.DoesNotExist:
-            obj: Product = self.model.objects.get(name="Test laptop")
+        obj = self._get_first_model()
         self.assertEqual(str(obj), obj.name)
 
     def test_name_verbose_name(self):
@@ -84,6 +80,15 @@ class ModelWithNameTestMixin:
             self.model._meta.get_field("name").blank, self.name_blank
         )
 
+    def _get_first_model(self) -> Model:
+        """Returns the first model depending on self.model"""
+
+        # * Workaround to avoid the DoesNotExist during ProductModelTest
+        try:
+            return self.model.objects.get(id=1)
+        except self.model.DoesNotExist:
+            return self.model.objects.get(name="Test laptop")
+
 
 class ModelWithNameAndSlugTestMixin(ModelWithNameTestMixin):
     """Mixin for testing the 'name' and 'slug' fields parameters
@@ -99,11 +104,7 @@ class ModelWithNameAndSlugTestMixin(ModelWithNameTestMixin):
 
     def test_slug_generating(self):
         """Test that the slug was generated correctly"""
-        # * Workaround to avoid the DoesNotExist during ProductModelTest
-        try:
-            obj: self.model = self.model.objects.get(id=1)
-        except self.model.DoesNotExist:
-            obj: Product = self.model.objects.get(name="Test laptop")
+        obj = self._get_first_model()
         self.assertEqual(obj.slug, self.expected_slug)
 
     def test_slug_verbose_name(self):
