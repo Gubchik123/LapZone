@@ -1,4 +1,5 @@
 {% extends '_base.html' %} 
+{% load static %}
 
 {# Redefining content of meta tags #}
 {% block social_image %}{{ product.image.url }}{% endblock %}
@@ -9,34 +10,12 @@
 {% block content_title %}{{ product.name }}{% endblock %}
 
 {% block styles %}
-<style>
-    #productCarousel { width: 85%; }
-
-    .share-links ion-icon[name="logo-facebook"],
-    .share-links ion-icon[name="navigate-circle"] { border-radius: 50%; }
-    .share-links ion-icon[name="logo-linkedin"],
-    .share-links ion-icon[name="mail-outline"] { border-radius: 5px; }
-    .share-links ion-icon[name="logo-linkedin"],
-    .share-links ion-icon[name="logo-facebook"] { 
-        color: #fff; background: darkblue; 
-    }
-    .share-links ion-icon[name="mail-outline"] { 
-        color: red; background-color: #fff; 
-    }
-    .share-links ion-icon[name="navigate-circle"] { 
-        color: #28a8e9; background-color: #fff; 
-    }
-
-    #description, #reviews { scroll-margin-top: 10px; }
-
-    textarea.form-control { height: 150px; }
-    @media screen and (max-width: 576px) { /* Bootstrap5 .sm breakpoint */
-        #review_form .form-control,
-        #review_form .btn { width: 100%!important; }
-        .review ._header { flex-direction: column; }
-    }
-</style>
-{% endblock styles %} 
+<link
+    type="text/css"
+    rel="stylesheet"
+    href="{% static 'css/shop/product_detail.css' %}"
+/> 
+{% endblock %} 
 
 
 {% block content %}
@@ -194,6 +173,7 @@
         >
             {% csrf_token %}
             {{ review_form.as_div }}
+            <input type="hidden" id="review_parent" name="review_parent_id">
             <input 
                 type="submit" 
                 value="Add review" 
@@ -201,15 +181,37 @@
             >
         </form>
 
-        {% for review in product.review_set.all %}
+        {% for review in product.get_reviews %}
         <div class="review mb-4">
             <div 
-                class="_header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
+                class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
             >
                 <b>{{ review.name }}</b>
                 {{ review.created |date:"d.m.Y | H:i" }}
             </div>
-            <p><b>Review:</b> {{ review.body }}</p>
+            <div class="review__body d-flex justify-content-between align-items-center">
+                <p class="mb-0"><b>Review:</b> {{ review.body }}</p>
+                <a
+                    href="#review_form"
+                    class="btn btn-outline-info btn-sm"
+                    onclick="add_answer_for_('{{ review.name }}', '{{ review.id }}')"
+                >
+                    Answer
+                </a>
+            </div>
+            {% for child_review in review.review_set.all %}
+            <div class="review mt-2 d-flex justify-content-end">
+                <div class="child-review">
+                    <div
+                        class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
+                    >
+                        <b>{{ child_review.name }}</b>
+                        {{ child_review.created |date:"d.m.Y | H:i" }}
+                    </div>
+                    <p class="mb-0"><b>Answer:</b> {{ child_review.body }}</p>
+                </div>
+            </div>
+            {% endfor %}
         </div>
         {% empty %}
         {% include 'utils/_alert.html' with message="There are no reviews yet." category="primary" dismissible=False only %}
@@ -217,3 +219,15 @@
     </div>
 </div>
 {% endblock content %}
+
+
+{% block scripts %}
+<script>
+	function add_answer_for_(name, id) {
+		document.getElementById("review_parent").value = id;
+		document.getElementById("id_body").innerText = `${name}, `;
+        document.querySelector("label[for='id_body']").textContent = "Answer:";
+        document.querySelector("#review_form .btn").value = "Add answer";
+	}
+</script>
+{% endblock scripts %} 
