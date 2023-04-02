@@ -117,7 +117,7 @@
 
 {% block scripts %}
 <!-- Script to add "active" class selector for first carousel item -->
-<script>
+<script defer>
 	let first_carousel_image = document.querySelectorAll(".carousel-item")[0];
 	first_carousel_image.classList.add("active");
 </script>

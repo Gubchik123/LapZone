@@ -222,7 +222,7 @@
 
 
 {% block scripts %}
-<script>
+<script defer>
 	function add_answer_for_(name, id) {
 		document.getElementById("review_parent").value = id;
 		document.getElementById("id_body").innerText = `${name}, `;
