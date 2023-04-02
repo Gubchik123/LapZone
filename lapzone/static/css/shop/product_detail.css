@@ -1,0 +1,33 @@
+#productCarousel { width: 85%; }
+
+.share-links ion-icon[name="logo-facebook"],
+.share-links ion-icon[name="navigate-circle"] { border-radius: 50%; }
+.share-links ion-icon[name="logo-linkedin"],
+.share-links ion-icon[name="mail-outline"] { border-radius: 5px; }
+.share-links ion-icon[name="logo-linkedin"],
+.share-links ion-icon[name="logo-facebook"] { 
+    color: #fff; background: darkblue; 
+}
+.share-links ion-icon[name="mail-outline"] { 
+    color: red; background-color: #fff; 
+}
+.share-links ion-icon[name="navigate-circle"] { 
+    color: #28a8e9; background-color: #fff; 
+}
+
+#description, #reviews { scroll-margin-top: 10px; }
+
+textarea.form-control { height: 150px; }
+
+.child-review { width: 90%; }
+
+@media screen and (max-width: 576px) { /* Bootstrap5 .sm breakpoint */
+    #review_form .form-control,
+    #review_form .btn { width: 100%!important; }
+
+    .review__header,
+    .review__body { flex-direction: column; }
+    .review__body { align-items: start!important; }
+
+    .review__body .btn { margin-top: 10px; }
+}
