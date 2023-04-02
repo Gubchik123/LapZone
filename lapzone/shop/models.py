@@ -82,6 +82,12 @@ class Product(
         Category, on_delete=models.CASCADE, verbose_name="Category"
     )
 
+    def get_reviews(self):
+        """Returns all top-level reviews and their child reviews."""
+        return self.review_set.filter(parent__isnull=True).prefetch_related(
+            "review_set"
+        )
+
     class Meta:
         """Meta options for the Product model."""
 

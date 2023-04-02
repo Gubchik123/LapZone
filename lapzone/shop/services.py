@@ -93,8 +93,12 @@ def get_products_filtered_by_brand_(
     return products.filter(brand__slug=slug)
 
 
-def create_review_with_data_from_(form: ReviewForm, product_slug: str) -> None:
+def create_review_with_data_from_(
+    form: ReviewForm, product_slug: str, review_parent_id: str | None
+) -> None:
     """Saves model form (creates review) with product by the given slug."""
     review: models.Review = form.save(commit=False)
     review.product = models.Product.objects.get(slug=product_slug)
+    if review_parent_id is not None:
+        review.parent_id = int(review_parent_id)
     review.save()

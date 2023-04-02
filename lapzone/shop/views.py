@@ -141,17 +141,27 @@ class ReviewFormView(generic.FormView):
         return self.request.path[:-7]  # path - "review/"
 
     def form_valid(self, form: ReviewForm) -> HttpResponseRedirect:
-        """Adds success message, creates review and returns redirect."""
+        """Adds success message, creates review 
+        and returns redirect to product_detail page."""
+        review_parent_id = self.request.POST.get("review_parent_id", None)
         services.create_review_with_data_from_(
-            form, product_slug=self.kwargs["slug"]
+            form,
+            product_slug=self.kwargs["slug"],
+            review_parent_id=review_parent_id,
         )
-        messages.success(self.request, "Review has added successfully.")
+        prefix = "Review" if review_parent_id is None else "Answer"
+        messages.success(self.request, f"{prefix} has added successfully.")
         return super().form_valid(form)
 
     def form_invalid(self, form: ReviewForm) -> HttpResponseRedirect:
         """Adds error message and returns redirect to product_detail page."""
+        prefix = (
+            "Review"
+            if self.request.POST.get("id_parent", None) is None
+            else "Answer"
+        )
         messages.error(
             self.request,
-            "Data in form is invalid! Review has not added successfully.",
+            f"Data in form is invalid! {prefix} has not added successfully.",
         )
         return HttpResponseRedirect(self.get_success_url())
