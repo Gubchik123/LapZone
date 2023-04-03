@@ -82,6 +82,12 @@ class Product(
         Category, on_delete=models.CASCADE, verbose_name="Category"
     )
 
+    def save(self, *args, **kwargs):
+        """Sets the special attributes for the parent save method."""
+        self.is_allow_to_resize = True
+        self.image_name = self.slug
+        super().save(*args, **kwargs)
+
     def get_reviews(self):
         """Returns all top-level reviews and their child reviews."""
         return self.review_set.filter(parent__isnull=True).prefetch_related(
@@ -110,6 +116,13 @@ class ProductShot(
     A model representing a product shot.
     Fields: name, description, image, product
     """
+
+    def save(self, *args, **kwargs):
+        """Sets the special attributes for the parent save method."""
+        self.is_allow_to_resize = True
+        shots_count = self.product.productshot_set.count() + 1
+        self.image_name = f"{self.product.slug}-shot-{shots_count}"
+        super().save(*args, **kwargs)
 
     class Meta:
         """Meta options for the ProductShot model."""
@@ -201,6 +214,12 @@ class CarouselImage(
     A model representing a carousel image.
     Fields: name, description, image
     """
+
+    def save(self, *args, **kwargs):
+        """Sets the special attributes for the parent save method."""
+        self.is_allow_to_resize = False
+        self.image_name = self.name
+        super().save(*args, **kwargs)
 
     class Meta:
         """Meta options for the CarouselImage model."""
