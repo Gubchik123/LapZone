@@ -1,3 +1,5 @@
+from PIL import Image
+
 from django.db import models
 from django.urls import reverse
 from django.utils.text import slugify
@@ -62,6 +64,45 @@ class ModelWithImage(models.Model):
     image = models.ImageField(
         upload_to="content/", blank=False, verbose_name="Image"
     )
+
+    def save(self, *args, **kwargs):
+        """Changes the image name and optimize if it's allowed."""
+        is_allow_to_resize_image = self._get_allow_for_image_resizing()
+        super().save(*args, **kwargs)
+        if is_allow_to_resize_image and self.is_allow_to_resize:
+            self._resize_and_optimize_image()
+
+    def _get_allow_for_image_resizing(self) -> bool:
+        """Checks instance and returns an allow for resizing after saving."""
+        if self._is_not_new_instance():
+            prev_instance = type(self).objects.get(pk=self.pk)
+            if prev_instance.image != self.image:
+                prev_instance.image.delete(save=False)
+                return self._set_image_name_and_allow_resizing()
+            return False
+        else:  # if it's a new instance
+            return self._set_image_name_and_allow_resizing()
+
+    def _is_not_new_instance(self) -> bool:
+        """Returns True if it's not a new instance and False if it is."""
+        return self.pk is not None
+
+    def _set_image_name_and_allow_resizing(self) -> True:
+        """Sets image name to image_name attribute and allows resizing."""
+        self.image.name = f"{self.image_name}.webp"
+        return True
+
+    def _resize_and_optimize_image(self) -> None:
+        """Resizes the image if it's larger than 800px and optimizes."""
+        img = Image.open(self.image)
+
+        if img.width > 800:
+            ratio = 800 / float(img.width)
+            new_height = int(ratio * img.height)
+            img = img.resize((800, new_height), Image.ANTIALIAS)
+
+        img.save(self.image.path, "webp", quality=80, optimize=True)
+        img.close()
 
     class Meta:
         abstract = True
