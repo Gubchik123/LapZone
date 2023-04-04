@@ -3,6 +3,19 @@ from django.db.models import Model
 from shop.models import Product
 
 
+class ModelTestMixin:
+    """Base mixin with general methods."""
+
+    def _get_first_model(self) -> Model:
+        """Returns the first model depending on self.model"""
+
+        # * Workaround to avoid the DoesNotExist during ProductModelTest
+        try:
+            return self.model.objects.get(id=1)
+        except self.model.DoesNotExist:
+            return self.model.objects.get(name="Test laptop")
+
+
 class ModelMetaOptionsTestMixin:
     """Mixin for testing the base meta options of models."""
 
@@ -32,7 +45,7 @@ class ModelMetaOptionsTestMixin:
         self.assertEqual(self.model._meta.ordering, self.ordering)
 
 
-class ModelWithNameTestMixin:
+class ModelWithNameTestMixin(ModelTestMixin):
     """Mixin for testing the 'name' field parameters
     for models that inherited from abstract ModelWithNameTest."""
 
@@ -79,15 +92,6 @@ class ModelWithNameTestMixin:
         self.assertEqual(
             self.model._meta.get_field("name").blank, self.name_blank
         )
-
-    def _get_first_model(self) -> Model:
-        """Returns the first model depending on self.model"""
-
-        # * Workaround to avoid the DoesNotExist during ProductModelTest
-        try:
-            return self.model.objects.get(id=1)
-        except self.model.DoesNotExist:
-            return self.model.objects.get(name="Test laptop")
 
 
 class ModelWithNameAndSlugTestMixin(ModelWithNameTestMixin):
@@ -185,7 +189,7 @@ class ModelWithDescriptionTestMixin:
         )
 
 
-class ModelWithImageTestMixin:
+class ModelWithImageTestMixin(ModelTestMixin):
     """Mixin for testing the 'image' field parameters
     for models that inherited from abstract ModelWithImageTestMixin."""
 
