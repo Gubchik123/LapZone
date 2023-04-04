@@ -90,6 +90,7 @@ class ProductModelTest(
 
     expected_slug = "test-laptop"
     expected_url = "/product/test-laptop/"
+    expected_image_name = "test-laptop.webp"
 
     @classmethod
     def setUpTestData(cls) -> NoReturn:
@@ -178,6 +179,8 @@ class ProductShotModelTest(
     # Redefined default parameter values of the abstract model(s).
     description_blank = True
     image_upload_to = "product_shots/"
+
+    expected_image_name = "test-laptop-shot-1.webp"
 
     @classmethod
     def setUpTestData(cls) -> NoReturn:
@@ -344,6 +347,8 @@ class CarouselImageModelTest(
     # Redefined default parameter values of the abstract model(s).
     description_blank = True
     image_upload_to = "carousel_images/"
+
+    expected_image_name = "test carousel image.webp"
 
     @classmethod
     def setUpTestData(cls) -> NoReturn:

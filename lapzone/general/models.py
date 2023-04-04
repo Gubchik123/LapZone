@@ -94,7 +94,11 @@ class ModelWithImage(models.Model):
 
     def _set_image_name_and_allow_resizing(self) -> True:
         """Sets image name to image_name attribute and allows resizing."""
-        self.image.name = f"{self.image_name}.webp"
+        try:
+            image_name = self.image_name if self.image_name else self.slug
+        except AttributeError:
+            image_name = self.name
+        self.image.name = f"{image_name}.webp"
         return True
 
     def _resize_and_optimize_image(self) -> None:

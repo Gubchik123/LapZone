@@ -198,6 +198,8 @@ class ModelWithImageTestMixin(ModelTestMixin):
     image_upload_to: str
     image_verbose_name = "Image"
 
+    expected_image_name: str
+
     def test_image_verbose_name(self):
         """
         Test that the image field's verbose name is equal to the image_verbose_name attribute.
@@ -223,6 +225,14 @@ class ModelWithImageTestMixin(ModelTestMixin):
         self.assertEqual(
             self.model._meta.get_field("image").upload_to,
             self.image_upload_to,
+        )
+
+    def test_generated_image_name(self):
+        """
+        Test that the instance's image name is equal to the expected_image_name attribute.
+        """
+        self.assertEqual(
+            self._get_first_model().image.name, self.expected_image_name
         )
 
 
