@@ -9,6 +9,11 @@
 	.my-carousel .carousel-item img { max-height: 70vh; }
 
 	.white-space-nowrap { white-space: nowrap; }
+
+    .product { min-width: 250px; }
+    @media screen and (max-width: 768px) { /* Bootstrap5 .md breakpoint */
+        .product { min-width: 200px; }
+    }
 </style>
 {% endblock styles %} 
 
@@ -75,6 +80,54 @@
 				>
 					{{ category.name }}
 				</a>
+				{% endfor %}
+			</div>
+
+			<h3 class="mt-5 mb-3">Recently added products</h3>
+			<div
+				class="white-space-nowrap overflow-auto d-flex align-items-center"
+			>
+				{% for product in recently_added_products %}
+				<div
+					class="product d-inline-block d-flex flex-column justify-content-between rounded p-2 m-0 me-3"
+				>
+					<div class="product__image w-100 mb-2">
+						<a
+							class="w-100 opacity-1"
+							href="{{ product.get_absolute_url }}"
+						>
+							<img
+								class="img-fluid w-100 rounded"
+								alt="{{ product.name }} image"
+								src="{{ product.image.url }}"
+							/>
+						</a>
+					</div>
+					<div class="product__details mb-3">
+						<hr class="table-group-divider" />
+						<h5 class="mb-2 product__title">
+							<a
+                                style="white-space: normal;"
+								href="{{ product.get_absolute_url }}"
+								class="text-decoration-none text-center"
+							>
+								{{ product.name |truncatechars:30 }}
+							</a>
+						</h5>
+						<hr class="table-group-divider" />
+						<h4><b>{{ product.price }}$</b></h4>
+					</div>
+					<div
+						class="product__buttons d-flex justify-content-between"
+					>
+						<a href="#" class="btn btn-danger btn-sm me-auto">
+							<ion-icon name="heart-outline"></ion-icon>
+						</a>
+						<a href="#" class="btn btn-success btn-sm ms-auto">
+							<ion-icon name="cart-outline"></ion-icon>
+						</a>
+					</div>
+				</div>
 				{% endfor %}
 			</div>
 

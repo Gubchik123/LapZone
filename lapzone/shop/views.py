@@ -20,6 +20,9 @@ class HomeView(BaseView, generic.TemplateView):
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         """Adds some content in context data and returns it."""
         context = super().get_context_data(**kwargs)
+        context[
+            "recently_added_products"
+        ] = services.get_recently_added_products(10)
         context["brands"] = services.get_all_brands()
         context["categories"] = services.get_all_categories()
         context["carousel_images"] = services.get_all_carousel_images()
@@ -141,7 +144,7 @@ class ReviewFormView(generic.FormView):
         return self.request.path[:-7]  # path - "review/"
 
     def form_valid(self, form: ReviewForm) -> HttpResponseRedirect:
-        """Adds success message, creates review 
+        """Adds success message, creates review
         and returns redirect to product_detail page."""
         review_parent_id = self.request.POST.get("review_parent_id", None)
         services.create_review_with_data_from_(

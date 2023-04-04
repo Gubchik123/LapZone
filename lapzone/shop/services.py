@@ -1,5 +1,3 @@
-from typing import NoReturn
-
 from django.shortcuts import redirect
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
@@ -8,8 +6,9 @@ from . import models
 from .forms import ProductFilterForm, ReviewForm
 
 
-class UnknownOrderDirection(Exception):
-    """Exception that occurs when an unrecognized order direction is given."""
+def get_recently_added_products(count: int) -> QuerySet[models.Product]:
+    """Returns the given number of recently added products."""
+    return models.Product.objects.order_by("-id")[:count]
 
 
 def get_all_brands() -> QuerySet[models.Brand]:
