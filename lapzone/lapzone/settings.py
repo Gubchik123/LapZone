@@ -15,6 +15,8 @@ SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
 DEBUG = True
 
+TESTING = len(sys.argv) > 1 and sys.argv[1] == "test"
+
 ALLOWED_HOSTS = []
 
 INSTALLED_APPS = [
@@ -153,7 +155,7 @@ LOGGING = {
     },
 }
 
-if len(sys.argv) > 1 and sys.argv[1] == "test":
+if TESTING:
     logging.disable(logging.CRITICAL)
 
 CKEDITOR_UPLOAD_PATH = "uploads/"
