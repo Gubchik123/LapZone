@@ -2,6 +2,7 @@ from PIL import Image
 
 from django.db import models
 from django.urls import reverse
+from django.conf import settings
 from django.utils.text import slugify
 
 
@@ -69,7 +70,11 @@ class ModelWithImage(models.Model):
         """Changes the image name and optimize if it's allowed."""
         is_allow_to_resize_image = self._get_allow_for_image_resizing()
         super().save(*args, **kwargs)
-        if is_allow_to_resize_image and self.is_allow_to_resize:
+        if (
+            is_allow_to_resize_image
+            and self.is_allow_to_resize
+            and not settings.TESTING
+        ):
             self._resize_and_optimize_image()
 
     def _get_allow_for_image_resizing(self) -> bool:
