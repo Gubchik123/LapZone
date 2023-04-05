@@ -4,7 +4,7 @@ from django.test import TestCase
 from django.contrib.auth.models import User
 
 from shop import models
-from general.test_mixins import (
+from general.test_mixins.for_models import (
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
     ModelWithNameAndSlugTestMixin,
