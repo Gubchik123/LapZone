@@ -68,3 +68,41 @@ class HomeViewTestCase(ShopAppViewsTestMixin, TestCase):
             self.response.context["carousel_images"],
             CarouselImage.objects.all(),
         )
+
+
+class ProductListViewTestMixin(ShopAppViewsTestMixin):
+    """Test mixin for views that are inherited from the _ProductListView."""
+ 
+    template_name = "shop/product_list.html"
+
+
+class AllProductsListViewTestCase(ProductListViewTestMixin, TestCase):
+    """Tests for the AllProductsListView."""
+
+    url = "/products/"
+    name = "shop:product_list"
+
+
+class ProductListByCategoryViewTestCase(ProductListViewTestMixin, TestCase):
+    """Tests for the ProductListByCategoryView."""
+
+    name = "shop:category"
+    url = "/category/test-category-1/"
+    kwargs = {"slug": "test-category-1"}
+
+
+class ProductListByBrandViewTestCase(ProductListViewTestMixin, TestCase):
+    """Tests for the ProductListByBrandView."""
+
+    name = "shop:brand"
+    url = "/brand/test-brand-1/"
+    kwargs = {"slug": "test-brand-1"}
+
+
+class ProductDetailViewTestCase(ProductListViewTestMixin, TestCase):
+    """Tests for the ProductDetailView."""
+
+    name = "shop:product_detail"
+    url = "/product/test-product-1/"
+    kwargs = {"slug": "test-product-1"}
+    template_name = "shop/product_detail.html"
