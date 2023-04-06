@@ -30,46 +30,44 @@
 				data-bs-ride="carousel"
 			>
 				<div class="carousel-inner">
-                    <div class="carousel-item active" data-bs-interval="5000">
-                        <img
-                            class="d-block w-100"
-                            src="{{ product.image.url }}"
-                            alt="{{ product.name }} image"
-                        />
-                    </div>
-					{% for shot in product.productshot_set.all %}
-					<div
-						class="carousel-item" data-bs-interval="3000"
-					>
+					<div class="carousel-item active" data-bs-interval="5000">
 						<img
-                            class="d-block w-100"
+							class="d-block w-100"
+							src="{{ product.image.url }}"
+							alt="{{ product.name }} image"
+						/>
+					</div>
+					{% for shot in product.productshot_set.all %}
+					<div class="carousel-item" data-bs-interval="3000">
+						<img
+							class="d-block w-100"
 							alt="{{ shot.name }}"
 							src="{{ shot.image.url }}"
 						/>
 					</div>
 					{% endfor %}
 				</div>
-                <!-- Carousel control to previous image -->
+				<!-- Carousel control to previous image -->
 				<button
-                    type="button"
-                    data-bs-slide="prev"
+					type="button"
+					data-bs-slide="prev"
 					class="carousel-control-prev"
 					data-bs-target="#productCarousel"
 				>
 					<span
-                        aria-hidden="true"
+						aria-hidden="true"
 						class="carousel-control-prev-icon"
 					></span>
 				</button>
-                <!-- Carousel control to next image -->
+				<!-- Carousel control to next image -->
 				<button
-                    type="button"
+					type="button"
 					data-bs-slide="next"
 					class="carousel-control-next"
 					data-bs-target="#productCarousel"
 				>
 					<span
-                        aria-hidden="true"
+						aria-hidden="true"
 						class="carousel-control-next-icon"
 					></span>
 				</button>
@@ -110,41 +108,62 @@
 		<!-- Share buttons -->
 		<div>
 			<h5 class="mb-4">Share</h5>
-			<div
-				class="share-links d-flex justify-content-center align-items-center"
-			>
+			<div class="row share-links">
 				{% with current_url=request.build_absolute_uri %}
-				<!-- Share link for Telegram -->
-				<a
-					target="_blank"
-					class="float_left me-4"
-					href="https://t.me/share/url?url={{ current_url }}"
+				<div
+					class="col-md-6 col-sm-12 d-flex justify-content-end align-items-center"
 				>
-					<ion-icon name="navigate-circle"></ion-icon>
-				</a>
-				<!-- Share link for Facebook -->
-				<a
-					target="_blank"
-					class="float_left me-4"
-					href="https://www.facebook.com/sharer.php?u={{ current_url }}"
-				>
-					<ion-icon name="logo-facebook"></ion-icon>
-				</a>
-				<!-- Share link for LinkedIn -->
-				<a
-					target="_blank"
-					class="float_left me-4"
-					href="https://www.linkedin.com/sharing/share-offsite/?url={{ current_url }}"
-				>
-					<ion-icon name="logo-linkedin"></ion-icon>
-				</a>
-				<!-- Share link for Email -->
-				<a
-					target="_blank"
-					href="mailto:?subject=Check-{{ product.name }}&body={{ current_url }}"
-				>
-					<ion-icon name="mail-outline"></ion-icon>
-				</a>
+					<!-- Share link for Telegram -->
+					<a
+						target="_blank"
+						class="float_left me-4"
+						href="https://t.me/share/url?url={{ current_url }}"
+					>
+						<ion-icon name="navigate-circle"></ion-icon>
+					</a>
+					<!-- Share link for Facebook -->
+					<a
+						target="_blank"
+						class="float_left me-4"
+						href="https://www.facebook.com/sharer.php?u={{ current_url }}"
+					>
+						<ion-icon name="logo-facebook"></ion-icon>
+					</a>
+					<!-- Share link for LinkedIn -->
+					<a
+						target="_blank"
+						class="float_left"
+						href="https://www.linkedin.com/sharing/share-offsite/?url={{ current_url }}"
+					>
+						<ion-icon name="logo-linkedin"></ion-icon>
+					</a>
+				</div>
+				<div class="col-md-6 col-sm-12 d-flex align-items-center">
+					<!-- Share link for Twitter -->
+					<a
+						target="_blank"
+						class="float_left me-4"
+						href="https://twitter.com/share?original_referer={{ current_url }}"
+					>
+						<ion-icon name="logo-twitter"></ion-icon>
+					</a>
+					<!-- Share link for Viber -->
+					<a
+						target="_blank"
+						class="float_left me-4"
+						href="viber://forward?text={{ current_url }}"
+					>
+						<ion-icon name="logo-whatsapp"></ion-icon>
+					</a>
+					<!-- Share link for Email -->
+					<a
+						target="_blank"
+						class="float_left"
+						href="mailto:?subject=Check-{{ product.name }}&body={{ current_url }}"
+					>
+						<ion-icon name="mail-outline"></ion-icon>
+					</a>
+				</div>
 				{% endwith %}
 			</div>
 		</div>
@@ -165,60 +184,60 @@
 <!-- Row with review form and product reviews -->
 <div class="row px-3">
 	<div class="panel-bg-color col-12 py-3">
-        <form 
-            class="mb-3"
-            method="post" 
-            id="review_form" 
-            action="{{ request.path }}review/" 
-        >
-            {% csrf_token %}
-            {{ review_form.as_div }}
-            <input type="hidden" id="review_parent" name="review_parent_id">
-            <input 
-                type="submit" 
-                value="Add review" 
-                class="btn btn-success btn-lg mb-3"
-            >
-        </form>
+		<form
+			class="mb-3"
+			method="post"
+			id="review_form"
+			action="{{ request.path }}review/"
+		>
+			{% csrf_token %} {{ review_form.as_div }}
+			<input type="hidden" id="review_parent" name="review_parent_id" />
+			<input
+				type="submit"
+				value="Add review"
+				class="btn btn-success btn-lg mb-3"
+			/>
+		</form>
 
-        {% for review in product.get_reviews %}
-        <div class="review mb-4">
-            <div 
-                class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
-            >
-                <b>{{ review.name }}</b>
-                {{ review.created |date:"d.m.Y | H:i" }}
-            </div>
-            <div class="review__body d-flex justify-content-between align-items-center">
-                <p class="mb-0"><b>Review:</b> {{ review.body }}</p>
-                <a
-                    href="#review_form"
-                    class="btn btn-outline-info btn-sm"
-                    onclick="add_answer_for_('{{ review.name }}', '{{ review.id }}')"
-                >
-                    Answer
-                </a>
-            </div>
-            {% for child_review in review.review_set.all %}
-            <div class="review mt-2 d-flex justify-content-end">
-                <div class="child-review">
-                    <div
-                        class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
-                    >
-                        <b>{{ child_review.name }}</b>
-                        {{ child_review.created |date:"d.m.Y | H:i" }}
-                    </div>
-                    <p class="mb-0"><b>Answer:</b> {{ child_review.body }}</p>
-                </div>
-            </div>
-            {% endfor %}
-        </div>
-        {% empty %}
-        {% include 'utils/_alert.html' with message="There are no reviews yet." category="primary" dismissible=False only %}
-        {% endfor %}
-    </div>
+		{% for review in product.get_reviews %}
+		<div class="review mb-4">
+			<div
+				class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
+			>
+				<b>{{ review.name }}</b>
+				{{ review.created |date:"d.m.Y | H:i" }}
+			</div>
+			<div
+				class="review__body d-flex justify-content-between align-items-center"
+			>
+				<p class="mb-0"><b>Review:</b> {{ review.body }}</p>
+				<a
+					href="#review_form"
+					class="btn btn-outline-info btn-sm"
+					onclick="add_answer_for_('{{ review.name }}', '{{ review.id }}')"
+				>
+					Answer
+				</a>
+			</div>
+			{% for child_review in review.review_set.all %}
+			<div class="review mt-2 d-flex justify-content-end">
+				<div class="child-review">
+					<div
+						class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
+					>
+						<b>{{ child_review.name }}</b>
+						{{ child_review.created |date:"d.m.Y | H:i" }}
+					</div>
+					<p class="mb-0"><b>Answer:</b> {{ child_review.body }}</p>
+				</div>
+			</div>
+			{% endfor %}
+		</div>
+		{% empty %} {% include 'utils/_alert.html' with message="There are no
+		reviews yet." category="primary" dismissible=False only %} {% endfor %}
+	</div>
 </div>
-{% endblock content %}
+{% endblock content %} 
 
 
 {% block scripts %}
@@ -226,8 +245,8 @@
 	function add_answer_for_(name, id) {
 		document.getElementById("review_parent").value = id;
 		document.getElementById("id_body").innerText = `${name}, `;
-        document.querySelector("label[for='id_body']").textContent = "Answer:";
-        document.querySelector("#review_form .btn").value = "Add answer";
+		document.querySelector("label[for='id_body']").textContent = "Answer:";
+		document.querySelector("#review_form .btn").value = "Add answer";
 	}
 </script>
-{% endblock scripts %} 
+{% endblock scripts %}

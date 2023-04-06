@@ -1,12 +1,24 @@
 #productCarousel { width: 85%; }
 
 .share-links ion-icon[name="logo-facebook"],
+.share-links ion-icon[name="logo-twitter"],
+.share-links ion-icon[name="logo-whatsapp"],
 .share-links ion-icon[name="navigate-circle"] { border-radius: 50%; }
 .share-links ion-icon[name="logo-linkedin"],
 .share-links ion-icon[name="mail-outline"] { border-radius: 5px; }
 .share-links ion-icon[name="logo-linkedin"],
-.share-links ion-icon[name="logo-facebook"] { 
+.share-links ion-icon[name="logo-facebook"] {
     color: #fff; background: darkblue; 
+}
+.share-links ion-icon[name="logo-twitter"] { 
+    padding: 7px;
+    font-size: 1.5em;
+    color: #fff; background-color: #0099E9; 
+}
+.share-links ion-icon[name="logo-whatsapp"] { 
+    padding: 7px;
+    font-size: 1.7em;
+    color: #fff; background-color: #8d3cd3; 
 }
 .share-links ion-icon[name="mail-outline"] { 
     color: red; background-color: #fff; 
@@ -28,6 +40,11 @@ textarea.form-control { height: 150px; }
     .review__header,
     .review__body { flex-direction: column; }
     .review__body { align-items: start!important; }
-
+    
     .review__body .btn { margin-top: 10px; }
+}
+
+@media screen and (max-width: 768px) { /* Bootstrap5 .md breakpoint */
+    .share-links .col-sm-12:first-child { margin-bottom: 10px; }
+    .share-links .col-sm-12 { justify-content: center!important; }
 }
