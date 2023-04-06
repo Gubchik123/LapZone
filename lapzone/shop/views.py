@@ -96,10 +96,9 @@ class ProductListByCategoryView(_ProductListView):
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         """Adds page title and filter form in context data and returns it."""
         context = super().get_context_data(**kwargs)
-        context["page_title"] = self.kwargs["slug"].capitalize()
-        context["filter_form"] = ProductFilterForm(
-            {"category": get_object_or_404(Category, slug=self.kwargs["slug"])}
-        )
+        category = get_object_or_404(Category, slug=self.kwargs["slug"])
+        context["page_title"] = category.name.capitalize()
+        context["filter_form"] = ProductFilterForm({"category": category})
         return context
 
 
@@ -115,10 +114,9 @@ class ProductListByBrandView(_ProductListView):
     def get_context_data(self, **kwargs) -> dict[str, Any]:
         """Adds page title and filter form in context data and returns it."""
         context = super().get_context_data(**kwargs)
-        context["page_title"] = f"{self.kwargs['slug'].capitalize()} products"
-        context["filter_form"] = ProductFilterForm(
-            {"brands": [get_object_or_404(Brand, slug=self.kwargs["slug"])]}
-        )
+        brand = get_object_or_404(Brand, slug=self.kwargs["slug"])
+        context["page_title"] = f"{brand.name.capitalize()} products"
+        context["filter_form"] = ProductFilterForm({"brands": [brand]})
         return context
 
 
