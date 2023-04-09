@@ -215,7 +215,7 @@ class AllProductsListViewTestCase(ProductListViewTestMixin, TestCase):
 
     # * ------------------ Testing filtering functionality -------------------
 
-    def test_filter_form_by_(
+    def check_filter_form_for_validity_by_(
         form_data: dict, expected_status_code: int = 200
     ) -> Callable:
         """
@@ -240,7 +240,9 @@ class AllProductsListViewTestCase(ProductListViewTestMixin, TestCase):
 
         return wrapper
 
-    @test_filter_form_by_(form_data={"category": 1}, expected_status_code=302)
+    @check_filter_form_for_validity_by_(
+        form_data={"category": 1}, expected_status_code=302
+    )
     def test_filtering_by_one_category_and_redirect_to_category_page(
         self, response: HttpResponse
     ):
@@ -249,7 +251,9 @@ class AllProductsListViewTestCase(ProductListViewTestMixin, TestCase):
         """
         self.assertRedirects(response, "/category/test-category/")
 
-    @test_filter_form_by_(form_data={"brands": [1]}, expected_status_code=302)
+    @check_filter_form_for_validity_by_(
+        form_data={"brands": [1]}, expected_status_code=302
+    )
     def test_filtering_by_one_brand_and_redirect_to_brand_page(
         self, response: HttpResponse
     ):
@@ -260,7 +264,7 @@ class AllProductsListViewTestCase(ProductListViewTestMixin, TestCase):
 
     # ! ------------- I think it's correct, but it doesn't work --------------
 
-    @test_filter_form_by_(form_data={"min_price": 1010})
+    @check_filter_form_for_validity_by_(form_data={"min_price": 1010})
     def test_filtering_by_min_price(self, response: HttpResponse):
         """Test filtering by minimum price."""
 
@@ -269,7 +273,7 @@ class AllProductsListViewTestCase(ProductListViewTestMixin, TestCase):
         #     list(self.queryset.filter(price__gte=1010)),
         # )
 
-    @test_filter_form_by_(form_data={"max_price": 1005})
+    @check_filter_form_for_validity_by_(form_data={"max_price": 1005})
     def test_filtering_by_max_price(self, response: HttpResponse):
         """Test filtering by maximum price."""
 
@@ -278,7 +282,9 @@ class AllProductsListViewTestCase(ProductListViewTestMixin, TestCase):
         #     list(self.queryset.filter(price__lte=1005)),
         # )
 
-    @test_filter_form_by_(form_data={"min_price": 1008, "max_price": 1012})
+    @check_filter_form_for_validity_by_(
+        form_data={"min_price": 1008, "max_price": 1012}
+    )
     def test_filtering_by_max_and_min_price(self, response: HttpResponse):
         """Test filtering by both maximum and minimum price."""
 
@@ -287,7 +293,7 @@ class AllProductsListViewTestCase(ProductListViewTestMixin, TestCase):
         #     list(self.queryset.filter(price__gte=1008, price__lte=1012)),
         # )
 
-    @test_filter_form_by_(form_data={"years": [2022]})
+    @check_filter_form_for_validity_by_(form_data={"years": [2022]})
     def test_filtering_by_year(self, response: HttpResponse):
         """Test filtering by year."""
 
@@ -319,13 +325,113 @@ class ProductListByBrandViewTestCase(ProductListViewTestMixin, TestCase):
     queryset = Product.objects.filter(brand__slug="test-brand")
 
 
-class ProductDetailViewTestCase(ShopAppViewsTestMixin, TestCase):
+class ProductDetailViewTestMixin:
+    """Test mixin with creating one product before testing."""
+
+    @classmethod
+    def setUpTestData(cls) -> None:
+        """Set up test data by creating 1 product with brand and category."""
+        cls.product = Product.objects.create(
+            name=f"Test product",
+            description="Some content",
+            image=f"./some_image.jpg",
+            price=1500,
+            year=2023,
+            brand=Brand.objects.create(name="Test brand"),
+            category=Category.objects.create(name="Test category"),
+        )
+
+
+class ProductDetailViewTestCase(
+    ProductDetailViewTestMixin, ViewTestMixin, TestCase
+):
     """Tests for the ProductDetailView."""
 
     name = "shop:product_detail"
-    url = "/product/test-product-1/"
-    kwargs = {"slug": "test-product-1"}
+    url = "/product/test-product/"
+    kwargs = {"slug": "test-product"}
     template_name = "shop/product_detail.html"
 
+    def test_404_with_non_existent_product_slug(self):
+        """Test that a non-existent product slug returns a 404 error."""
+        response = self.client.get("/product/non-existent-slug/")
+        self.assertEqual(response.status_code, 404)
 
-# TODO: add ReviewFormViewTestCase for testing adding review to product
+    def test_product_detail_page_contains_product_image(self):
+        """Test that product image is displayed on the product detail page."""
+        self.assertContains(self.response, self.product.image.url)
+
+    def test_product_detail_page_contains_product_name(self):
+        """Test that product name is displayed on the product detail page."""
+        self.assertContains(self.response, self.product.name)
+
+    def test_product_detail_page_contains_product_description(self):
+        """
+        Test that product description is displayed on the product detail page.
+        """
+        self.assertContains(self.response, self.product.description)
+
+    def test_product_detail_page_contains_product_price(self):
+        """Test that product price is displayed on the product detail page."""
+        self.assertContains(self.response, f"{float(self.product.price)}$")
+
+    def test_review_form_is_on_page(self):
+        """Test that the "review_form" there is the product detail page."""
+        self.assertIn("review_form", self.response.context)
+        self.assertIsInstance(self.response.context["review_form"], ReviewForm)
+
+
+class ReviewFormViewTestCase(ProductDetailViewTestMixin, TestCase):
+    """Tests for the ReviewFormView."""
+
+    def check_review_form_for_validity_by_(
+        form_data: dict, is_valid: bool = True
+    ) -> Callable:
+        """
+        Returns a decorator that tests whether the given form data is valid.
+        """
+
+        def wrapper(test_func: Callable) -> Callable:
+            """Wraps a view function with a test for
+            the validity of a form created from form_data."""
+
+            def inner(self):
+                """Test ReviewForm(form_data)
+                is_valid: bool and calls the wrapped function."""
+                self.assertTrue(
+                    ReviewForm(form_data).is_valid()
+                ) if is_valid else self.assertFalse(
+                    ReviewForm(form_data).is_valid()
+                )
+
+                response = self.client.post(
+                    f"{self.product.get_absolute_url()}review/",
+                    data=form_data,
+                    follow=True,  # follow redirects
+                )
+                self.assertEqual(response.status_code, 200)
+
+                return test_func(self, response)
+
+            return inner
+
+        return wrapper
+
+    @check_review_form_for_validity_by_(
+        form_data={"name": "Username", "body": "Test review"}
+    )
+    def test_adding_review_valid(self, response: HttpResponse):
+        """Test adding a valid review to the product."""
+        self.assertContains(response, "Review has added successfully.")
+        self.assertEqual(self.product.review_set.count(), 1)
+
+    @check_review_form_for_validity_by_(
+        form_data={"name": "", "body": ""}, is_valid=False
+    )
+    def test_adding_review_invalid(self, response: HttpResponse):
+        """Test adding an invalid review to the product."""
+        self.assertContains(
+            response,
+            "Data in form is invalid! Review has not added successfully.",
+        )
+        self.assertEqual(self.product.review_set.count(), 0)
