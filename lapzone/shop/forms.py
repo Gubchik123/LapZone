@@ -1,4 +1,5 @@
 from django import forms
+from django.conf import settings
 from django.db.models import QuerySet
 from snowpenguin.django.recaptcha3.fields import ReCaptchaField
 
@@ -69,7 +70,7 @@ class ProductFilterForm(forms.Form):
         if self.cleaned_data.get("years"):
             products = products.filter(year__in=self.cleaned_data["years"])
         return products
-    
+
 
 dict_with_field_classes = {"class": "form-control w-50 mb-2"}
 
@@ -77,13 +78,16 @@ dict_with_field_classes = {"class": "form-control w-50 mb-2"}
 class ReviewForm(forms.ModelForm):
     """Model form for adding review to product."""
 
-    captcha = ReCaptchaField()
+    if not settings.TESTING:
+        captcha = ReCaptchaField()
 
     class Meta:
         """Meta options for the ReviewForm."""
 
         model = Review
-        fields = ("name", "body", "captcha")
+        fields = ("name", "body")
+        if not settings.TESTING:
+            fields = ("name", "body", "captcha")
         widgets = {
             "name": forms.TextInput(attrs=dict_with_field_classes),
             "body": forms.Textarea(attrs=dict_with_field_classes),
