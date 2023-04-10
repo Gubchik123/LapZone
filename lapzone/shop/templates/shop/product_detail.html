@@ -190,7 +190,8 @@
 			id="review_form"
 			action="{{ request.path }}review/"
 		>
-			{% csrf_token %} {{ review_form.as_div }}
+			{% csrf_token %} 
+            {{ review_form.as_div }}
 			<input type="hidden" id="review_parent" name="review_parent_id" />
 			<input
 				type="submit"
@@ -233,8 +234,9 @@
 			</div>
 			{% endfor %}
 		</div>
-		{% empty %} {% include 'utils/_alert.html' with message="There are no
-		reviews yet." category="primary" dismissible=False only %} {% endfor %}
+		{% empty %} 
+            {% include 'utils/_alert.html' with message="There are no reviews yet." category="primary" dismissible=False only %}
+        {% endfor %}
 	</div>
 </div>
 {% endblock content %} 
