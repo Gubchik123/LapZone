@@ -150,19 +150,21 @@ class ReviewFormView(generic.FormView):
             product_slug=self.kwargs["slug"],
             review_parent_id=review_parent_id,
         )
-        prefix = "Review" if not review_parent_id else "Answer"
+        prefix = self._get_message_prefix_by_(review_parent_id)
         messages.success(self.request, f"{prefix} has added successfully.")
         return super().form_valid(form)
 
     def form_invalid(self, form: ReviewForm) -> HttpResponseRedirect:
         """Adds error message and returns redirect to product_detail page."""
-        prefix = (
-            "Review"
-            if not self.request.POST.get("review_parent_id", None)
-            else "Answer"
+        prefix = self._get_message_prefix_by_(
+            self.request.POST.get("review_parent_id", None)
         )
         messages.error(
             self.request,
             f"Data in form is invalid! {prefix} has not added successfully.",
         )
         return HttpResponseRedirect(self.get_success_url())
+
+    def _get_message_prefix_by_(review_parent_id: str | None) -> str:
+        """Return the message prefix based on the review parent ID."""
+        return "Review" if not review_parent_id else "Answer"
