@@ -98,6 +98,6 @@ def create_review_with_data_from_(
     """Saves model form (creates review) with product by the given slug."""
     review: models.Review = form.save(commit=False)
     review.product = models.Product.objects.get(slug=product_slug)
-    if review_parent_id is not None:
+    if review_parent_id:
         review.parent_id = int(review_parent_id)
     review.save()
