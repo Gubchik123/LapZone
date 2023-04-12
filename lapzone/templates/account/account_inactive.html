@@ -1,11 +1,9 @@
 {% extends "account/base.html" %}
 
-{% load i18n %}
+{% block title %}Account Inactive{% endblock %} 
+{% block content_title %}Account Inactive{% endblock %}
 
-{% block head_title %}{% trans "Account Inactive" %}{% endblock %}
 
 {% block content %}
-<h1>{% trans "Account Inactive" %}</h1>
-
-<p>{% trans "This account is inactive." %}</p>
+    {% include 'utils/_alert.html' with message="This account is inactive." category="warning" dismissible=False only %}
 {% endblock %}
