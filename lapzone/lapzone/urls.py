@@ -17,6 +17,7 @@ handler404 = CustomNotFoundView.as_view()
 
 urlpatterns = [
     path("admin/", admin.site.urls),
+    path("auth/", include("allauth.urls")),
     path("ckeditor/", include("ckeditor_uploader.urls")),
     path("", include("shop.urls")),
     path(
