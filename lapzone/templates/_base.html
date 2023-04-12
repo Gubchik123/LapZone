@@ -152,8 +152,8 @@
 							<ul
 								class="navbar-nav list-group-horizontal justify-content-between align-items-center"
 							>
+                                <!-- Theme toggler -->
 								<li class="nav-item me-5">
-									<!-- Theme toggler -->
 									<div id="theme_toggler">
 										<input
 											type="checkbox"
@@ -170,11 +170,12 @@
 										</label>
 									</div>
 								</li>
+                                <!-- Link to either user profile or login page -->
 								<li class="nav-item">
-									<!-- TODO: make condition about link to user profile or login page -->
+                                    <!-- TODO: add url to customer profile page instead of # -->
 									<a
-										href="#"
-										class="d-block text-decoration-none"
+                                        class="d-block text-decoration-none"
+                                        href="{% if user.is_authenticated %}#{% else %}{% url 'account_login' %}{% endif %}"
 									>
 										<ion-icon
 											class="pt-1"
