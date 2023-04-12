@@ -4,7 +4,7 @@ import logging
 from pathlib import Path
 
 from dotenv import load_dotenv
-from django.urls import reverse
+from django.urls import reverse_lazy
 from django.contrib.messages import constants as messages
 
 
@@ -123,7 +123,7 @@ ACCOUNT_USERNAME_MIN_LENGTH = 2
 SOCIALACCOUNT_PROVIDERS = {}  # OAuth providers
 
 LOGOUT_REDIRECT_URL = "/"
-LOGIN_URL = reverse("account_login")
+LOGIN_URL = reverse_lazy("account_login")
 LOGIN_REDIRECT_URL = "/"  # TODO: add url to customer profile page
 
 MEDIA_URL = "/media/"
