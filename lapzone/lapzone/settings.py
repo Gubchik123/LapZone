@@ -33,6 +33,7 @@ INSTALLED_APPS = [
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
+    "allauth.socialaccount.providers.google",
     "ckeditor",
     "ckeditor_uploader",
     "snowpenguin.django.recaptcha3",
@@ -117,7 +118,16 @@ ACCOUNT_LOGIN_ON_EMAIL_CONFIRMATION = True
 ACCOUNT_LOGOUT_ON_GET = True
 ACCOUNT_USERNAME_MIN_LENGTH = 2
 
-SOCIALACCOUNT_PROVIDERS = {}  # OAuth providers
+SOCIALACCOUNT_PROVIDERS = {  # OAuth providers
+    "google": {
+        "APP": {
+            "client_id": str(os.getenv("GOOGLE_OAUTH_CLIENT_ID")),
+            "secret": str(os.getenv("GOOGLE_OAUTH_SECRET")),
+            "key": "",
+        }
+    },
+}
+SOCIALACCOUNT_LOGIN_ON_GET = True
 
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = reverse_lazy("account_login")
