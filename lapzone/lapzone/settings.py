@@ -34,6 +34,7 @@ INSTALLED_APPS = [
     "allauth.account",
     "allauth.socialaccount",
     "allauth.socialaccount.providers.google",
+    "allauth.socialaccount.providers.github",
     "ckeditor",
     "ckeditor_uploader",
     "snowpenguin.django.recaptcha3",
@@ -123,6 +124,13 @@ SOCIALACCOUNT_PROVIDERS = {  # OAuth providers
         "APP": {
             "client_id": str(os.getenv("GOOGLE_OAUTH_CLIENT_ID")),
             "secret": str(os.getenv("GOOGLE_OAUTH_SECRET")),
+            "key": "",
+        }
+    },
+    "github": {
+        "APP": {
+            "client_id": str(os.getenv("GITHUB_OAUTH_CLIENT_ID")),
+            "secret": str(os.getenv("GITHUB_OAUTH_SECRET")),
             "key": "",
         }
     },
