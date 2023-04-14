@@ -15,7 +15,7 @@
 {% block scripts %}
 <script defer>
     for (const field of document.querySelectorAll("input")) {
-        if (field.type != "checkbox")
+        if (field.type != "checkbox" || field.type != "radio")
             field.classList.add("form-control")
     }
 </script>
