@@ -2,19 +2,31 @@
 
 {% get_providers as socialaccount_providers %}
 
-{% for provider in socialaccount_providers %}
-{% if provider.id == "openid" %}
-{% for brand in provider.get_brands %}
-<li>
-  <a title="{{brand.name}}" 
-     class="socialaccount_provider {{provider.id}} {{brand.id}}" 
-     href="{% provider_login_url provider.id openid=brand.openid_url process=process %}"
-     >{{brand.name}}</a>
-</li>
-{% endfor %}
-{% endif %}
-<li>
-  <a title="{{provider.name}}" class="socialaccount_provider {{provider.id}}" 
-     href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}">{{provider.name}}</a>
-</li>
-{% endfor %}
+<style>
+    .btn.google, .btn.github { 
+        opacity: 0.9;
+        color: white; 
+        transition: opacity 0.3s; 
+    }
+    .btn.google, .btn.google:hover { background-color: #EA4335!important; }
+    .btn.github, .btn.github:hover { background-color: var(--bs-dark)!important; }
+
+    .btn.google:hover, .btn.github:hover { opacity: 1; }
+</style>
+
+<ul class="list-unstyled">
+    {% for provider in socialaccount_providers %}
+    <li class="mb-3">
+        <a
+            title="{{provider.name}}"
+            class="btn btn-dark w-50 d-flex align-items-center {{provider.name|lower}}"
+            href="{% provider_login_url provider.id process=process scope=scope auth_params=auth_params %}"
+        >
+            <ion-icon
+                name="logo-{{provider.name|lower}}"
+            ></ion-icon>
+            <span class="me-auto ms-auto">{{provider.name}}</span>
+        </a>
+    </li>
+    {% endfor %}
+</ul>

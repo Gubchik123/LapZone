@@ -7,7 +7,7 @@
     .form-control { width: 50%; }
 
     @media screen and (max-width: 576px) { /* Bootstrap5 .sm breakpoint */
-        .form-control { width: 100%; }
+        .form-control, main .w-50 { width: 100%!important; }
     }
 </style>
 {% endblock styles %} 
@@ -15,7 +15,7 @@
 {% block scripts %}
 <script defer>
     for (const field of document.querySelectorAll("input")) {
-        if (field.type != "checkbox" || field.type != "radio")
+        if (field.type != "checkbox" && field.type != "radio")
             field.classList.add("form-control")
     }
 </script>

@@ -42,7 +42,7 @@
                 {% endwith %}
             {% endfor %}
 
-                <button type="submit" class="btn btn-danger btn-lg mt-3">
+                <button type="submit" class="btn btn-danger mt-3">
                     Remove
                 </button>
             </fieldset>
@@ -54,12 +54,9 @@
         </p>
     {% endif %}
 
-        <h2 class="my-2">Add a 3rd Party Account</h2>
+        <h3 class="my-3">Add a 3rd Party Account</h3>
 
-        <ul class="socialaccount_providers">
         {% include "socialaccount/snippets/provider_list.html" with process="connect" %}
-        </ul>
-
         {% include "socialaccount/snippets/login_extra.html" %}
     </div>
 </div>

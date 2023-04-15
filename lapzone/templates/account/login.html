@@ -8,6 +8,12 @@
 {{ block.super }}
 
 <style>
+    .or-divider {
+        height: 2px;
+        border: none;
+        flex-grow: 1;
+        background-color: #000;
+    }
     label[for="id_remember"] { display: inline-block; }
 </style>
 {% endblock styles %} 
@@ -25,11 +31,11 @@
                 for a {{ site.name }} account and sign in below:
             </p>
 
-            <div class="socialaccount_ballot">
-                <ul class="socialaccount_providers">
-                    {% include "socialaccount/snippets/provider_list.html" with process="login" %}
-                </ul>
-                <div class="login-or">or</div>
+            {% include "socialaccount/snippets/provider_list.html" with process="login" %}
+            <div class="w-50 d-flex justify-content-center align-items-center mb-3">
+                <hr class="or-divider">
+                <span class="mx-2">OR</span>
+                <hr class="or-divider">
             </div>
 
             {% include "socialaccount/snippets/login_extra.html" %}
@@ -52,15 +58,17 @@
                 />
             {% endif %}
 
-            <a 
-                class="forgot-password d-block" 
-                href="{% url 'account_reset_password' %}"
-            >
-                Forgot Password?
-            </a>
-            <button class="btn btn-success btn-lg d-block mt-3" type="submit">
-                Sign In
-            </button>
+            <div class="w-50 d-flex flex-column align-items-center mt-0">
+                <a
+                    class="mb-1"
+                    href="{% url 'account_reset_password' %}"
+                >
+                    Forgot Password?
+                </a>
+                <button class="btn btn-success btn-lg d-block mt-3" type="submit">
+                    Sign In
+                </button>
+            </div>
         </form>
     </div>
 </div>
