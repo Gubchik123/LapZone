@@ -4,6 +4,7 @@ from django.views import generic
 from django.contrib import messages
 from django.db.models import QuerySet
 from django.shortcuts import get_object_or_404
+from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 
 from general.views import BaseView
@@ -168,3 +169,15 @@ class ReviewFormView(generic.FormView):
     def _get_message_prefix_by_(review_parent_id: str | None) -> str:
         """Return the message prefix based on the review parent ID."""
         return "Review" if not review_parent_id else "Answer"
+
+
+class LikeView(LoginRequiredMixin, generic.View):
+    """View for managing likes to a product."""
+
+    def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
+        """Handles a like operation on the specified product."""
+        return HttpResponse(
+            services.add_or_delete_like_and_get_response_message(
+                request.body, product_slug=self.kwargs["slug"]
+            )
+        )
