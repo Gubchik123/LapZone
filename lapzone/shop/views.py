@@ -24,6 +24,9 @@ class HomeView(BaseView, generic.TemplateView):
         context[
             "recently_added_products"
         ] = services.get_recently_added_products(10)
+        context["liked_products"] = services.get_liked_products_for_(
+            self.request.user
+        )
         context["brands"] = services.get_all_brands()
         context["categories"] = services.get_all_categories()
         context["carousel_images"] = services.get_all_carousel_images()
@@ -45,6 +48,16 @@ class _ProductListView(BaseView, generic.ListView):
         if services.are_ordering_parameters_valid(order_by, order_dir):
             return [services.get_order_symbol_by_(order_dir) + order_by]
         return []
+
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        """
+        Adds list of product IDs that user liked in context data and returns it.
+        """
+        context = super().get_context_data(**kwargs)
+        context["liked_products"] = services.get_liked_products_for_(
+            self.request.user
+        )
+        return context
 
 
 class AllProductsListView(_ProductListView):
@@ -127,8 +140,14 @@ class ProductDetailView(BaseView, generic.DetailView):
     model = Product
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
+        """
+        Adds is_liked: bool and review form in context data and returns it.
+        """
         context = super().get_context_data(**kwargs)
         context["review_form"] = ReviewForm()
+        context["is_liked"] = context[
+            "product"
+        ].id in services.get_liked_products_for_(self.request.user)
         return context
 
 

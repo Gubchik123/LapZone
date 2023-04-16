@@ -3,6 +3,7 @@ import logging
 
 from django.shortcuts import redirect
 from django.db.models import QuerySet
+from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 
 from . import models
@@ -15,6 +16,11 @@ logger = logging.getLogger(__name__)
 def get_recently_added_products(count: int) -> QuerySet[models.Product]:
     """Returns the given number of recently added products."""
     return models.Product.objects.order_by("-id")[:count]
+
+
+def get_liked_products_for_(user: User) -> list[int]:
+    """Returns a list of IDs for all products liked by the given user."""
+    return [tup[0] for tup in user.like_set.all().values_list("product_id")]
 
 
 def get_all_brands() -> QuerySet[models.Brand]:

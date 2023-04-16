@@ -85,7 +85,7 @@
                 data-href="{{ product.get_absolute_url }}like/"
                 class="like btn btn-danger me-auto"
             >
-                <ion-icon name="heart-outline"></ion-icon>
+                <ion-icon name="heart{% if not is_liked %}-outline{% endif %}"></ion-icon>
             </button>
         {% else %}
             <span></span>
