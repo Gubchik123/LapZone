@@ -13,16 +13,19 @@ document.querySelectorAll(".like").forEach((like_btn) => {
 		})
 			.then((response) => response.text())
 			.then((response_text) => {
+				let like_icon = like_btn.firstElementChild;
+
 				if (
 					response_text ==
 					"Product has successfully added to your wish list."
-				) {
-					let like_icon = like_btn.firstElementChild;
+				)
+					like_icon.name = "heart";
 
-					if (like_icon.name == "heart-outline")
-						like_icon.name = "heart";
-					else like_icon.name = "heart-outline";
-				}
+				if (
+					response_text ==
+					"Product has successfully deleted from your wish list."
+				)
+					like_icon.name = "heart-outline";
 
 				alert(response_text);
 			})
