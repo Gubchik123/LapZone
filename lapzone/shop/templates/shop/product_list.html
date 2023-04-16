@@ -1,4 +1,4 @@
-{% extends '_base.html' %} 
+{% extends 'shop/_base.html' %} 
 {% load static %} 
 
 {% block title %}
@@ -125,17 +125,18 @@
                 </ul>
             </div>
             {% for product in page_obj %}
+            {% with product_url=product.get_absolute_url %}
             <div class="col-lg-4 col-md-6 col-sm-12 d-flex align-items-stretch">
                 <div class="product w-100 d-flex flex-column justify-content-between rounded mb-3">
                     <div class="product__image w-100 mb-2">
                         <a 
                             class="w-100 opacity-1"
-                            href="{{ product.get_absolute_url }}" 
+                            href="{{ product_url }}" 
                         >
                             <img
-                                class="img-fluid w-100 rounded"
-                                alt="{{ product.name }} image"
                                 src="{{ product.image.url }}"
+                                alt="{{ product.name }} image"
+                                class="img-fluid w-100 rounded"
                             />
                         </a>
                     </div>
@@ -143,8 +144,8 @@
                         <hr class="table-group-divider" />
                         <h4 class="mb-2 product__title">
                             <a
+                                href="{{ product_url }}"
                                 class="text-decoration-none text-center"
-                                href="{{ product.get_absolute_url }}"
                             >
                                 {{ product.name |truncatechars:30 }}
                             </a>
@@ -153,15 +154,24 @@
                         <h3><b>{{ product.price }}$</b></h3>
                     </div>
                     <div class="product__buttons d-flex justify-content-between">
-                        <a href="#" class="btn btn-danger me-auto">
+                    {% if user.is_authenticated %}
+                        <button
+                            data-href="{{ product_url }}like/"
+                            class="like btn btn-danger me-auto"
+                        >
                             <ion-icon name="heart-outline"></ion-icon>
-                        </a>
+                        </button>
+                    {% else %}
+                        <span></span>
+                    {% endif %} 
+                        
                         <a href="#" class="btn btn-success ms-auto">
                             <ion-icon name="cart-outline"></ion-icon>
                         </a>
                     </div>
                 </div>
             </div>
+            {% endwith %} 
             {% empty %}
                 <div>
                     {% include 'utils/_alert.html' with message="There are no products that match your search criteria." category="primary" dismissible=False only %}
@@ -182,5 +192,7 @@
 
 
 {% block scripts %}
+{{ block.super }}
+
 <script src="{% static 'js/shop/product_list.js' %}" defer></script>
 {% endblock %} 

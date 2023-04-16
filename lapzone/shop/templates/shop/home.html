@@ -1,4 +1,4 @@
-{% extends '_base.html' %} 
+{% extends 'shop/_base.html' %} 
 {% load static %} 
 
 {% block title %}Home{% endblock %}
@@ -88,13 +88,14 @@
 				class="white-space-nowrap overflow-auto d-flex align-items-center"
 			>
 				{% for product in recently_added_products %}
+                {% with product_url=product.get_absolute_url %}
 				<div
 					class="product d-inline-block d-flex flex-column justify-content-between rounded p-2 m-0 me-3"
 				>
 					<div class="product__image w-100 mb-2">
 						<a
 							class="w-100 opacity-1"
-							href="{{ product.get_absolute_url }}"
+							href="{{ product_url }}"
 						>
 							<img
 								class="img-fluid w-100 rounded"
@@ -108,7 +109,7 @@
 						<h5 class="mb-2 product__title">
 							<a
                                 style="white-space: normal;"
-								href="{{ product.get_absolute_url }}"
+								href="{{ product_url }}"
 								class="text-decoration-none text-center"
 							>
 								{{ product.name |truncatechars:30 }}
@@ -120,14 +121,23 @@
 					<div
 						class="product__buttons d-flex justify-content-between"
 					>
-						<a href="#" class="btn btn-danger btn-sm me-auto">
-							<ion-icon name="heart-outline"></ion-icon>
-						</a>
-						<a href="#" class="btn btn-success btn-sm ms-auto">
+                    {% if user.is_authenticated %}
+                        <button
+                            data-href="{{ product_url }}like/"
+                            class="like btn btn-danger me-auto"
+                        >
+                            <ion-icon name="heart-outline"></ion-icon>
+                        </button>
+                    {% else %}
+                        <span></span>
+                    {% endif %}
+
+						<a href="#" class="btn btn-success btn-sm ms-auto content-center">
 							<ion-icon name="cart-outline"></ion-icon>
 						</a>
 					</div>
 				</div>
+				{% endwith %}
 				{% endfor %}
 			</div>
 
@@ -169,6 +179,8 @@
 
 
 {% block scripts %}
+{{ block.super }}
+
 <!-- Script to add "active" class selector for first carousel item -->
 <script defer>
 	let first_carousel_image = document.querySelectorAll(".carousel-item")[0];

@@ -1,4 +1,4 @@
-{% extends '_base.html' %} 
+{% extends 'shop/_base.html' %} 
 {% load static %}
 
 {# Redefining content of meta tags #}
@@ -80,9 +80,16 @@
 	>
 		<!-- "Like" and "Cart" buttons -->
 		<div class="d-flex mb-4">
-			<a href="#" class="btn btn-danger ms-auto">
-				<ion-icon name="heart-outline"></ion-icon>
-			</a>
+        {% if user.is_authenticated %}
+            <button
+                data-href="{{ product.get_absolute_url }}like/"
+                class="like btn btn-danger me-auto"
+            >
+                <ion-icon name="heart-outline"></ion-icon>
+            </button>
+        {% else %}
+            <span></span>
+        {% endif %}
 			<a href="#" class="btn btn-success ms-2">
 				<ion-icon name="cart-outline"></ion-icon>
 			</a>
@@ -243,6 +250,8 @@
 
 
 {% block scripts %}
+{{ block.super }}
+
 <script defer>
 	function add_answer_for_(name, id) {
 		document.getElementById("review_parent").value = id;
