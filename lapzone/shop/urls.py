@@ -28,4 +28,8 @@ urlpatterns = [
         "product/<slug:slug>/review/",
         views.ReviewFormView.as_view(),
     ),
+    path(
+        "product/<slug:slug>/like/",
+        views.LikeView.as_view(),
+    ),
 ]
