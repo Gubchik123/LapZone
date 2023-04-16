@@ -1,9 +1,15 @@
+import json
+import logging
+
 from django.shortcuts import redirect
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
 
 from . import models
 from .forms import ProductFilterForm, ReviewForm
+
+
+logger = logging.getLogger(__name__)
 
 
 def get_recently_added_products(count: int) -> QuerySet[models.Product]:
@@ -101,3 +107,41 @@ def create_review_with_data_from_(
     if review_parent_id:
         review.parent_id = int(review_parent_id)
     review.save()
+
+
+def _get_user_id_from_(request_body: bytes) -> int:
+    """Extracts and returns the user ID from a JSON request body."""
+    data = json.loads(request_body)
+    try:
+        return int(data["user_id"])
+    except KeyError:
+        return None
+
+
+def add_or_delete_like_and_get_response_message(
+    request_body: bytes, product_slug: str
+) -> str:
+    """
+    Adds or deletes a 'like' record
+    for the given product slug and user ID and returns a response message.
+    """
+    user_id = _get_user_id_from_(request_body)
+
+    if not (product_slug and user_id):
+        logger.error(
+            f"like processing: product_slug={product_slug}, user_id={user_id}"
+        )
+        return "There was an error! Try again later."
+
+    like, was_created = models.Like.objects.get_or_create(
+        user_id=user_id,
+        product_id=models.Product.objects.get(slug=product_slug).id,
+    )
+
+    if not was_created:
+        like.delete()
+        message_prefix = "deleted from"
+    else:
+        message_prefix = "added to"
+
+    return f"Product has successfully {message_prefix} your wish list."
