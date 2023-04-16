@@ -1,0 +1,18 @@
+{% extends '_base.html' %} 
+
+
+{% block scripts %}
+
+<script>
+    // Template variables for fetch "POST" request
+    const user_id = "{{ user.id }}";
+    const csrf_token = "{{ csrf_token }}";
+</script>
+
+{% load static %}
+<script
+    defer
+    src="{% static 'js/shop/like_btn.js' %}"
+></script>
+
+{% endblock scripts %}
