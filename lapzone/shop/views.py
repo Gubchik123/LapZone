@@ -154,7 +154,7 @@ class ProductDetailView(BaseView, generic.DetailView):
         return context
 
 
-class ReviewFormView(generic.FormView):
+class ReviewFormView(BaseView, generic.FormView):
     """Form view for adding review to product."""
 
     form_class = ReviewForm
@@ -193,7 +193,7 @@ class ReviewFormView(generic.FormView):
         return "Review" if not review_parent_id else "Answer"
 
 
-class LikeView(LoginRequiredMixin, generic.View):
+class LikeView(BaseView, LoginRequiredMixin, generic.View):
     """View for managing likes to a product."""
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
