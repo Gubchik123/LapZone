@@ -40,6 +40,7 @@ INSTALLED_APPS = [
     "snowpenguin.django.recaptcha3",
     # My apps
     "shop.apps.ShopConfig",
+    "cart.apps.CartConfig",
 ]
 
 MIDDLEWARE = [
@@ -164,6 +165,8 @@ RECAPTCHA_PUBLIC_KEY = str(os.getenv("RECAPTCHA_PUBLIC_KEY"))
 RECAPTCHA_PRIVATE_KEY = str(os.getenv("RECAPTCHA_PRIVATE_KEY"))
 RECAPTCHA_DEFAULT_ACTION = "generic"
 RECAPTCHA_SCORE_THRESHOLD = 0.5
+
+CART_SESSION_ID = "cart"
 
 LOGGING = {
     "version": 1,
