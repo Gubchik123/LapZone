@@ -7,4 +7,9 @@ app_name = "cart"
 urlpatterns = [
     path("cart/", views.CartDetailView, name="detail"),
     path("product/<slug:slug>/add-to-cart/", views.CartAddView, name="add"),
+    path(
+        "product/<slug:slug>/remove-from-cart/",
+        views.CartRemoveView,
+        name="remove",
+    ),
 ]

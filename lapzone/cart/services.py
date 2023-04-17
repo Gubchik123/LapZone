@@ -32,3 +32,15 @@ def add_product_to_cart_and_get_response_message(request: HttpRequest) -> str:
 
     Cart(request).add(get_object_or_404(Product, id=product_id))
     return "Product has successfully added to your cart."
+
+
+def remove_product_from_cart_and_get_response_message(
+    request: HttpRequest,
+) -> str:
+    """Removes a product from cart and returns a response message."""
+    product_id = _get_product_id_from_(request.body, prefix="removing")
+    if isinstance(product_id, str):
+        return product_id  # Error message.
+
+    Cart(request).remove(get_object_or_404(Product, id=product_id))
+    return "Product has successfully removed from your cart."
