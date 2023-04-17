@@ -120,7 +120,7 @@ def _get_user_id_from_(request_body: bytes) -> int:
     data = json.loads(request_body)
     try:
         return int(data["user_id"])
-    except KeyError:
+    except (KeyError, ValueError, TypeError):
         return None
 
 
