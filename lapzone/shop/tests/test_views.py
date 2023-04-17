@@ -4,6 +4,7 @@ from typing import Callable
 from django.test import TestCase
 from django.http import HttpResponse
 from django.db.models import QuerySet
+from django.contrib.auth.models import User
 
 from general.test_mixins.for_views import ViewTestMixin
 from shop.forms import ProductFilterForm, ReviewForm
@@ -435,3 +436,98 @@ class ReviewFormViewTestCase(ProductDetailViewTestMixin, TestCase):
             "Data in form is invalid! Review has not added successfully.",
         )
         self.assertEqual(self.product.review_set.count(), 0)
+
+
+class LikeViewTestCase(ProductDetailViewTestMixin, TestCase):
+    """Tests for the LikeView."""
+
+    product_url = "/product/test-product/"
+    like_icon = '<ion-icon name="heart"></ion-icon>'
+    like_outline_icon = '<ion-icon name="heart-outline"></ion-icon>'
+
+    @classmethod
+    def setUpTestData(cls) -> None:
+        """Set up test data by creating an user."""
+        super().setUpTestData()
+        cls.user = User.objects.create_user(
+            username="testuser", email="test@example.com", password="testpass"
+        )
+
+    def test_there_is_no_like_icon_on_product_page_if_not_authenticated(self):
+        """
+        Test that no like icon appears on the product page if user is not authenticated.
+        """
+        response = self.client.get(self.product_url)
+        self.assertNotContains(response, self.like_icon)
+        self.assertNotContains(response, self.like_outline_icon)
+
+    def test_like_icon_is_outline_on_product_page_if_authenticated(self):
+        """
+        Test when an user is authenticated, a like icon is outline on the product page.
+        """
+        self._assert_get_response_contains(self.like_outline_icon)
+
+    def test_post_like_processing(self):
+        """Test the processing of adding and deleting likes to a post."""
+        self._test_post_add_like_success()
+        self._test_like_icon_is_not_outline_on_product_page_after_adding_like()
+        self._test_post_delete_like_success()
+        self._test_like_icon_is_outline_on_product_page_after_deleting_like()
+
+    def test_post_service_error(self):
+        """Test handling a service error when adding/deleting a like."""
+        response = self._get_response(user_id=None)
+        self.assertContains(response, "There was an error! Try again later.")
+
+    def _test_post_add_like_success(self):
+        """Test adding a like to a product successfully."""
+        response = self._get_response(user_id=1)
+        self.assertContains(
+            response, "Product has successfully added to your wish list."
+        )
+        self.assertEqual(self.user.like_set.count(), 1)
+
+    def _test_like_icon_is_not_outline_on_product_page_after_adding_like(self):
+        """
+        Test that the like icon is not outline once the user has liked a product.
+        """
+        self._assert_get_response_contains(self.like_icon)
+
+    def _test_post_delete_like_success(self):
+        """Test deleting a like from a product successfully."""
+        response = self._get_response(user_id=1)
+        self.assertContains(
+            response, "Product has successfully deleted from your wish list."
+        )
+        self.assertEqual(self.user.like_set.count(), 0)
+
+    def _test_like_icon_is_outline_on_product_page_after_deleting_like(self):
+        """
+        Test that the like icon is not outline on the product page after the user has unliked a product.
+        """
+        self._assert_get_response_contains(self.like_outline_icon)
+
+    def _login(self):
+        """Logs in with a test user data."""
+        self.assertTrue(
+            self.client.login(username="testuser", password="testpass")
+        )
+
+    def _assert_get_response_contains(self, like_btn_icon: str):
+        """
+        Assert that a response contains the given like btn icon on a product page after login.
+        """
+        self._login()
+        response = self.client.get(self.product_url)
+        self.assertContains(response, like_btn_icon)
+
+    def _get_response(self, user_id: int) -> HttpResponse:
+        """Returns the HTTP response to the like url with a given user ID."""
+        self._login()
+        response = self.client.post(
+            f"{self.product_url}like/",
+            data={"user_id": user_id},
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        return response
