@@ -170,8 +170,18 @@
 										</label>
 									</div>
 								</li>
-                                <!-- Link to either user profile or login page -->
-								<li class="nav-item">
+								<li 
+                                    class="nav-item d-flex"
+                                >
+                                    <!-- Link to user's cart detail page -->
+									<a
+                                        href="{% url 'cart:detail' %}"
+                                        class="d-block text-decoration-none me-3"
+                                    >
+                                        <ion-icon name="cart" class="pt-1" ></ion-icon>
+                                    </a>
+
+                                    <!-- Link to either user profile or login page -->
                                     <!-- TODO: add url to customer profile page instead of # -->
 									<a
                                         class="d-block text-decoration-none"
