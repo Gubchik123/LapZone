@@ -188,7 +188,7 @@ class ReviewFormView(generic.FormView):
         )
         return HttpResponseRedirect(self.get_success_url())
 
-    def _get_message_prefix_by_(review_parent_id: str | None) -> str:
+    def _get_message_prefix_by_(self, review_parent_id: str | None) -> str:
         """Return the message prefix based on the review parent ID."""
         return "Review" if not review_parent_id else "Answer"
 
