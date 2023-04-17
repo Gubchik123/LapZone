@@ -24,9 +24,10 @@ class HomeView(BaseView, generic.TemplateView):
         context[
             "recently_added_products"
         ] = services.get_recently_added_products(10)
-        context["liked_products"] = services.get_liked_products_for_(
-            self.request.user
-        )
+        if self.request.user.is_authenticated:
+            context["liked_products"] = services.get_liked_products_for_(
+                self.request.user
+            )
         context["brands"] = services.get_all_brands()
         context["categories"] = services.get_all_categories()
         context["carousel_images"] = services.get_all_carousel_images()
@@ -54,9 +55,10 @@ class _ProductListView(BaseView, generic.ListView):
         Adds list of product IDs that user liked in context data and returns it.
         """
         context = super().get_context_data(**kwargs)
-        context["liked_products"] = services.get_liked_products_for_(
-            self.request.user
-        )
+        if self.request.user.is_authenticated:
+            context["liked_products"] = services.get_liked_products_for_(
+                self.request.user
+            )
         return context
 
 
@@ -145,9 +147,10 @@ class ProductDetailView(BaseView, generic.DetailView):
         """
         context = super().get_context_data(**kwargs)
         context["review_form"] = ReviewForm()
-        context["is_liked"] = context[
-            "product"
-        ].id in services.get_liked_products_for_(self.request.user)
+        if self.request.user.is_authenticated:
+            context["is_liked"] = context[
+                "product"
+            ].id in services.get_liked_products_for_(self.request.user)
         return context
 
 
