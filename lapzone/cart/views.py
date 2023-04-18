@@ -13,12 +13,6 @@ class CartDetailView(BaseView, generic.TemplateView):
 
     template_name = "cart/detail.html"
 
-    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
-        """Adds the user's cart to the template context data and returns it."""
-        context = super().get_context_data(**kwargs)
-        context["cart"] = Cart(self.request)
-        return context
-
 
 class CartAddView(BaseView, generic.View):
     """View for adding a product to the user's cart via POST request."""
