@@ -15,6 +15,7 @@ def _get_product_id_from_(request_body: bytes, prefix: str) -> int | str:
     """
     Extracts product ID from request body and returns it or error message.
     """
+    product_id: int | None = None
     data = json.loads(request_body)
     try:
         product_id = int(data["product_id"])
