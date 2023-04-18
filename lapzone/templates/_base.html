@@ -176,9 +176,15 @@
                                     <!-- Link to user's cart detail page -->
 									<a
                                         href="{% url 'cart:detail' %}"
-                                        class="d-block text-decoration-none me-3"
+                                        class="d-block text-decoration-none me-3 position-relative"
                                     >
                                         <ion-icon name="cart" class="pt-1" ></ion-icon>
+                                        <span 
+                                            style="top: 5px;"
+                                            class="position-absolute start-100 translate-middle badge rounded-pill bg-primary"
+                                        >
+                                            {{ cart|length }}
+                                        </span>
                                     </a>
 
                                     <!-- Link to either user profile or login page -->
