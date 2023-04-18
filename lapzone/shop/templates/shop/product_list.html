@@ -165,9 +165,21 @@
                         <span></span>
                     {% endif %} 
                         
-                        <a href="#" class="btn btn-success ms-auto">
-                            <ion-icon name="cart-outline"></ion-icon>
+                    {% if product.id|stringformat:"s" in cart.cart %}
+                        <a
+                            href="{% url 'cart:detail' %}"
+                            class="btn btn-success ms-2"
+                        >
+                            <ion-icon name="cart"></ion-icon>
                         </a>
+                    {% else %} 
+                        <button
+                            class="cart btn btn-success ms-2"
+                            data-product_id="{{ product.id }}"
+                        >
+                            <ion-icon name="cart-outline"></ion-icon>
+                        </button>
+                    {% endif %}
                     </div>
                 </div>
             </div>
