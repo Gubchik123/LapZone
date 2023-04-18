@@ -1,0 +1,95 @@
+{% extends '_base.html' %} 
+
+{% block title %}Cart{% endblock %} 
+{% block content_title %}Your shopping cart{% endblock %} 
+
+{% block styles %}
+<style>
+    .white-space-nowrap { white-space: nowrap; }
+    .white-space-normal { white-space: normal; }
+
+    .table { color: var(--text-color) }
+    .table td { border: 0; }
+    .table img { min-width: 100px; }
+</style>
+{% endblock styles %} 
+
+
+{% block content %}
+
+{% if cart|length == 0 %}
+    <div class="mb-5">
+        {% include 'utils/_alert.html' with message="There are no products in your cart yet." category="primary" dismissible=False only %}
+    </div>
+{% else %}
+<div class="row px-3 mb-5">
+    <div class="panel-bg-color col-12 p-3">
+        <div class="white-space-nowrap overflow-auto">
+            <table class="table">
+                <tbody>
+                    {% for item_dict in cart %}
+                    {% with product_url=item_dict.product.get_absolute_url product_name=item_dict.product.name %}
+                    <tr
+                        class="d-flex justify-content-between align-items-center border-1 border-bottom py-2"
+                    >
+                        <!-- Product image -->
+                        <td class="w-25 me-4">
+                            <a href="{{ product_url }}">
+                                <img
+                                    class="img-fluid w-100"
+                                    alt="{{ product_name }} image"
+                                    src="{{ item_dict.product.image.url }}"
+                                />
+                            </a>
+                        </td>
+                        <!-- Product name -->
+                        <td>
+                            <a href="{{ product_url }}" class="fs-5 white-space-normal">
+                                {{ product_name }}
+                            </a>
+                        </td>
+                        <!-- Product price -->
+                        <td class="fs-4">
+                            {{ item_dict.price }}$
+                        </td>
+                        <!-- Quantity -->
+                        <td class="fs-3">
+                            {{ item_dict.quantity }}
+                        </td>
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div class="d-flex justify-content-end mt-3">
+            <div>
+                <a 
+                    class="btn btn-lg btn-primary me-3 mb-2"
+                    href="{% url 'shop:product_list' %}" 
+                >
+                    Continue shopping
+                </a>
+                <!-- TODO: Add the link to order checkout page -->
+                <a 
+                    href="#" 
+                    class="btn btn-lg btn-success mb-2"
+                >
+                    Checkout
+                </a>
+            </div>
+        </div>
+    </div>
+</div>
+{% endif %} 
+
+{% endblock content %} 
+
+
+{% block scripts %}
+<!-- Script to disable cart button in the site header -->
+<script defer>
+    document.querySelector("ion-icon[name='cart']").parentElement.href = "#";
+</script>
+{% endblock scripts %} 
