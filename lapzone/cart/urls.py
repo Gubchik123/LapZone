@@ -5,14 +5,14 @@ from . import views
 
 app_name = "cart"
 urlpatterns = [
-    path("cart/", views.CartDetailView.as_view(), name="detail"),
+    path("", views.CartDetailView.as_view(), name="detail"),
     path(
-        "product/<slug:slug>/add-to-cart/",
+        "add/",
         views.CartAddView.as_view(),
         name="add",
     ),
     path(
-        "product/<slug:slug>/remove-from-cart/",
+        "remove/",
         views.CartRemoveView.as_view(),
         name="remove",
     ),
