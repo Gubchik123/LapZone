@@ -28,16 +28,16 @@
             <table class="table">
                 <tbody>
                     {% for item_dict in cart %}
-                    {% with product_url=item_dict.product.get_absolute_url product_name=item_dict.product.name %}
+                    {% with product_url=item_dict.product.get_absolute_url %}
                     <tr
                         class="d-flex justify-content-between align-items-center border-1 border-bottom py-2"
                     >
                         <!-- Product image -->
                         <td class="w-25 me-4">
-                            <a href="{{ product_url }}">
+                            <a href="{{ product_url }}" class="opacity-1">
                                 <img
                                     class="img-fluid w-100"
-                                    alt="{{ product_name }} image"
+                                    alt="{{ item_dict.product.name }} image"
                                     src="{{ item_dict.product.image.url }}"
                                 />
                             </a>
@@ -45,7 +45,7 @@
                         <!-- Product name -->
                         <td>
                             <a href="{{ product_url }}" class="fs-5 white-space-normal">
-                                {{ product_name }}
+                                {{ item_dict.product.name }}
                             </a>
                         </td>
                         <!-- Product price -->
@@ -55,6 +55,19 @@
                         <!-- Quantity -->
                         <td class="fs-3">
                             {{ item_dict.quantity }}
+                        </td>
+                        <!-- "Remove" button -->
+                        <td>
+                            <button 
+                                title="Remove"
+                                data-product_id="{{ item_dict.product.id }}"
+                                class="remove btn fs-6 border-0 panel-bg-color"
+                            >
+                                <ion-icon 
+                                    name="trash" 
+                                    style="color: red;"
+                                ></ion-icon>
+                            </button>
                         </td>
                     </tr>
                     {% endwith %}
@@ -91,5 +104,11 @@
 <!-- Script to disable cart button in the site header -->
 <script defer>
     document.querySelector("ion-icon[name='cart']").parentElement.href = "#";
+
+    // Template variable for fetch "POST" request
+    const csrf_token = "{{ csrf_token }}";
 </script>
+
+{% load static %}
+<script defer src="{% static 'js/cart/remove_btn.js' %}"></script>
 {% endblock scripts %} 
