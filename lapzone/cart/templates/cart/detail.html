@@ -76,7 +76,12 @@
             </table>
         </div>
 
-        <div class="d-flex justify-content-end mt-3">
+        <div class="d-flex justify-content-between fs-4 mt-3">
+            <b>Total price: </b>
+            <span>{{ cart.get_total_price }}$</span>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
             <div>
                 <a 
                     class="btn btn-lg btn-primary me-3 mb-2"
