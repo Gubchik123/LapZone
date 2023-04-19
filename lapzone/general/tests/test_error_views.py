@@ -2,7 +2,7 @@ from typing import NoReturn
 
 from django.urls import path
 from django.views import View
-from django.test import SimpleTestCase
+from django.test import TestCase
 from django.http import HttpRequest, HttpResponse, Http404
 from django.core.exceptions import PermissionDenied, BadRequest
 
@@ -96,25 +96,25 @@ class CustomErrorHandlerTestMixin:
         )
 
 
-class CustomBadRequestViewTest(CustomErrorHandlerTestMixin, SimpleTestCase):
+class CustomBadRequestViewTest(CustomErrorHandlerTestMixin, TestCase):
     """Tests for CustomBadRequestView"""
 
     error_handler = CustomBadRequestView
 
 
-class CustomForbiddenViewTest(CustomErrorHandlerTestMixin, SimpleTestCase):
+class CustomForbiddenViewTest(CustomErrorHandlerTestMixin, TestCase):
     """Tests for CustomPermissionDeniedView"""
 
     error_handler = CustomPermissionDeniedView
 
 
-class CustomNotFoundViewTest(CustomErrorHandlerTestMixin, SimpleTestCase):
+class CustomNotFoundViewTest(CustomErrorHandlerTestMixin, TestCase):
     """Tests for CustomNotFoundView"""
 
     error_handler = CustomNotFoundView
 
 
-class CustomServerErrorViewTest(CustomErrorHandlerTestMixin, SimpleTestCase):
+class CustomServerErrorViewTest(CustomErrorHandlerTestMixin, TestCase):
     """Tests for CustomServerErrorView"""
 
     error_handler = CustomServerErrorView
