@@ -1,10 +1,9 @@
-from typing import Any
-
 from django.views import generic
-from django.http import HttpRequest, HttpResponse
+from django.contrib import messages
+from django.shortcuts import redirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
 from general.views import BaseView
-from .cart import Cart
 from . import services
 
 
@@ -29,6 +28,5 @@ class CartRemoveView(BaseView, generic.View):
 
     def post(self, request: HttpRequest, *args, **kwargs) -> HttpResponse:
         """Returns response message from service removing function."""
-        return HttpResponse(
-            services.remove_product_from_cart_and_get_response_message(request)
-        )
+        services.remove_product_from_cart(request)
+        return HttpResponse(status=200)

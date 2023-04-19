@@ -1,6 +1,7 @@
 import json
 import logging
 
+from django.contrib import messages
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
 
@@ -35,13 +36,13 @@ def add_product_to_cart_and_get_response_message(request: HttpRequest) -> str:
     return "Product has successfully added to your cart."
 
 
-def remove_product_from_cart_and_get_response_message(
-    request: HttpRequest,
-) -> str:
-    """Removes a product from cart and returns a response message."""
+def remove_product_from_cart(request: HttpRequest) -> str:
+    """Removes a product from cart and adds a response message in messages."""
     product_id = _get_product_id_from_(request.body, prefix="removing")
     if isinstance(product_id, str):
-        return product_id  # Error message.
+        messages.error(request, product_id)  # Error message
 
     Cart(request).remove(get_object_or_404(Product, id=product_id))
-    return "Product has successfully removed from your cart."
+    messages.success(
+        request, "Product has successfully removed from your cart."
+    )
