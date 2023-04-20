@@ -5,12 +5,6 @@ from general.views import BaseView
 from . import services
 
 
-class CartDetailView(BaseView, generic.TemplateView):
-    """View for displaying the contents of the user's shopping cart."""
-
-    template_name = "cart/detail.html"
-
-
 class CartAddView(BaseView, generic.View):
     """View for adding a product to the user's cart via POST request."""
 
