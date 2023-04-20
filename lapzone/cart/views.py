@@ -1,7 +1,5 @@
 from django.views import generic
-from django.contrib import messages
-from django.shortcuts import redirect
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse
 
 from general.views import BaseView
 from . import services

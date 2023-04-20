@@ -4,7 +4,7 @@ function replace_cart_btn_with_link_to_cart_detail_page(cart_btn) {
 	link.classList = "btn btn-success ms-2";
 	link.innerHTML = "<ion-icon name='cart'></ion-icon>";
 
-    cart_btn.parentNode.replaceChild(link, cart_btn);
+	cart_btn.parentNode.replaceChild(link, cart_btn);
 }
 
 function increase_cart_badge_count_of_products_in_cart() {
@@ -16,6 +16,13 @@ function increase_cart_badge_count_of_products_in_cart() {
 
 document.querySelectorAll(".cart").forEach((cart_btn) => {
 	cart_btn.addEventListener("click", function () {
+		let quantity = parseInt(
+			prompt(
+				"Please enter the product quantity you'd like to add to your cart:"
+			)
+		);
+		if (isNaN(quantity) || quantity < 1) quantity = 1;
+
 		fetch("/cart/add/", {
 			method: "POST",
 			headers: {
@@ -24,6 +31,7 @@ document.querySelectorAll(".cart").forEach((cart_btn) => {
 				"X-CSRFToken": csrf_token, // Template variable
 			},
 			body: JSON.stringify({
+				quantity: quantity,
 				product_id: cart_btn.attributes["data-product_id"].nodeValue,
 			}),
 		})
