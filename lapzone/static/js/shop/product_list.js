@@ -13,6 +13,20 @@ if (order_by && order_dir) {
 	}
 } else document.querySelector(".dropdown-item").classList.add("active");
 
+// Script to check window size and hide filtering Bootstrap5 collapse
+const collapseOne = new bootstrap.Collapse(
+	document.getElementById("panelsStayOpen-collapseOne"),
+	{ toggle: false }
+);
+
+function collapseCheck() {
+	if (window.innerWidth < 992) collapseOne.hide();
+	else collapseOne.show();
+}
+
+window.addEventListener("resize", collapseCheck);
+collapseCheck();
+
 // Script to check window size and resize pagination nav
 const pagination = document.querySelector(".pagination");
 
@@ -27,6 +41,6 @@ function resize_pagination_nav() {
 }
 
 if (pagination) {
-    resize_pagination_nav();
-    window.addEventListener("resize", resize_pagination_nav);
+	resize_pagination_nav();
+	window.addEventListener("resize", resize_pagination_nav);
 }
