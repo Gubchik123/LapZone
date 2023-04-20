@@ -191,7 +191,7 @@
                                     <!-- TODO: add url to customer profile page instead of # -->
 									<a
                                         class="d-block text-decoration-none"
-                                        href="{% if user.is_authenticated %}#{% else %}{% url 'account_login' %}{% endif %}"
+                                        href="{% if user.is_authenticated %}#{% else %}{% url 'account_login' %}{% endif %}?next={{ request.path }}"
 									>
 										<ion-icon
 											class="pt-1"
