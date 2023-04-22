@@ -25,14 +25,17 @@ function update_cart_product(event) {
 	const initial_quantity_field_value =
 		initial_quantity_fields_values[quantity_field.id];
 
-	if (quantity_field_value == initial_quantity_field_value) return;
+    console.log(quantity_field_value);
+
+	if (quantity_field_value == initial_quantity_field_value) 
+        return;
 	if (isNaN(quantity_field_value) || quantity_field_value < 1) {
-		quantity_field_value = initial_quantity_field_value;
+		quantity_field.value = initial_quantity_field_value;
 		alert("Minimum quantity is 1!");
 		return;
 	}
 	if (quantity_field_value > 10) {
-		quantity_field_value = initial_quantity_field_value;
+		quantity_field.value = initial_quantity_field_value;
 		alert("Maximum quantity is 10!");
 		return;
 	}
