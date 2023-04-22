@@ -1,7 +1,7 @@
 from decimal import Decimal
 
 from django.conf import settings
-from django.http import HttpRequest
+from django.contrib.sessions.backends.base import SessionBase
 
 from shop.models import Product
 
@@ -11,9 +11,9 @@ class Cart:
     Shopping cart that stores products, their quantities and their prices.
     """
 
-    def __init__(self, request: HttpRequest) -> None:
+    def __init__(self, request_session: SessionBase) -> None:
         """Initializes a new cart instance."""
-        self.session = request.session
+        self.session = request_session
         cart = self.session.get(settings.CART_SESSION_ID)
         if not cart:
             cart = self.session[settings.CART_SESSION_ID] = {}
@@ -42,24 +42,20 @@ class Cart:
         self.session[settings.CART_SESSION_ID] = self.cart
         self.session.modified = True
 
-    def add(
-        self,
-        product: Product,
-        quantity: int = 1,
-        update_quantity: bool = False,
-    ) -> None:
-        """Adds a product to the cart or updates its quantity."""
-        product_id = str(product.id)
-        if product_id not in self.cart:
+    def add(self, product: Product, quantity: int) -> None:
+        """Adds a product to the cart"""
+        if (product_id := str(product.id)) not in self.cart:
             self.cart[product_id] = {
-                "quantity": 0,
+                "quantity": quantity,
                 "price": str(product.price),
             }
-        if update_quantity:
+            self.save()
+
+    def update(self, product: Product, quantity: int) -> None:
+        """Updates the cart product quantity."""
+        if (product_id := str(product.id)) in self.cart:
             self.cart[product_id]["quantity"] = quantity
-        else:
-            self.cart[product_id]["quantity"] += quantity
-        self.save()
+            self.save()
 
     def get_total_price(self) -> int:
         """Returns the total price of all items in the cart."""
@@ -70,12 +66,6 @@ class Cart:
 
     def remove(self, product: Product) -> None:
         """Removes a product from the cart."""
-        product_id = str(product.id)
-        if product_id in self.cart:
+        if (product_id := str(product.id)) in self.cart:
             del self.cart[product_id]
             self.save()
-
-    def clear(self) -> None:
-        """Clears all items from the cart."""
-        del self.session[settings.CART_SESSION_ID]
-        self.session.modified = True
