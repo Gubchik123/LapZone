@@ -11,15 +11,7 @@ urlpatterns = [
         TemplateView.as_view(template_name="cart/detail.html"),
         name="detail",
     ),
-    path(
-        "add/",
-        views.CartAddView.as_view(),
-        name="add",
-    ),
-    path("update/", views.CartUpdateView.as_view(), name="update"),
-    path(
-        "remove/",
-        views.CartRemoveView.as_view(),
-        name="remove",
-    ),
+    path("add/", views.CartAddView.as_view()),
+    path("update/", views.CartUpdateView.as_view()),
+    path("remove/", views.CartRemoveView.as_view()),
 ]
