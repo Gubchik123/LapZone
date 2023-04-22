@@ -16,6 +16,7 @@ urlpatterns = [
         views.CartAddView.as_view(),
         name="add",
     ),
+    path("update/", views.CartUpdateView.as_view(), name="update"),
     path(
         "remove/",
         views.CartRemoveView.as_view(),
