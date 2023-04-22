@@ -23,17 +23,36 @@ def _get_product_id_from_(json_data: dict, prefix: str) -> int | str:
         return "There was an error! Try again later."
 
 
-def add_product_to_cart_and_get_response_message(request: HttpRequest) -> str:
-    """Adds a product to cart and returns a response message."""
+def _process_cart_product(request: HttpRequest, action: str) -> str:
+    """
+    Processes a cart product based on action and returns a response message.
+    """
     json_data: dict = json.loads(request.body)
-    product_id = _get_product_id_from_(json_data, prefix="adding")
+    product_id = _get_product_id_from_(json_data, prefix=action)
     if isinstance(product_id, str):
         return product_id  # Error message.
 
-    Cart(request).add(
-        get_object_or_404(Product, id=product_id), json_data.get("quantity", 1)
+    product = get_object_or_404(Product, id=product_id)
+    if action == "adding":
+        Cart(request.session).add(
+            product=product, quantity=int(json_data.get("quantity", 1))
+        )
+        return "Product has successfully added to your cart."
+
+    Cart(request.session).update(
+        product=product, quantity=int(json_data.get("quantity", 1))
     )
-    return "Product has successfully added to your cart."
+    return "The product quantity has successfully updated."
+
+
+def add_product_to_cart_and_get_response_message(request: HttpRequest) -> str:
+    """Adds a product to cart and returns a response message."""
+    return _process_cart_product(request, action="adding")
+
+
+def update_cart_product_and_get_response_message(request: HttpRequest) -> str:
+    """Updates a cart product and returns a response message."""
+    return _process_cart_product(request, action="updating")
 
 
 def remove_product_from_cart(request: HttpRequest) -> str:
@@ -44,7 +63,7 @@ def remove_product_from_cart(request: HttpRequest) -> str:
     if isinstance(product_id, str):
         messages.error(request, product_id)  # Error message
 
-    Cart(request).remove(get_object_or_404(Product, id=product_id))
+    Cart(request.session).remove(get_object_or_404(Product, id=product_id))
     messages.success(
         request, "Product has successfully removed from your cart."
     )
