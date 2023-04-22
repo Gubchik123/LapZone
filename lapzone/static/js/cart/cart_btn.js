@@ -7,11 +7,11 @@ function replace_cart_btn_with_link_to_cart_detail_page(cart_btn) {
 	cart_btn.parentNode.replaceChild(link, cart_btn);
 }
 
-function increase_cart_badge_count_of_products_in_cart() {
+function increase_cart_badge_count_of_products_in_cart(quantity) {
 	const header_cart_badge = document.querySelector(
 		"header ion-icon[name='cart']"
 	).nextElementSibling;
-	header_cart_badge.textContent = +header_cart_badge.textContent + 1;
+	header_cart_badge.textContent = +header_cart_badge.textContent + quantity;
 }
 
 document.querySelectorAll(".cart").forEach((cart_btn) => {
@@ -42,7 +42,7 @@ document.querySelectorAll(".cart").forEach((cart_btn) => {
 					"Product has successfully added to your cart."
 				) {
 					replace_cart_btn_with_link_to_cart_detail_page(cart_btn);
-					increase_cart_badge_count_of_products_in_cart();
+					increase_cart_badge_count_of_products_in_cart(quantity);
 				}
 
 				alert(response_text);
