@@ -12,7 +12,7 @@ document.querySelectorAll(".remove.btn").forEach((remove_btn) => {
 				},
 				body: JSON.stringify({
 					product_id:
-						remove_btn.attributes["data-product_id"].nodeValue,
+						+remove_btn.attributes["data-product_id"].nodeValue,
 				}),
 			})
 				.then((response) => window.location.reload())

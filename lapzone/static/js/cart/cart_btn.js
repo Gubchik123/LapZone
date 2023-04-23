@@ -32,7 +32,7 @@ document.querySelectorAll(".cart").forEach((cart_btn) => {
 			},
 			body: JSON.stringify({
 				quantity: quantity,
-				product_id: cart_btn.attributes["data-product_id"].nodeValue,
+				product_id: +cart_btn.attributes["data-product_id"].nodeValue,
 			}),
 		})
 			.then((response) => response.text())
