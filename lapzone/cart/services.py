@@ -59,11 +59,12 @@ def update_cart_product_and_get_response_message(request: HttpRequest) -> str:
 
 def remove_product_from_cart(request: HttpRequest) -> None:
     """Removes a product from cart and adds a response message in messages."""
-    product_id = json.loads(request.body).get(
-        "product_id", "There was an error! Try again later."
-    )
-    if isinstance(product_id, str):
-        messages.error(request, product_id)  # Error message
+    product_id = None
+    try:
+        product_id = int(json.loads(request.body)["product_id"])
+    except (KeyError, ValueError, TypeError):
+        logger.error(f"cart product removing: {product_id=}")
+        messages.error(request, "There was an error! Try again later.")
         return
     Cart(request.session).remove(get_object_or_404(Product, id=product_id))
     messages.success(
