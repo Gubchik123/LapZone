@@ -171,6 +171,8 @@ RECAPTCHA_SCORE_THRESHOLD = 0.5
 
 CART_SESSION_ID = "cart"
 
+ERROR_MESSAGE = "There was an error; please try again later."
+
 LOGGING = {
     "version": 1,
     "disable_existing_loggers": False,
