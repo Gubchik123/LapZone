@@ -1,6 +1,7 @@
 import json
 import logging
 
+from django.conf import settings
 from django.shortcuts import redirect
 from django.db.models import QuerySet
 from django.contrib.auth.models import User
@@ -137,7 +138,7 @@ def add_or_delete_like_and_get_response_message(
         logger.error(
             f"like processing: product_slug={product_slug}, user_id={user_id}"
         )
-        return "There was an error! Try again later."
+        return settings.ERROR_MESSAGE
 
     like, was_created = models.Like.objects.get_or_create(
         user_id=user_id,

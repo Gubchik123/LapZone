@@ -1,5 +1,6 @@
 import json
 
+from django.conf import settings
 from django.test import TestCase
 from django.http import HttpResponse
 from django.contrib.messages import get_messages
@@ -117,7 +118,7 @@ class CartPOSTViewWithRequiredProductIDTestMixin(CartViewTestMixin):
         response = self._send_post_request_and_get_response(data)
         self.assertEqual(response.status_code, 200)
         self._check_response_message_is_equal_to_(
-            "There was an error! Try again later.", response
+            settings.ERROR_MESSAGE, response
         )
 
     def _send_post_request_and_get_response(self, data: dict) -> HttpResponse:

@@ -1,6 +1,7 @@
 from random import randint
 from typing import Callable
 
+from django.conf import settings
 from django.test import TestCase
 from django.http import HttpResponse
 from django.db.models import QuerySet
@@ -477,7 +478,7 @@ class LikeViewTestCase(ProductDetailViewTestMixin, TestCase):
     def test_post_service_error(self):
         """Test handling a service error when adding/deleting a like."""
         response = self._get_response(user_id=None)
-        self.assertContains(response, "There was an error! Try again later.")
+        self.assertContains(response, settings.ERROR_MESSAGE)
 
     def _test_post_add_like_success(self):
         """Test adding a like to a product successfully."""

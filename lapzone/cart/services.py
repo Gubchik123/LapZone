@@ -1,6 +1,7 @@
 import json
 import logging
 
+from django.conf import settings
 from django.contrib import messages
 from django.http import HttpRequest
 from django.shortcuts import get_object_or_404
@@ -25,7 +26,7 @@ def _get_product_id_and_quantity_from_(
         return (product_id, quantity)
     except (KeyError, ValueError, TypeError):
         logger.error(f"cart product {prefix}: {product_id=}, {quantity=}")
-        return ("There was an error! Try again later.", None)
+        return (settings.ERROR_MESSAGE, None)
 
 
 def _process_cart_product(request: HttpRequest, action: str) -> str:
@@ -64,7 +65,7 @@ def remove_product_from_cart(request: HttpRequest) -> None:
         product_id = int(json.loads(request.body)["product_id"])
     except (KeyError, ValueError, TypeError):
         logger.error(f"cart product removing: {product_id=}")
-        messages.error(request, "There was an error! Try again later.")
+        messages.error(request, settings.ERROR_MESSAGE)
         return
     Cart(request.session).remove(get_object_or_404(Product, id=product_id))
     messages.success(
