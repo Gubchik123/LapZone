@@ -117,6 +117,15 @@ class ModelWithImage(models.Model):
         abstract = True
 
 
+class ModelWithPrice(models.Model):
+    """Abstract model with 'price' FloatField"""
+
+    price = models.FloatField(blank=False, verbose_name="Price")
+
+    class Meta:
+        abstract = True
+
+
 class ModelWithCreatedDateTime(models.Model):
     """Abstract model with 'created' DateTimeField"""
 

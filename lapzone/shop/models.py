@@ -6,6 +6,7 @@ from general.models import (
     ModelWithNameAndSlug,
     ModelWithDescription,
     ModelWithImage,
+    ModelWithPrice,
     ModelWithCreatedDateTime,
     ModelWithFKToProduct,
 )
@@ -61,7 +62,10 @@ class ModelWithDescriptionAndImage(ModelWithDescription, ModelWithImage):
 
 
 class Product(
-    ModelWithNameAndSlug, ModelWithDescriptionAndImage, models.Model
+    ModelWithNameAndSlug,
+    ModelWithDescriptionAndImage,
+    ModelWithPrice,
+    models.Model,
 ):
     """
     A model representing a product, for example, 'ASUS ROG Zephyrus M16'.
@@ -72,7 +76,6 @@ class Product(
     url_pattern_name = "product_detail"
 
     # Model fields
-    price = models.FloatField(blank=False, verbose_name="Price")
     year = models.IntegerField(blank=False, verbose_name="Year")
 
     brand = models.ForeignKey(
