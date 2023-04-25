@@ -9,6 +9,7 @@ from general.models import (
     ModelWithPrice,
     ModelWithCreatedDateTime,
     ModelWithFKToProduct,
+    ModelWithFKToUser,
 )
 
 
@@ -151,15 +152,13 @@ class ModelWithCreatedDateTimeAndFKToProduct(
         abstract = True
 
 
-class Like(ModelWithCreatedDateTimeAndFKToProduct, models.Model):
+class Like(
+    ModelWithCreatedDateTimeAndFKToProduct, ModelWithFKToUser, models.Model
+):
     """
     A model representing a product like from user.
-    Fields: created, user, product
+    Fields: created, product, user
     """
-
-    user = models.ForeignKey(
-        User, on_delete=models.CASCADE, verbose_name="User"
-    )
 
     def __str__(self) -> str:
         """Gets string representation of the Like model."""

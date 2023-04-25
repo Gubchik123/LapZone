@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from django.utils.text import slugify
+from django.contrib.auth.models import User
 
 
 class ModelWithName(models.Model):
@@ -144,6 +145,17 @@ class ModelWithFKToProduct(models.Model):
         "shop.Product",
         on_delete=models.CASCADE,
         verbose_name="Product",
+    )
+
+    class Meta:
+        abstract = True
+
+
+class ModelWithFKToUser(models.Model):
+    """Abstract model with 'user' ForeignKey field"""
+
+    user = models.ForeignKey(
+        User, on_delete=models.CASCADE, verbose_name="User"
     )
 
     class Meta:
