@@ -348,6 +348,6 @@ class ModelWithFKToUserTestMixin:
 
     def test_user_on_delete_cascade(self):
         """Test that the user field's on_delete is CASCADE."""
-        User.objects.get(id=1).delete()
+        User.objects.get(username="Someone").delete()
         with self.assertRaises(self.model.DoesNotExist):
             self.model.objects.get(id=1)
