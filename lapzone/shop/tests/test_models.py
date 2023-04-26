@@ -1,7 +1,4 @@
-from typing import NoReturn
-
 from django.test import TestCase
-from django.contrib.auth.models import User
 
 from shop import models
 from general.test_mixins.for_models import (
@@ -17,7 +14,7 @@ from general.test_mixins.for_models import (
 )
 
 
-class BrandModelTest(
+class BrandModelTestCase(
     ModelMetaOptionsTestMixin, ModelWithNameAndSlugTestMixin, TestCase
 ):
     """Test cases for the Brand model."""
@@ -36,12 +33,12 @@ class BrandModelTest(
     expected_url = "/brand/test-brand/"
 
     @classmethod
-    def setUpTestData(cls) -> NoReturn:
+    def setUpTestData(cls) -> None:
         """Creates the first Brand for testing."""
         models.Brand.objects.create(name="test brand")
 
 
-class CategoryModelTest(
+class CategoryModelTestCase(
     ModelMetaOptionsTestMixin, ModelWithNameAndSlugTestMixin, TestCase
 ):
     """Test cases for the Category model."""
@@ -60,7 +57,7 @@ class CategoryModelTest(
     expected_url = "/category/test-category/"
 
     @classmethod
-    def setUpTestData(cls) -> NoReturn:
+    def setUpTestData(cls) -> None:
         """Creates the first Category for testing."""
         models.Category.objects.create(name="test category")
 
@@ -73,7 +70,7 @@ class ModelWithDescriptionAndImageTestMixin(
     """
 
 
-class ProductModelTest(
+class ProductModelTestCase(
     ModelMetaOptionsTestMixin,
     ModelWithNameAndSlugTestMixin,
     ModelWithDescriptionAndImageTestMixin,
@@ -96,7 +93,7 @@ class ProductModelTest(
     expected_image_name = "test-laptop.webp"
 
     @classmethod
-    def setUpTestData(cls) -> NoReturn:
+    def setUpTestData(cls) -> None:
         """Creates the first Product for testing."""
         models.Product.objects.create(
             name="Test laptop",
@@ -156,7 +153,7 @@ class ProductModelTest(
             models.Category.objects.get(id=1)
 
 
-class ProductShotModelTest(
+class ProductShotModelTestCase(
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
     ModelWithDescriptionAndImageTestMixin,
@@ -176,7 +173,7 @@ class ProductShotModelTest(
     expected_image_name = "test-laptop-shot-1.webp"
 
     @classmethod
-    def setUpTestData(cls) -> NoReturn:
+    def setUpTestData(cls) -> None:
         """Creates the first ProductShot for testing."""
         models.ProductShot.objects.create(
             name="test product shot",
@@ -194,7 +191,7 @@ class ProductShotModelTest(
         )
 
 
-class LikeModelTest(
+class LikeModelTestCase(
     ModelMetaOptionsTestMixin,
     ModelWithCreatedDateTimeTestMixin,
     ModelWithFKToProductTestMixin,
@@ -209,7 +206,7 @@ class LikeModelTest(
     ordering = ["-created", "product_id"]
 
     @classmethod
-    def setUpTestData(cls) -> NoReturn:
+    def setUpTestData(cls) -> None:
         """Creates the first Like for testing."""
         models.Like.objects.create(
             user=models.User.objects.create(
@@ -232,7 +229,7 @@ class LikeModelTest(
         self.assertEqual(str(like), f"From {like.user} for {like.product}")
 
 
-class ReviewModelTest(
+class ReviewModelTestCase(
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
     ModelWithCreatedDateTimeTestMixin,
@@ -250,7 +247,7 @@ class ReviewModelTest(
     name_verbose_name = "Username"
 
     @classmethod
-    def setUpTestData(cls) -> NoReturn:
+    def setUpTestData(cls) -> None:
         """Creates the first Review for testing."""
         models.Review.objects.create(
             name="Test user",
@@ -308,7 +305,7 @@ class ReviewModelTest(
         self.assertEqual(self.model._meta.get_field("parent").null, True)
 
 
-class CarouselImageModelTest(
+class CarouselImageModelTestCase(
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
     ModelWithDescriptionAndImageTestMixin,
@@ -327,7 +324,7 @@ class CarouselImageModelTest(
     expected_image_name = "test carousel image.webp"
 
     @classmethod
-    def setUpTestData(cls) -> NoReturn:
+    def setUpTestData(cls) -> None:
         """Creates the first CarouselImage for testing."""
         models.CarouselImage.objects.create(
             name="test carousel image", image="./some_image.jpg"
