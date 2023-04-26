@@ -7,6 +7,7 @@ from django.utils.safestring import mark_safe, SafeText
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from . import models
+from general.admin_mixins import ModelWithFKToProductAdminMixin
 
 
 admin.site.site_title = admin.site.site_header = "LapZone Admin"
@@ -155,24 +156,6 @@ class ProductAdmin(
         )
 
     get_category_link.short_description = "Category"
-
-
-class ModelWithFKToProductAdminMixin:
-    """Admin mixin for managing instances that
-    inherited form abstract ModelWithFKToProduct"""
-
-    list_filter = ("product",)
-
-    def get_product_link(self, shot: models.ProductShot) -> SafeText:
-        """Returns link to the admin page for shot.product"""
-        link_to_product = reverse(
-            "admin:shop_product_change", args=(shot.product.pk,)
-        )
-        return mark_safe(
-            f"<a href='{link_to_product}'>{shot.product.name}</a>"
-        )
-
-    get_product_link.short_description = "For product"
 
 
 @admin.register(models.ProductShot)
