@@ -19,3 +19,15 @@ class ModelWithFKToProductAdminMixin:
         )
 
     get_product_link.short_description = "Product"
+
+
+class ModelWithFKToUserAdminMixin:
+    """Admin mixin for managing instances that
+    inherited form abstract ModelWithFKToUser"""
+
+    def get_user_link(self, model: Model) -> SafeText:
+        """Returns link to the admin page for like.user"""
+        link_to_user = reverse("admin:auth_user_change", args=(model.user.pk,))
+        return mark_safe(f"<a href='{link_to_user}'>{model.user.username}</a>")
+
+    get_user_link.short_description = "User"

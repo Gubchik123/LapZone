@@ -7,7 +7,10 @@ from django.utils.safestring import mark_safe, SafeText
 from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from . import models
-from general.admin_mixins import ModelWithFKToProductAdminMixin
+from general.admin_mixins import (
+    ModelWithFKToProductAdminMixin,
+    ModelWithFKToUserAdminMixin,
+)
 
 
 admin.site.site_title = admin.site.site_header = "LapZone Admin"
@@ -176,7 +179,10 @@ class ProductShotAdmin(
 
 @admin.register(models.Like)
 class LikeAdmin(
-    BaseModelAdmin, ModelWithFKToProductAdminMixin, admin.ModelAdmin
+    BaseModelAdmin,
+    ModelWithFKToProductAdminMixin,
+    ModelWithFKToUserAdminMixin,
+    admin.ModelAdmin,
 ):
     """Admin class for managing Like instances."""
 
@@ -186,13 +192,6 @@ class LikeAdmin(
     readonly_fields = ("get_product_link", "get_user_link")
     list_display = ("id", "get_user_link", "get_product_link", "created")
     fields = (("product", "get_product_link"), ("user", "get_user_link"))
-
-    def get_user_link(self, like: models.Like) -> SafeText:
-        """Returns link to the admin page for like.user"""
-        link_to_user = reverse("admin:auth_user_change", args=(like.user.pk,))
-        return mark_safe(f"<a href='{link_to_user}'>{like.user.username}</a>")
-
-    get_user_link.short_description = "From user"
 
 
 class ReviewParentListFilter(admin.SimpleListFilter):
