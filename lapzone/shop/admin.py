@@ -40,7 +40,7 @@ class ModelWithNameAndSlugAdminMixin(ModelWithNameAdminMixin):
 
 
 @admin.register(models.Brand)
-class BrandAdmin(
+class BrandModelAdmin(
     BaseModelAdmin, ModelWithNameAndSlugAdminMixin, admin.ModelAdmin
 ):
     """Admin class for managing Brand instances."""
@@ -50,7 +50,7 @@ class BrandAdmin(
 
 
 @admin.register(models.Category)
-class CategoryAdmin(
+class CategoryModelAdmin(
     BaseModelAdmin, ModelWithNameAndSlugAdminMixin, admin.ModelAdmin
 ):
     """Admin class for managing Category instances."""
@@ -97,7 +97,7 @@ class ProductShotInline(ModelWithImageAdminMixin, admin.TabularInline):
 
 
 @admin.register(models.Product)
-class ProductAdmin(
+class ProductModelAdmin(
     BaseModelAdmin,
     ModelWithNameAndSlugAdminMixin,
     ModelWithImageAdminMixin,
@@ -158,7 +158,7 @@ class ProductAdmin(
 
 
 @admin.register(models.ProductShot)
-class ProductShotAdmin(
+class ProductShotModelAdmin(
     BaseModelAdmin,
     ModelWithNameAdminMixin,
     ModelWithImageAdminMixin,
@@ -174,7 +174,7 @@ class ProductShotAdmin(
 
 
 @admin.register(models.Like)
-class LikeAdmin(
+class LikeModelAdmin(
     BaseModelAdmin,
     ModelWithFKToProductAdminMixin,
     ModelWithFKToUserAdminMixin,
@@ -212,7 +212,7 @@ class ReviewParentListFilter(admin.SimpleListFilter):
 
 
 @admin.register(models.Review)
-class ReviewAdmin(
+class ReviewModelAdmin(
     BaseModelAdmin, ModelWithFKToProductAdminMixin, admin.ModelAdmin
 ):
     """Admin class for managing Review instances."""
@@ -257,7 +257,7 @@ class ReviewAdmin(
 
 
 @admin.register(models.CarouselImage)
-class CarouselImageAdmin(
+class CarouselImageModelAdmin(
     BaseModelAdmin,
     ModelWithNameAdminMixin,
     ModelWithImageAdminMixin,
