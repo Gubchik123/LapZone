@@ -13,6 +13,7 @@ from general.test_mixins.for_models import (
     ModelWithCreatedDateTimeTestMixin,
     ModelWithPriceTestMixin,
     ModelWithFKToProductTestMixin,
+    ModelWithFKToUserTestMixin,
 )
 
 
@@ -197,6 +198,7 @@ class LikeModelTest(
     ModelMetaOptionsTestMixin,
     ModelWithCreatedDateTimeTestMixin,
     ModelWithFKToProductTestMixin,
+    ModelWithFKToUserTestMixin,
     TestCase,
 ):
     """Test cases for the Like model."""
@@ -228,24 +230,6 @@ class LikeModelTest(
         """Test the model string representation by __str__."""
         like = models.Like.objects.get(id=1)
         self.assertEqual(str(like), f"From {like.user} for {like.product}")
-
-    def test_user_verbose_name(self):
-        """Test that the user field's verbose name is "User"."""
-        self.assertEqual(
-            self.model._meta.get_field("user").verbose_name, "User"
-        )
-
-    def test_user_related_model(self):
-        """Test that the user field's related model is Django User model."""
-        self.assertEqual(
-            self.model._meta.get_field("user").related_model, User
-        )
-
-    def test_user_on_delete_cascade(self):
-        """Test that the user field's on_delete is CASCADE."""
-        models.User.objects.get(id=1).delete()
-        with self.assertRaises(self.model.DoesNotExist):
-            self.model.objects.get(id=1)
 
 
 class ReviewModelTest(

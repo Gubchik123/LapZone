@@ -1,4 +1,5 @@
 from django.db.models import Model
+from django.contrib.auth.models import User
 
 from shop.models import Product
 
@@ -315,5 +316,38 @@ class ModelWithFKToProductTestMixin:
     def test_product_on_delete_cascade(self):
         """Test that the product field's on_delete is CASCADE."""
         Product.objects.get(name="Test laptop").delete()
+        with self.assertRaises(self.model.DoesNotExist):
+            self.model.objects.get(id=1)
+
+
+class ModelWithFKToUserTestMixin:
+    """Mixin for testing the 'user' field parameters
+    for models that inherited from abstract ModelWithFKToUser."""
+
+    # Default parameter values.
+    user_related_model = User
+    user_verbose_name = "User"
+
+    def test_user_verbose_name(self):
+        """
+        Test that the user field's verbose name is equal to the user_verbose_name attribute.
+        """
+        self.assertEqual(
+            self.model._meta.get_field("user").verbose_name,
+            self.user_verbose_name,
+        )
+
+    def test_user_related_model(self):
+        """
+        Test that the user field's related model is equal to the user_related_model attribute.
+        """
+        self.assertEqual(
+            self.model._meta.get_field("user").related_model,
+            self.user_related_model,
+        )
+
+    def test_user_on_delete_cascade(self):
+        """Test that the user field's on_delete is CASCADE."""
+        User.objects.get(id=1).delete()
         with self.assertRaises(self.model.DoesNotExist):
             self.model.objects.get(id=1)
