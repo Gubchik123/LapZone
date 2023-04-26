@@ -8,6 +8,7 @@ from ckeditor_uploader.widgets import CKEditorUploadingWidget
 
 from . import models
 from general.admin_mixins import (
+    ModelWithPriceAdminMixin,
     ModelWithFKToProductAdminMixin,
     ModelWithFKToUserAdminMixin,
 )
@@ -100,6 +101,7 @@ class ProductAdmin(
     BaseModelAdmin,
     ModelWithNameAndSlugAdminMixin,
     ModelWithImageAdminMixin,
+    ModelWithPriceAdminMixin,
     admin.ModelAdmin,
 ):
     """Admin class for managing Product instances."""
@@ -133,12 +135,6 @@ class ProductAdmin(
         ),
     )
     inlines = (ProductShotInline,)
-
-    def get_price(self, product: models.Product) -> str:
-        """Returns string: price + '$'"""
-        return f"{product.price} $"
-
-    get_price.short_description = "Price"
 
     def get_brand_link(self, product: models.Product) -> SafeText:
         """Returns link to the admin page for product.brand"""

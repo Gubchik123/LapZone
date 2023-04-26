@@ -3,9 +3,20 @@ from django.db.models import Model
 from django.utils.safestring import mark_safe, SafeText
 
 
+class ModelWithPriceAdminMixin:
+    """Admin mixin for managing instances that
+    inherited form abstract ModelWithPrice."""
+
+    def get_price(self, model: Model) -> str:
+        """Returns string: price + '$'"""
+        return f"{model.price} $"
+
+    get_price.short_description = "Price"
+
+
 class ModelWithFKToProductAdminMixin:
     """Admin mixin for managing instances that
-    inherited form abstract ModelWithFKToProduct"""
+    inherited form abstract ModelWithFKToProduct."""
 
     list_filter = ("product",)
 
@@ -23,7 +34,7 @@ class ModelWithFKToProductAdminMixin:
 
 class ModelWithFKToUserAdminMixin:
     """Admin mixin for managing instances that
-    inherited form abstract ModelWithFKToUser"""
+    inherited form abstract ModelWithFKToUser."""
 
     def get_user_link(self, model: Model) -> SafeText:
         """Returns link to the admin page for like.user"""
