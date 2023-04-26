@@ -11,6 +11,7 @@ from general.test_mixins.for_models import (
     ModelWithDescriptionTestMixin,
     ModelWithImageTestMixin,
     ModelWithCreatedDateTimeTestMixin,
+    ModelWithPriceTestMixin,
     ModelWithFKToProductTestMixin,
 )
 
@@ -75,6 +76,7 @@ class ProductModelTest(
     ModelMetaOptionsTestMixin,
     ModelWithNameAndSlugTestMixin,
     ModelWithDescriptionAndImageTestMixin,
+    ModelWithPriceTestMixin,
     TestCase,
 ):
     """Test cases for the Product model."""
@@ -104,16 +106,6 @@ class ProductModelTest(
             brand=models.Brand.objects.create(name="test brand"),
             category=models.Category.objects.create(name="test category"),
         )
-
-    def test_price_verbose_name(self):
-        """Test that the price field's verbose name is "Price"."""
-        self.assertEqual(
-            self.model._meta.get_field("price").verbose_name, "Price"
-        )
-
-    def test_price_blank(self):
-        """Test that the price field's blank is False."""
-        self.assertEqual(self.model._meta.get_field("price").blank, False)
 
     def test_year_verbose_name(self):
         """Test that the year field's verbose name is "Year"."""

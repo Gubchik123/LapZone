@@ -191,7 +191,7 @@ class ModelWithDescriptionTestMixin:
 
 class ModelWithImageTestMixin(ModelTestMixin):
     """Mixin for testing the 'image' field parameters
-    for models that inherited from abstract ModelWithImageTestMixin."""
+    for models that inherited from abstract ModelWithImage."""
 
     # Default parameter values.
     image_blank = False
@@ -233,6 +233,29 @@ class ModelWithImageTestMixin(ModelTestMixin):
         """
         self.assertEqual(
             self._get_first_model().image.name, self.expected_image_name
+        )
+
+
+class ModelWithPriceTestMixin(ModelTestMixin):
+    """Mixin for testing the 'price' field parameters
+    for models that inherited from abstract ModelWithPrice."""
+
+    # Default parameter values.
+    price_blank = False
+    price_verbose_name = "Price"
+
+    def test_price_blank(self):
+        """
+        Test that the price field's blank is equal to the price_blank attribute.
+        """
+        self.assertEqual(self.model._meta.get_field("price").blank, False)
+
+    def test_price_verbose_name(self):
+        """
+        Test that the price field's verbose name is equal to the price_verbose_name attribute.
+        """
+        self.assertEqual(
+            self.model._meta.get_field("price").verbose_name, "Price"
         )
 
 
