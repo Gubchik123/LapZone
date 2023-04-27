@@ -1,6 +1,7 @@
 import uuid
 
 from django.db import models
+from django.urls import reverse
 
 from general.models import (
     ModelWithPrice,
@@ -28,6 +29,10 @@ class Order(ModelWithFKToUser, ModelWithCreatedDateTime, models.Model):
     def __str__(self) -> str:
         """Returns string representation of the Order model."""
         return f"Order {self.id} from {self.user}"
+
+    def get_absolute_url(self) -> str:
+        """Returns the URL to the order detail page."""
+        return reverse("order:detail", kwargs={"pk": self.pk})
 
     class Meta:
         """Meta options for the Order model."""
