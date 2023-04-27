@@ -1,0 +1,18 @@
+{% extends '_base.html' %} 
+
+{% block styles %}
+<style>
+    .white-space-nowrap { white-space: nowrap; }
+    .white-space-normal { white-space: normal; }
+
+    .table { color: var(--text-color) }
+    .table td, .table th { 
+        flex: 1; 
+        border: 0; 
+        text-align: center; 
+    }
+    .table .image-td { width: 10%; }
+    .table img { min-width: 100px; }
+    .table input[type="number"] { width: 75px; }
+</style>
+{% endblock styles %} 
