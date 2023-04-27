@@ -21,6 +21,7 @@ urlpatterns = [
     path("ckeditor/", include("ckeditor_uploader.urls")),
     path("", include("shop.urls")),
     path("cart/", include("cart.urls")),
+    path("order/", include("order.urls")),
     path(
         "faq/",
         TemplateView.as_view(template_name="pages/FAQs.html"),
