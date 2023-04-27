@@ -1,0 +1,84 @@
+{% extends 'cart/_base.html' %} 
+
+{% block title %}Order {{ order.id }}{% endblock %} 
+{% block content_title %}Order {{ order.id }}{% endblock %}
+
+
+{% block content %}
+<div class="row px-3 mb-5">
+    <div class="panel-bg-color col-12 p-3">
+        <div class="white-space-nowrap overflow-auto">
+            <table class="table">
+                <thead>
+                    <tr
+                        class="d-flex justify-content-between align-items-center border-1 border-bottom"
+                    >
+                        <th class="me-4">Image</th>
+                        <th>Product</th>
+                        <th>Quantity</th>
+                        <th>Price</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order_item in order.orderitem_set.all %}
+                    {% with product_url=order_item.product.get_absolute_url %}
+                    <tr
+                        class="d-flex justify-content-between align-items-center border-1 border-bottom py-2"
+                    >
+                        <!-- Product image -->
+                        <td class="image-td me-4">
+                            <a href="{{ product_url }}" class="opacity-1">
+                                <img
+                                    class="img-fluid w-100"
+                                    alt="{{ order_item.product.name }} image"
+                                    src="{{ order_item.product.image.url }}"
+                                />
+                            </a>
+                        </td>
+                        <!-- Product name -->
+                        <td>
+                            <a href="{{ product_url }}" class="fs-5 white-space-normal">
+                                {{ order_item.product.name }}
+                            </a>
+                        </td>
+                        <!-- Order item quantity -->
+                        <td class="fs-3">
+                            {{ order_item.product.id }}
+                        </td>
+                        <!-- Order item price -->
+                        <td class="fs-4">
+                            {{ order_item.price }}$
+                        </td>
+                    </tr>
+                    {% endwith %}
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+
+        <div 
+            class="d-flex justify-content-between align-items-center fs-4 mt-3"
+        >
+            <b>Order total price: </b>
+            <span>{{ order.total_price }}$</span>
+        </div>
+
+        <div class="d-flex justify-content-end mt-4">
+            <form action="{% url 'order:delete' order.pk %}" method="post">
+                {% csrf_token %}
+                <input 
+                    type="submit" 
+                    value="Remove" 
+                    class="remove btn btn-danger btn-lg"
+                >
+            </form>
+        </div>
+    </div>
+</div>
+{% endblock content %} 
+
+
+{% block scripts %}
+{% load static %}
+<script defer src="{% static 'js/remove_btn.js' %}"></script>
+{% endblock scripts %} 
