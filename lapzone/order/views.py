@@ -1,5 +1,7 @@
 from django.views import generic
+from django.contrib import messages
 from django.db.models import QuerySet
+from django.http import HttpResponseRedirect, HttpRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import services
@@ -25,3 +27,18 @@ class OrderDetailView(BaseView, LoginRequiredMixin, generic.DetailView):
             queryset if queryset is not None else self.get_queryset(),
             self.kwargs["pk"],
         )
+
+
+class OrderDeleteView(OrderDetailView, generic.DeleteView):
+    """View for deleting an order."""
+
+    success_url = "/"
+    template_name = None
+    http_method_names = ["post"]
+
+    def post(
+        self, request: HttpRequest, *args, **kwargs
+    ) -> HttpResponseRedirect:
+        """Adds a success message and calls the super().post() method."""
+        messages.success(request, "Order has successfully deleted.")
+        return super().post(request, *args, **kwargs)
