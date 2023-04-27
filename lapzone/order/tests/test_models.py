@@ -42,6 +42,12 @@ class OrderModelTestCase(
             str(self.order), f"Order {self.order.id} from {self.order.user}"
         )
 
+    def test_get_absolute_url(self):
+        """Test the get_absolute_url method."""
+        self.assertEqual(
+            self.order.get_absolute_url(), f"/order/{self.order.id}/"
+        )
+
     def test_id_unique(self):
         """Test that the id field is unique."""
         self.assertTrue(self.model._meta.get_field("id").unique)
