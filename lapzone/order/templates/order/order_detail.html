@@ -1,4 +1,4 @@
-{% extends 'cart/_base.html' %} 
+{% extends 'order/_base.html' %} 
 
 {% block title %}Order {{ order.id }}{% endblock %} 
 {% block content_title %}Order {{ order.id }}{% endblock %}
@@ -76,9 +76,3 @@
     </div>
 </div>
 {% endblock content %} 
-
-
-{% block scripts %}
-{% load static %}
-<script defer src="{% static 'js/remove_btn.js' %}"></script>
-{% endblock scripts %} 
