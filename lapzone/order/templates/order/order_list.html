@@ -6,7 +6,7 @@
 
 {% block content %}
 
-{% if not object_list %}
+{% if not page_obj %}
     <div class="mb-5">
         {% include 'utils/_alert.html' with message="You don't have any orders yet." category="primary" dismissible=False only %}
     </div>
@@ -19,19 +19,19 @@
                     <tr
                         class="d-flex justify-content-between align-items-center border-1 border-bottom"
                     >
-                        <th>Order ID</th>
-                        <th>Total price</th>
-                        <th>Created at</th>
-                        <th>Remove</th>
+                        <th class="ms-3 me-4">Order ID</th>
+                        <th class="me-4">Total price</th>
+                        <th class="me-4">Created at</th>
+                        <th class="me-4">Remove</th>
                     </tr>
                 </thead>
                 <tbody>
-                    {% for order in object_list %}
+                    {% for order in page_obj %}
                     <tr
                         class="d-flex justify-content-between align-items-center border-1 border-bottom py-2"
                     >
                         <!-- Order ID -->
-                        <td>
+                        <td class="me-2">
                             <a 
                                 class="fs-5 white-space-normal"
                                 href="{{ order.get_absolute_url }}" 
@@ -40,15 +40,15 @@
                             </a>
                         </td>
                         <!-- Order total price -->
-                        <td class="fs-4">
+                        <td class="fs-4 me-2">
                             {{ order.total_price }}$
                         </td>
                         <!-- Order created datetime -->
-                        <td class="fs-5">
+                        <td class="fs-5 me-2 white-space-normal">
                             {{ order.created }}
                         </td>
                         <!-- "Remove" button -->
-                        <td>
+                        <td class="me-2">
                             <form 
                                 method="post"
                                 action="{% url 'order:delete' order.pk %}"
@@ -72,8 +72,20 @@
                 </tbody>
             </table>
         </div>
+
+        {% if page_obj.paginator.num_pages > 1 %} 
+            {% include 'utils/_pagination_nav.html' with page_obj=page_obj %}
+        {% endif %}
     </div>
 </div>
 {% endif %} 
 
 {% endblock content %} 
+
+
+{% block scripts %}
+{{ block.super }}
+
+{% load static %}
+<script defer src="{% static 'js/resize_pagination.js' %}"></script>
+{% endblock scripts %} 
