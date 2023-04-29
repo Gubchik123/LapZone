@@ -10,24 +10,22 @@ from .models import Order
 from general.views import BaseView
 
 
-class OrderListView(LoginRequiredMixin, generic.ListView):
+class OrderViewMixin(BaseView, LoginRequiredMixin):
+    """Mixin for the order views."""
+
+    model = Order
+
+    def get_queryset(self):
+        """Returns a queryset of orders that belong to the current user."""
+        return super().get_queryset().filter(user=self.request.user)
+
+
+class OrderListView(OrderViewMixin, generic.ListView):
     """View for the order list page."""
 
-    model = Order
 
-    def get_queryset(self):
-        """Returns a queryset of orders that belong to the current user."""
-        return super().get_queryset().filter(user=self.request.user)
-
-
-class OrderDetailView(BaseView, LoginRequiredMixin, generic.DetailView):
+class OrderDetailView(OrderViewMixin, generic.DetailView):
     """View for the order detail page."""
-
-    model = Order
-
-    def get_queryset(self):
-        """Returns a queryset of orders that belong to the current user."""
-        return super().get_queryset().filter(user=self.request.user)
 
     def get_object(self, queryset: QuerySet[Order] | None = None) -> Order:
         """
