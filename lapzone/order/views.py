@@ -1,5 +1,6 @@
 from django.views import generic
 from django.contrib import messages
+from django.urls import reverse_lazy
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect, HttpRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
@@ -7,6 +8,16 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from . import services
 from .models import Order
 from general.views import BaseView
+
+
+class OrderListView(LoginRequiredMixin, generic.ListView):
+    """View for the order list page."""
+
+    model = Order
+
+    def get_queryset(self):
+        """Returns a queryset of orders that belong to the current user."""
+        return super().get_queryset().filter(user=self.request.user)
 
 
 class OrderDetailView(BaseView, LoginRequiredMixin, generic.DetailView):
@@ -31,8 +42,8 @@ class OrderDetailView(BaseView, LoginRequiredMixin, generic.DetailView):
 class OrderDeleteView(OrderDetailView, generic.DeleteView):
     """View for deleting an order."""
 
-    success_url = "/"
     http_method_names = ["post"]
+    success_url = reverse_lazy("order:list")
 
     def post(
         self, request: HttpRequest, *args, **kwargs
