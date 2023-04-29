@@ -23,6 +23,8 @@ class OrderViewMixin(BaseView, LoginRequiredMixin):
 class OrderListView(OrderViewMixin, generic.ListView):
     """View for the order list page."""
 
+    paginate_by = 10
+
 
 class OrderDetailView(OrderViewMixin, generic.DetailView):
     """View for the order detail page."""
