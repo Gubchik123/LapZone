@@ -1,0 +1,79 @@
+{% extends 'order/_base.html' %} 
+
+{% block title %}Order list{% endblock %} 
+{% block content_title %}All your orders{% endblock %}
+
+
+{% block content %}
+
+{% if not object_list %}
+    <div class="mb-5">
+        {% include 'utils/_alert.html' with message="You don't have any orders yet." category="primary" dismissible=False only %}
+    </div>
+{% else %}
+<div class="row px-3 mb-5">
+    <div class="panel-bg-color col-12 p-3">
+        <div class="white-space-nowrap overflow-auto">
+            <table class="table">
+                <thead>
+                    <tr
+                        class="d-flex justify-content-between align-items-center border-1 border-bottom"
+                    >
+                        <th>Order ID</th>
+                        <th>Total price</th>
+                        <th>Created at</th>
+                        <th>Remove</th>
+                    </tr>
+                </thead>
+                <tbody>
+                    {% for order in object_list %}
+                    <tr
+                        class="d-flex justify-content-between align-items-center border-1 border-bottom py-2"
+                    >
+                        <!-- Order ID -->
+                        <td>
+                            <a 
+                                class="fs-5 white-space-normal"
+                                href="{{ order.get_absolute_url }}" 
+                            >
+                                {{ order.id }}
+                            </a>
+                        </td>
+                        <!-- Order total price -->
+                        <td class="fs-4">
+                            {{ order.total_price }}$
+                        </td>
+                        <!-- Order created datetime -->
+                        <td class="fs-5">
+                            {{ order.created }}
+                        </td>
+                        <!-- "Remove" button -->
+                        <td>
+                            <form 
+                                method="post"
+                                action="{% url 'order:delete' order.pk %}"
+                            >
+                                {% csrf_token %}
+
+                                <button 
+                                    type="submit"
+                                    title="Remove"
+                                    class="remove btn fs-6 border-0 panel-bg-color"
+                                >
+                                    <ion-icon 
+                                        name="trash" 
+                                        style="color: red;"
+                                    ></ion-icon>
+                                </button>
+                            </form>
+                        </td>
+                    </tr>
+                    {% endfor %}
+                </tbody>
+            </table>
+        </div>
+    </div>
+</div>
+{% endif %} 
+
+{% endblock content %} 
