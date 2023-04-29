@@ -13,7 +13,6 @@ class OrderDetailView(BaseView, LoginRequiredMixin, generic.DetailView):
     """View for the order detail page."""
 
     model = Order
-    template_name = "order/detail.html"
 
     def get_queryset(self):
         """Returns a queryset of orders that belong to the current user."""
@@ -33,7 +32,6 @@ class OrderDeleteView(OrderDetailView, generic.DeleteView):
     """View for deleting an order."""
 
     success_url = "/"
-    template_name = None
     http_method_names = ["post"]
 
     def post(
