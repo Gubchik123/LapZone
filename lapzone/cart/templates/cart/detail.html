@@ -11,6 +11,8 @@
         {% include 'utils/_alert.html' with message="There are no products in your cart yet." category="primary" dismissible=False only %}
     </div>
 {% else %}
+{% block order_create_form %}{% endblock %} 
+
 <div class="row px-3 mb-5">
     <div class="panel-bg-color col-12 p-3">
         <div class="white-space-nowrap overflow-auto">
@@ -101,6 +103,7 @@
             <span id="total_price">{{ cart.get_total_price }}$</span>
         </div>
 
+        {% block cart_buttons %} 
         <div class="d-flex justify-content-end mt-4">
             <div>
                 <a 
@@ -109,15 +112,15 @@
                 >
                     Continue shopping
                 </a>
-                <!-- TODO: Add the link to order checkout page -->
                 <a 
-                    href="#" 
+                    href="{% url 'order:create' %}" 
                     class="btn btn-lg btn-success mb-2"
                 >
                     Checkout
                 </a>
             </div>
         </div>
+        {% endblock cart_buttons %}
     </div>
 </div>
 {% endif %} 
@@ -126,6 +129,8 @@
 
 
 {% block scripts %}
+
+{% block script_to_disable_cart_btn %} 
 <!-- Script to disable cart button in the site header -->
 <script defer>
     document.querySelector("ion-icon[name='cart']").parentElement.href = "#";
@@ -133,8 +138,12 @@
     // Template variable for fetch "POST" request
     const csrf_token = "{{ csrf_token }}";
 </script>
+{% endblock script_to_disable_cart_btn %}
 
+{% if cart|length != 0 %}
 {% load static %}
 <script defer src="{% static 'js/cart/remove_btn.js' %}"></script>
 <script defer src="{% static 'js/cart/quantity_field.js' %}"></script>
+{% endif %}
+
 {% endblock scripts %} 
