@@ -1,0 +1,36 @@
+{% extends 'cart/detail.html' %}
+
+{% block title %}Checkout{% endblock %} 
+{% block content_title %}Checkout{% endblock %} 
+
+{% block styles %}
+{{ block.super }}
+
+<style>
+    .row:last-child { margin-bottom: 0!important; }
+
+    textarea { height: 150px; }
+
+    @media screen and (max-width: 576px) { /* Bootstrap5 .sm breakpoint */
+        .form-control { width: 100%!important; }
+    }
+</style>
+{% endblock styles %} 
+
+
+{% block order_create_form %}
+<div class="row px-3 mb-3">
+    <div class="panel-bg-color col-12 p-3">
+        <form action="" method="post">
+            {% csrf_token %}
+
+            {{ form.as_p }}
+
+            <input type="submit" value="Checkout" class="btn btn-success btn-lg mt-3">
+        </form>
+    </div>
+</div>
+{% endblock order_create_form %} 
+
+{% block cart_buttons %}{% endblock %} 
+{% block script_to_disable_cart_btn %}{% endblock %} 
