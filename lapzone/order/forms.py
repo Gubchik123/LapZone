@@ -40,7 +40,7 @@ class OrderCreateForm(forms.Form):
         validators=[
             RegexValidator(r"^\+?1?\d{9,15}$", "Invalid phone number.")
         ],
-        widget=forms.NumberInput(
+        widget=forms.TextInput(
             attrs=_get_field_widget_attrs_with_placeholder_("+380501234567")
         ),
     )
