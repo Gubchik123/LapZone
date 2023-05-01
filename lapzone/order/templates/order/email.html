@@ -1,0 +1,94 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>Receipt from LapZone</title>
+		<style>
+			.receipt-container {
+                margin: 0 auto;
+				max-width: 600px;
+				padding: 30px 20px;
+				border: 1px solid #ccc;
+                background-color: #fff;
+			}
+
+			.header { width: 100%; }
+			.header img {
+                max-width: 100%;
+				max-height: 80px;
+			}
+            .header h1 {
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+
+			.order-info { margin-bottom: 20px; }
+			.order-info p { margin: 0; }
+
+			.product-list table {
+				width: 100%;
+				border-collapse: collapse;
+			}
+			.product-list th,
+			.product-list td {
+                padding: 10px;
+				text-align: left;
+				border: 1px solid #ccc;
+			}
+			.product-list th { background-color: #eee; }
+		</style>
+	</head>
+	<body style="background-color: #E6E4E4; padding: 30px 0; font-size: 1.5em;">
+		<div class="receipt-container">
+			<div class="header">
+				<img
+                    alt="LapZone Logo"
+                    src="{% static 'images/site_header.webp' %}"
+				/>
+				<h1>Receipt from LapZone</h1>
+			</div>
+			<div class="order-info">
+				<p>
+					Dear {{ email }}, <br />
+					<br />
+					Thank you for your order from LapZone! We are
+					excited to let you know that your order has been received
+					and is currently being processed. <br />
+					<br />
+                    Order Details:
+					<br />
+					<br />
+                    Order Date: <strong>{% now 'H:i d.m.Y' %}</strong>
+					<br />
+                    Order Number: <strong>{{ order_id }}</strong> 
+				</p>
+			</div>
+			<div class="product-list">
+				<table>
+					<thead>
+						<tr>
+							<th>Product</th>
+							<th>Unit price</th>
+							<th>Quantity</th>
+							<th>Price</th>
+						</tr>
+					</thead>
+					<tbody>
+						{% for item_dict in cart %}
+						<tr>
+							<td>{{ item_dict.product.name }}</td>
+							<td>{{ item_dict.price }}$</td>
+							<td>{{ item_dict.quantity }}</td>
+							<td>{{ item_dict.total_price }}$</td>
+						</tr>
+						{% endfor %}
+					</tbody>
+				</table>
+			</div>
+            
+            <p>Total: <strong>{{ cart.get_total_price }}$</strong></p>
+		</div>
+	</body>
+</html>
