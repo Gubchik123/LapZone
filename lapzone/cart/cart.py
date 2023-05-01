@@ -69,3 +69,9 @@ class Cart:
         if (product_id := str(product.id)) in self.cart:
             del self.cart[product_id]
             self.save()
+
+    def clear(self) -> None:
+        """Clears all items from the cart."""
+        self.cart.clear()
+        del self.session[settings.CART_SESSION_ID]
+        self.session.modified = True
