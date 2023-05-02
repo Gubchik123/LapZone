@@ -1,14 +1,16 @@
-from uuid import UUID
+from uuid import uuid4, UUID
 from typing import NoReturn
 
 from django.conf import settings
 from django.contrib import messages
 from django.db.models import QuerySet
+from django.contrib.auth import login
 from django.core.mail import send_mail
 from django.contrib.auth.models import User
 from django.http import Http404, HttpRequest
 from allauth.account.models import EmailAddress
 from django.template.loader import render_to_string
+from allauth.account.utils import send_email_confirmation
 
 from .forms import OrderCreateModelForm
 from .models import Order, OrderItem
@@ -71,6 +73,42 @@ def create_order_for_user_with_data_from_(
             price=item_dict["price"],
         )
     return order.get_absolute_url()
+
+
+def process_order_and_get_redirect_url(
+    request: HttpRequest, form: OrderCreateModelForm
+) -> str:
+    """Processes an order by the given form and returns the redirect url."""
+    order_id = uuid4()
+    send_email_to_customer_by_(
+        form.cleaned_data.get("email", None) or request.user.email,
+        order_id,
+        request,
+    )
+    user = None
+    if request.user.is_authenticated:
+        user = request.user
+    elif form.cleaned_data["is_create_profile"]:
+        user, was_created = get_or_create_user_with_data_from_(form)
+        if was_created:
+            send_email_confirmation(request, user)
+        login(
+            request,
+            user,
+            backend="django.contrib.auth.backends.ModelBackend",
+        )
+        messages.success(
+            request, f"Successfully signed in as {user.username}."
+        )
+    redirect_url = "/"
+    cart = Cart(request.session)
+    if user is not None:
+        redirect_url = create_order_for_user_with_data_from_(
+            cart, user, order_id
+        )
+        messages.success(request, "Order has successfully created.")
+    cart.clear()
+    return redirect_url
 
 
 def get_user_order_from_(queryset: QuerySet, pk: UUID) -> Order | NoReturn:

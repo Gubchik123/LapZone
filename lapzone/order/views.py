@@ -1,17 +1,12 @@
-from uuid import uuid4
-
 from django.views import generic
 from django.contrib import messages
 from django.urls import reverse_lazy
-from django.contrib.auth import login
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect, HttpRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
-from allauth.account.utils import send_email_confirmation
 
 from . import services
 from .models import Order
-from cart.cart import Cart
 from general.views import BaseView
 from .forms import OrderCreateModelForm
 
@@ -53,38 +48,9 @@ class OrderCheckoutFormView(generic.FormView):
 
     def form_valid(self, form: OrderCreateModelForm) -> HttpResponseRedirect:
         """Processes an order and redirects to the success page."""
-        order_id = uuid4()
-        services.send_email_to_customer_by_(
-            form.cleaned_data.get("email", None) or self.request.user.email,
-            order_id,
-            self.request,
+        return HttpResponseRedirect(
+            services.process_order_and_get_redirect_url(self.request, form)
         )
-        user = None
-        if self.request.user.is_authenticated:
-            user = self.request.user
-        elif form.cleaned_data["is_create_profile"]:
-            user, was_created = services.get_or_create_user_with_data_from_(
-                form
-            )
-            if was_created:
-                send_email_confirmation(self.request, user)
-            login(
-                self.request,
-                user,
-                backend="django.contrib.auth.backends.ModelBackend",
-            )
-            messages.success(
-                self.request, f"Successfully signed in as {user.username}."
-            )
-        redirect_url = "/"
-        cart = Cart(self.request.session)
-        if user is not None:
-            redirect_url = services.create_order_for_user_with_data_from_(
-                cart, user, order_id
-            )
-            messages.success(self.request, "Order has successfully created.")
-        cart.clear()
-        return HttpResponseRedirect(redirect_url)
 
 
 class OrderViewMixin(BaseView, LoginRequiredMixin):
