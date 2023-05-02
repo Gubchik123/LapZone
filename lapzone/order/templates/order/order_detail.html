@@ -15,6 +15,7 @@
                     >
                         <th class="me-4">Image</th>
                         <th>Product</th>
+                        <th>Unit price</th>
                         <th>Quantity</th>
                         <th>Price</th>
                     </tr>
@@ -41,13 +42,17 @@
                                 {{ order_item.product.name }}
                             </a>
                         </td>
+                        <!-- Order item unit price -->
+                        <td class="fs-4">
+                            {{ order_item.price }}$
+                        </td>
                         <!-- Order item quantity -->
                         <td class="fs-3">
                             {{ order_item.quantity }}
                         </td>
-                        <!-- Order item price -->
+                        <!-- Order item total price -->
                         <td class="fs-4">
-                            {{ order_item.price }}$
+                            {% widthratio order_item.price 1 order_item.quantity %}.0$
                         </td>
                     </tr>
                     {% endwith %}
