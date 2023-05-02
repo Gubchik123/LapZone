@@ -26,11 +26,26 @@
 
             {{ form.as_p }}
 
-            <input type="submit" value="Checkout" class="btn btn-success btn-lg mt-3">
+            <input 
+                type="submit" 
+                value="Checkout" 
+                class="btn btn-success btn-lg mt-3"
+            >
         </form>
     </div>
 </div>
 {% endblock order_create_form %} 
 
+
 {% block cart_buttons %}{% endblock %} 
 {% block script_to_disable_cart_btn %}{% endblock %} 
+
+{% block scripts %}
+{{ block.super }}
+
+{% load static %}
+<script 
+    defer
+    src="{% static 'js/order/is_create_profile_switcher.js' %}" 
+></script>
+{% endblock scripts %} 
