@@ -17,7 +17,7 @@ from .models import Order, OrderItem
 from cart.cart import Cart
 
 
-def send_email_to_customer_by_(
+def _send_email_to_customer_by_(
     email: str, order_id: UUID, request: HttpRequest
 ) -> None:
     """Sends a receipt email to the customer at the given email address."""
@@ -38,7 +38,28 @@ def send_email_to_customer_by_(
     )
 
 
-def get_or_create_user_with_data_from_(
+def _get_or_create_user(
+    request: HttpRequest, form: OrderCreateModelForm
+) -> User | None:
+    """Returns a user if the user is authenticated or
+    creates a new user if 'is_create_profile' is True."""
+    if request.user.is_authenticated:
+        return user
+    elif form.cleaned_data["is_create_profile"]:
+        user, was_created = _get_or_create_user_with_data_from_(form)
+        if was_created:
+            send_email_confirmation(request, user)
+        login(
+            request, user, backend="django.contrib.auth.backends.ModelBackend"
+        )
+        messages.success(
+            request, f"Successfully signed in as {user.username}."
+        )
+        return user
+    return None
+
+
+def _get_or_create_user_with_data_from_(
     form: OrderCreateModelForm,
 ) -> tuple[User, bool]:
     """Returns a user with the data from the given OrderCreateModelForm."""
@@ -55,7 +76,7 @@ def get_or_create_user_with_data_from_(
     return user, was_created
 
 
-def create_order_for_user_with_data_from_(
+def _create_order_for_user_with_data_from_(
     cart: Cart, user: User, order_id: UUID
 ) -> str:
     """
@@ -80,30 +101,15 @@ def process_order_and_get_redirect_url(
 ) -> str:
     """Processes an order by the given form and returns the redirect url."""
     order_id = uuid4()
-    send_email_to_customer_by_(
+    _send_email_to_customer_by_(
         form.cleaned_data.get("email", None) or request.user.email,
         order_id,
         request,
     )
-    user = None
-    if request.user.is_authenticated:
-        user = request.user
-    elif form.cleaned_data["is_create_profile"]:
-        user, was_created = get_or_create_user_with_data_from_(form)
-        if was_created:
-            send_email_confirmation(request, user)
-        login(
-            request,
-            user,
-            backend="django.contrib.auth.backends.ModelBackend",
-        )
-        messages.success(
-            request, f"Successfully signed in as {user.username}."
-        )
     redirect_url = "/"
     cart = Cart(request.session)
-    if user is not None:
-        redirect_url = create_order_for_user_with_data_from_(
+    if (user := _get_or_create_user(request, form)) is not None:
+        redirect_url = _create_order_for_user_with_data_from_(
             cart, user, order_id
         )
         messages.success(request, "Order has successfully created.")
