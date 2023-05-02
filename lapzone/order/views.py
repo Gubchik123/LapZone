@@ -1,20 +1,20 @@
 from django.views import generic
 from django.contrib import messages
-from django.urls import reverse_lazy
 from django.db.models import QuerySet
+from django.urls import reverse_lazy
 from django.http import HttpResponseRedirect, HttpRequest
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import services
 from .models import Order
-from .forms import OrderCreateForm
 from general.views import BaseView
+from .forms import OrderCreateModelForm
 
 
-class OrderCreateFormView(BaseView, generic.FormView):
+class OrderCreateFormView(generic.FormView):
     """View for the checkout page."""
 
-    form_class = OrderCreateForm
+    form_class = OrderCreateModelForm
     template_name = "order/order_create.html"
 
     def get_initial(self):
@@ -33,11 +33,17 @@ class OrderCreateFormView(BaseView, generic.FormView):
     def get_form(self, form_class=None):
         """
         Returns an instance of the form to be used in this view.
-        Checks if the user is authenticated and removes the 'is_create_profile' field.
+        Checks if the user is authenticated and removes the fields that user already has.
         """
         form = super().get_form(form_class)
         if self.request.user.is_authenticated:
             del form.fields["is_create_profile"]
+            if self.request.user.email:
+                del form.fields["email"]
+            if self.request.user.first_name:
+                del form.fields["first_name"]
+            if self.request.user.last_name:
+                del form.fields["last_name"]
         return form
 
 
