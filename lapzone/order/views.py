@@ -11,7 +11,7 @@ from general.views import BaseView
 from .forms import OrderCreateModelForm
 
 
-class OrderCreateFormView(generic.FormView):
+class OrderCheckoutFormView(generic.FormView):
     """View for the checkout page."""
 
     form_class = OrderCreateModelForm
