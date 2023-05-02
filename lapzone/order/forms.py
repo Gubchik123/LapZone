@@ -1,4 +1,5 @@
 from django import forms
+from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
 
@@ -9,7 +10,7 @@ def _get_field_widget_attrs_with_placeholder_(
     return {"class": "w-50 form-control mb-2", "placeholder": placeholder}
 
 
-class OrderCreateForm(forms.Form):
+class OrderCreateModelForm(forms.ModelForm):
     """Form for creating an order."""
 
     is_create_profile = forms.ChoiceField(
@@ -17,22 +18,6 @@ class OrderCreateForm(forms.Form):
         choices=((True, "Yes"), (False, "No")),
         initial=False,
         widget=forms.RadioSelect,
-    )
-    first_name = forms.CharField(
-        label="First name",
-        min_length=2,
-        max_length=30,
-        widget=forms.TextInput(
-            attrs=_get_field_widget_attrs_with_placeholder_("First name")
-        ),
-    )
-    last_name = forms.CharField(
-        label="Last name",
-        min_length=2,
-        max_length=30,
-        widget=forms.TextInput(
-            attrs=_get_field_widget_attrs_with_placeholder_("Last name")
-        ),
     )
     phone_number = forms.CharField(
         label="Phone number",
@@ -44,30 +29,13 @@ class OrderCreateForm(forms.Form):
             attrs=_get_field_widget_attrs_with_placeholder_("+380501234567")
         ),
     )
-    email = forms.EmailField(
-        label="Email",
-        max_length=255,
-        widget=forms.EmailInput(
-            attrs=_get_field_widget_attrs_with_placeholder_(
-                "Where should we send your receipt?"
-            )
-        ),
-    )
     address = forms.CharField(
         label="Address",
         max_length=255,
         widget=forms.TextInput(
             attrs=_get_field_widget_attrs_with_placeholder_(
-                "Address (apartment, suite, unit, building, floor)"
+                "City, Street Name, House name / Flat number, Postcode"
             )
-        ),
-    )
-    postal_code = forms.IntegerField(
-        label="Postal code",
-        min_value=0,
-        max_value=99999,
-        widget=forms.NumberInput(
-            attrs=_get_field_widget_attrs_with_placeholder_("Zip/Postal code")
         ),
     )
     order_comment = forms.CharField(
@@ -80,3 +48,46 @@ class OrderCreateForm(forms.Form):
             )
         ),
     )
+
+    def __init__(self, *args, **kwargs):
+        """Removes the help text from the username field 
+        and removes the required attribute from it and the password field."""
+        super().__init__(*args, **kwargs)
+        self.fields["username"].help_text = ""
+        self.fields["username"].required = False
+        self.fields["password"].required = False
+
+    class Meta:
+        """Meta options for the OrderCreateModelForm."""
+
+        model = User
+        fields = (
+            "is_create_profile",
+            "username",
+            "password",
+            "first_name",
+            "last_name",
+            "phone_number",
+            "email",
+            "address",
+            "order_comment",
+        )
+        widgets = {
+            "username": forms.TextInput(
+                attrs=_get_field_widget_attrs_with_placeholder_("Username")
+            ),
+            "password": forms.PasswordInput(
+                attrs=_get_field_widget_attrs_with_placeholder_("Password")
+            ),
+            "email": forms.EmailInput(
+                attrs=_get_field_widget_attrs_with_placeholder_(
+                    "Where should we send the receipt?"
+                )
+            ),
+            "first_name": forms.TextInput(
+                attrs=_get_field_widget_attrs_with_placeholder_("First name")
+            ),
+            "last_name": forms.TextInput(
+                attrs=_get_field_widget_attrs_with_placeholder_("Last name")
+            ),
+        }
