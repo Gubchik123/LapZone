@@ -10,8 +10,9 @@ from django.http import Http404, HttpRequest
 from allauth.account.models import EmailAddress
 from django.template.loader import render_to_string
 
-from .models import Order
 from .forms import OrderCreateModelForm
+from .models import Order, OrderItem
+from cart.cart import Cart
 
 
 def send_email_to_customer_by_(
@@ -50,6 +51,26 @@ def get_or_create_user_with_data_from_(
     user.last_name = form.cleaned_data["last_name"]
     user.save()
     return user, was_created
+
+
+def create_order_for_user_with_data_from_(
+    cart: Cart, user: User, order_id: UUID
+) -> str:
+    """
+    Creates an order for the given user with the data from the given cart.
+    Returns the absolute url of the created order.
+    """
+    order = Order.objects.create(
+        id=order_id, user=user, total_price=cart.get_total_price()
+    )
+    for item_dict in cart:
+        OrderItem.objects.create(
+            order=order,
+            product=item_dict["product"],
+            quantity=item_dict["quantity"],
+            price=item_dict["price"],
+        )
+    return order.get_absolute_url()
 
 
 def get_user_order_from_(queryset: QuerySet, pk: UUID) -> Order | NoReturn:
