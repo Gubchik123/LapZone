@@ -15,7 +15,7 @@ class OrderCheckoutFormView(generic.FormView):
     """View for the checkout page."""
 
     form_class = OrderCheckoutModelForm
-    template_name = "order/order_create.html"
+    template_name = "order/order_checkout.html"
 
     def get_initial(self):
         """
