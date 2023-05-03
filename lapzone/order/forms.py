@@ -50,12 +50,15 @@ class OrderCheckoutModelForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        """Removes the help text from the username field
-        and removes the required attribute from it and the password field."""
+        """Initializes the OrderCheckoutModelForm."""
         super().__init__(*args, **kwargs)
         self.fields["username"].help_text = ""
         self.fields["username"].required = False
         self.fields["password"].required = False
+
+        self.fields["email"].required = True
+        self.fields["first_name"].required = True
+        self.fields["last_name"].required = True
 
     class Meta:
         """Meta options for the OrderCreateModelForm."""
