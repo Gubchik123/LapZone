@@ -55,11 +55,17 @@ def _get_or_create_user_with_data_from_(
 def _update_user_personal_details(
     user: User, form: OrderCheckoutModelForm
 ) -> None:
-    """Updates the personal details such as first and last name
-    of the given user with the data from the given OrderCheckoutModelForm."""
-    user.first_name = form.cleaned_data["first_name"]
-    user.last_name = form.cleaned_data["last_name"]
-    user.save()
+    """Updates the personal details such as first and last name for user
+    if they are empty with the data from the given OrderCheckoutModelForm."""
+    was_changed = False
+    if not user.first_name:
+        was_changed = True
+        user.first_name = form.cleaned_data["first_name"]
+    if not user.last_name:
+        was_changed = True
+        user.last_name = form.cleaned_data["last_name"]
+    if was_changed:
+        user.save()
 
 
 def _get_or_create_user(
