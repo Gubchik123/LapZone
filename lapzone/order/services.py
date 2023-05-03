@@ -71,7 +71,7 @@ def _get_or_create_user(
 
     if request.user.is_authenticated:
         user = request.user
-    elif form.cleaned_data["is_create_profile"]:
+    elif form.cleaned_data["is_create_profile"] == "True":
         user, was_created = _get_or_create_user_with_data_from_(form)
         if was_created:
             send_email_confirmation(request, user)
