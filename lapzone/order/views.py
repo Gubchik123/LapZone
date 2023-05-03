@@ -8,13 +8,13 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 from . import services
 from .models import Order
 from general.views import BaseView
-from .forms import OrderCreateModelForm
+from .forms import OrderCheckoutModelForm
 
 
 class OrderCheckoutFormView(generic.FormView):
     """View for the checkout page."""
 
-    form_class = OrderCreateModelForm
+    form_class = OrderCheckoutModelForm
     template_name = "order/order_create.html"
 
     def get_initial(self):
@@ -46,7 +46,7 @@ class OrderCheckoutFormView(generic.FormView):
                 del form.fields["last_name"]
         return form
 
-    def form_valid(self, form: OrderCreateModelForm) -> HttpResponseRedirect:
+    def form_valid(self, form: OrderCheckoutModelForm) -> HttpResponseRedirect:
         """Processes an order and redirects to the success page."""
         return HttpResponseRedirect(
             services.process_order_and_get_redirect_url(self.request, form)

@@ -10,8 +10,8 @@ def _get_field_widget_attrs_with_placeholder_(
     return {"class": "w-50 form-control mb-2", "placeholder": placeholder}
 
 
-class OrderCreateModelForm(forms.ModelForm):
-    """Form for creating an order."""
+class OrderCheckoutModelForm(forms.ModelForm):
+    """Form for checking out an order."""
 
     is_create_profile = forms.ChoiceField(
         label="Create a profile automatically?",
@@ -50,7 +50,7 @@ class OrderCreateModelForm(forms.ModelForm):
     )
 
     def __init__(self, *args, **kwargs):
-        """Removes the help text from the username field 
+        """Removes the help text from the username field
         and removes the required attribute from it and the password field."""
         super().__init__(*args, **kwargs)
         self.fields["username"].help_text = ""

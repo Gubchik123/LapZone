@@ -12,7 +12,7 @@ from allauth.account.models import EmailAddress
 from django.template.loader import render_to_string
 from allauth.account.utils import send_email_confirmation
 
-from .forms import OrderCreateModelForm
+from .forms import OrderCheckoutModelForm
 from .models import Order, OrderItem
 from cart.cart import Cart
 
@@ -39,7 +39,7 @@ def _send_email_to_customer_by_(
 
 
 def _get_or_create_user(
-    request: HttpRequest, form: OrderCreateModelForm
+    request: HttpRequest, form: OrderCheckoutModelForm
 ) -> User | None:
     """Returns a user if the user is authenticated or
     creates a new user if 'is_create_profile' is True."""
@@ -60,7 +60,7 @@ def _get_or_create_user(
 
 
 def _get_or_create_user_with_data_from_(
-    form: OrderCreateModelForm,
+    form: OrderCheckoutModelForm,
 ) -> tuple[User, bool]:
     """Returns a user with the data from the given OrderCreateModelForm."""
     user, was_created = User.objects.get_or_create(
@@ -97,7 +97,7 @@ def _create_order_for_user_with_data_from_(
 
 
 def process_order_and_get_redirect_url(
-    request: HttpRequest, form: OrderCreateModelForm
+    request: HttpRequest, form: OrderCheckoutModelForm
 ) -> str:
     """Processes an order by the given form and returns the redirect url."""
     order_id = uuid4()
