@@ -38,27 +38,6 @@ def _send_email_to_customer_by_(
     )
 
 
-def _get_or_create_user(
-    request: HttpRequest, form: OrderCheckoutModelForm
-) -> User | None:
-    """Returns a user if the user is authenticated or
-    creates a new user if 'is_create_profile' is True."""
-    if request.user.is_authenticated:
-        return user
-    elif form.cleaned_data["is_create_profile"]:
-        user, was_created = _get_or_create_user_with_data_from_(form)
-        if was_created:
-            send_email_confirmation(request, user)
-        login(
-            request, user, backend="django.contrib.auth.backends.ModelBackend"
-        )
-        messages.success(
-            request, f"Successfully signed in as {user.username}."
-        )
-        return user
-    return None
-
-
 def _get_or_create_user_with_data_from_(
     form: OrderCheckoutModelForm,
 ) -> tuple[User, bool]:
@@ -70,10 +49,41 @@ def _get_or_create_user_with_data_from_(
         user.username = form.cleaned_data["username"]
         user.set_password(form.cleaned_data["password"])
         EmailAddress.objects.create(user=user, email=user.email)
+    return user, was_created
+
+
+def _update_user_personal_details(
+    user: User, form: OrderCheckoutModelForm
+) -> None:
+    """Updates the personal details such as first and last name
+    of the given user with the data from the given OrderCheckoutModelForm."""
     user.first_name = form.cleaned_data["first_name"]
     user.last_name = form.cleaned_data["last_name"]
     user.save()
-    return user, was_created
+
+
+def _get_or_create_user(
+    request: HttpRequest, form: OrderCheckoutModelForm
+) -> User | None:
+    """Returns a user if the user is authenticated or
+    creates a new user if 'is_create_profile' is True."""
+    user = None
+
+    if request.user.is_authenticated:
+        user = request.user
+    elif form.cleaned_data["is_create_profile"]:
+        user, was_created = _get_or_create_user_with_data_from_(form)
+        if was_created:
+            send_email_confirmation(request, user)
+        login(
+            request, user, backend="django.contrib.auth.backends.ModelBackend"
+        )
+        messages.success(
+            request, f"Successfully signed in as {user.username}."
+        )
+    if user is not None:
+        _update_user_personal_details(user, form)
+    return user
 
 
 def _create_order_for_user_with_data_from_(
