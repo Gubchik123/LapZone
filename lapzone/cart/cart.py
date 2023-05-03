@@ -14,8 +14,7 @@ class Cart:
     def __init__(self, request_session: SessionBase) -> None:
         """Initializes a new cart instance."""
         self.session = request_session
-        cart = self.session.get(settings.CART_SESSION_ID)
-        if not cart:
+        if not (cart := self.session.get(settings.CART_SESSION_ID)):
             cart = self.session[settings.CART_SESSION_ID] = {}
         self.cart = cart
 
@@ -30,12 +29,17 @@ class Cart:
             item["price"] = Decimal(item["price"])
             item["total_price"] = item["price"] * item["quantity"]
             yield item
+        # Remove not JSON serializable objects from the cart.
+        for item in self.cart.values():
+            del item["product"]
+            item["price"] = str(item["price"])
+            item["total_price"] = str(item["total_price"])
 
     def __len__(self) -> int:
         """
         Returns the total number of items in the cart based on their quantities.
         """
-        return sum(item_dict["quantity"] for item_dict in self.cart.values())
+        return sum(item["quantity"] for item in self.cart.values())
 
     def save(self) -> None:
         """Saves the current state of the cart to the session."""
@@ -60,8 +64,8 @@ class Cart:
     def get_total_price(self) -> int:
         """Returns the total price of all items in the cart."""
         return sum(
-            Decimal(item_dict["price"]) * item_dict["quantity"]
-            for item_dict in self.cart.values()
+            Decimal(item["price"]) * item["quantity"]
+            for item in self.cart.values()
         )
 
     def remove(self, product: Product) -> None:
