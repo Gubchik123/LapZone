@@ -8,7 +8,7 @@ from django.contrib.auth.models import User
 from django.http import HttpResponseRedirect
 
 from . import models
-from .forms import ProductFilterForm, ReviewForm
+from .forms import ProductFilterForm, ReviewModelForm
 
 
 logger = logging.getLogger(__name__)
@@ -106,7 +106,7 @@ def get_products_filtered_by_brand_(
 
 
 def create_review_with_data_from_(
-    form: ReviewForm, product_slug: str, review_parent_id: str | None
+    form: ReviewModelForm, product_slug: str, review_parent_id: str | None
 ) -> None:
     """Saves model form (creates review) with product by the given slug."""
     review: models.Review = form.save(commit=False)

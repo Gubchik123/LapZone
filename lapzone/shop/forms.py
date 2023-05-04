@@ -75,7 +75,7 @@ class ProductFilterForm(forms.Form):
 dict_with_field_classes = {"class": "form-control w-50 mb-2"}
 
 
-class ReviewForm(forms.ModelForm):
+class ReviewModelForm(forms.ModelForm):
     """Model form for adding review to product."""
 
     if not settings.TESTING:

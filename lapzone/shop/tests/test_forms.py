@@ -1,8 +1,8 @@
 from django import forms
 from django.test import TestCase
 
-from shop.models import Category, Brand
-from shop.forms import ProductFilterForm, ReviewForm
+from shop.models import Category, Brand, Review
+from shop.forms import ProductFilterForm, ReviewModelForm
 
 
 class ProductFilterFormTestCase(TestCase):
@@ -132,12 +132,12 @@ class ProductFilterFormTestCase(TestCase):
         )
 
 
-class ReviewFormTestCase(TestCase):
-    """Tests for the ReviewForm."""
+class ReviewModelFormTestCase(TestCase):
+    """Tests for the ReviewModelForm."""
 
     @classmethod
     def setUpTestData(cls) -> None:
-        cls.form = ReviewForm()
+        cls.form = ReviewModelForm()
 
     # * --------------- Testing the 'name' field's parameters ----------------
 

@@ -10,7 +10,7 @@ from django.http import HttpResponse, HttpRequest, HttpResponseRedirect
 from general.views import BaseView
 from . import services
 from .models import Product, Category, Brand
-from .forms import ProductFilterForm, ReviewForm
+from .forms import ProductFilterForm, ReviewModelForm
 
 
 class HomeView(BaseView, generic.TemplateView):
@@ -146,7 +146,7 @@ class ProductDetailView(BaseView, generic.DetailView):
         Adds is_liked: bool and review form in context data and returns it.
         """
         context = super().get_context_data(**kwargs)
-        context["review_form"] = ReviewForm()
+        context["review_form"] = ReviewModelForm()
         if self.request.user.is_authenticated:
             context["is_liked"] = context[
                 "product"
@@ -157,14 +157,14 @@ class ProductDetailView(BaseView, generic.DetailView):
 class ReviewFormView(BaseView, generic.FormView):
     """Form view for adding review to product."""
 
-    form_class = ReviewForm
+    form_class = ReviewModelForm
 
     def get_success_url(self) -> str:
         """Returns the URL to the product_detail page
         from which the POST request was made."""
         return self.request.path[:-7]  # path - "review/"
 
-    def form_valid(self, form: ReviewForm) -> HttpResponseRedirect:
+    def form_valid(self, form: ReviewModelForm) -> HttpResponseRedirect:
         """Adds success message, creates review
         and returns redirect to product_detail page."""
         review_parent_id = self.request.POST.get("review_parent_id", None)
@@ -177,7 +177,7 @@ class ReviewFormView(BaseView, generic.FormView):
         messages.success(self.request, f"{prefix} has added successfully.")
         return super().form_valid(form)
 
-    def form_invalid(self, form: ReviewForm) -> HttpResponseRedirect:
+    def form_invalid(self, form: ReviewModelForm) -> HttpResponseRedirect:
         """Adds error message and returns redirect to product_detail page."""
         prefix = self._get_message_prefix_by_(
             self.request.POST.get("review_parent_id", None)

@@ -8,7 +8,7 @@ from django.db.models import QuerySet
 from django.contrib.auth.models import User
 
 from general.test_mixins.for_views import ViewTestMixin
-from shop.forms import ProductFilterForm, ReviewForm
+from shop.forms import ProductFilterForm, ReviewModelForm
 from shop.models import Brand, Category, Product, CarouselImage
 
 
@@ -380,7 +380,9 @@ class ProductDetailViewTestCase(
     def test_review_form_is_on_page(self):
         """Test that the "review_form" there is the product detail page."""
         self.assertIn("review_form", self.response.context)
-        self.assertIsInstance(self.response.context["review_form"], ReviewForm)
+        self.assertIsInstance(
+            self.response.context["review_form"], ReviewModelForm
+        )
 
 
 class ReviewFormViewTestCase(ProductDetailViewTestMixin, TestCase):
@@ -401,9 +403,9 @@ class ReviewFormViewTestCase(ProductDetailViewTestMixin, TestCase):
                 """Test ReviewForm(form_data)
                 is_valid: bool and calls the wrapped function."""
                 self.assertTrue(
-                    ReviewForm(form_data).is_valid()
+                    ReviewModelForm(form_data).is_valid()
                 ) if is_valid else self.assertFalse(
-                    ReviewForm(form_data).is_valid()
+                    ReviewModelForm(form_data).is_valid()
                 )
 
                 response = self.client.post(
