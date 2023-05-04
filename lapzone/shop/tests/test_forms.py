@@ -1,5 +1,5 @@
 from django import forms
-from django.test import TestCase
+from django.test import TestCase, SimpleTestCase
 
 from shop.models import Category, Brand, Review
 from shop.forms import ProductFilterForm, ReviewModelForm
@@ -132,12 +132,24 @@ class ProductFilterFormTestCase(TestCase):
         )
 
 
-class ReviewModelFormTestCase(TestCase):
+class ReviewModelFormSimpleTestCase(SimpleTestCase):
     """Tests for the ReviewModelForm."""
 
     @classmethod
-    def setUpTestData(cls) -> None:
+    def setUpClass(cls) -> None:
+        """Set up the ReviewModelForm for testing."""
+        super().setUpClass()
         cls.form = ReviewModelForm()
+
+    # * ---------------------- Testing the meta options ----------------------
+
+    def test_form_model(self):
+        """Tests the form model."""
+        self.assertEqual(self.form.Meta.model, Review)
+
+    def test_form_fields(self):
+        """Tests the form fields."""
+        self.assertEqual(tuple(self.form.Meta.fields), ("name", "body"))
 
     # * --------------- Testing the 'name' field's parameters ----------------
 
