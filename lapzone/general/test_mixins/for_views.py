@@ -1,7 +1,20 @@
 from django.urls import reverse
 
 
-class ViewURLTestMixin:
+class _ViewTestMixin:
+    """Base test mixin for view test mixins."""
+
+    is_login_required = False
+
+    def _login_if_it_is_required(self):
+        """Logs in the user."""
+        if self.is_login_required:
+            self.assertTrue(
+                self.client.login(username="testuser", password="testpass")
+            )
+
+
+class ViewURLTestMixin(_ViewTestMixin):
     """Test mixin to test a view's URL and template."""
 
     url: str
@@ -9,6 +22,7 @@ class ViewURLTestMixin:
 
     def setUp(self) -> None:
         """Sets up the test by retrieving a response from the view's URL."""
+        self._login_if_it_is_required()
         self.response = self.client.get(self.url)
 
     def test_view_url_exists_at_desired_location(self):
@@ -21,7 +35,7 @@ class ViewURLTestMixin:
         self.assertTemplateUsed(self.response, self.template_name)
 
 
-class ViewNameTestMixin:
+class ViewNameTestMixin(_ViewTestMixin):
     """Test mixin to test a view's path name."""
 
     name: str
@@ -29,6 +43,7 @@ class ViewNameTestMixin:
 
     def test_view_url_accessible_by_name(self):
         """Test that the view is accessible using its name."""
+        self._login_if_it_is_required()
         response = self.client.get(reverse(self.name, kwargs=self.kwargs))
         self.assertEqual(response.status_code, 200)
 
