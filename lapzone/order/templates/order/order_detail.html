@@ -7,11 +7,20 @@
 {% block content %}
 <div class="row px-3 mb-5">
     <div class="panel-bg-color col-12 p-3">
+        <div class="d-flex align-items-center fs-4 mb-3">
+            <b>Order date: </b> &nbsp;
+            <span>{{ order.created|date:"F d, Y, H:i A" }}</span>
+        </div>
+        
+        <div class="fs-4 mb-1">
+            <b class="mb-4">Order items</b>
+        </div>
+
         <div class="white-space-nowrap overflow-auto">
             <table class="table">
                 <thead>
                     <tr
-                        class="d-flex justify-content-between align-items-center border-1 border-bottom"
+                        class="d-flex justify-content-between align-items-center border-1 border-bottom border-top"
                     >
                         <th class="me-4">Image</th>
                         <th>Product</th>
