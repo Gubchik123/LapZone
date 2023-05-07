@@ -17,19 +17,6 @@ class OrderCheckoutFormView(generic.FormView):
     form_class = OrderCheckoutModelForm
     template_name = "order/order_checkout.html"
 
-    def get_initial(self):
-        """
-        Return the initial data to use for the OrderCreateForm.
-        Checks if the user is authenticated and adds the user data.
-        """
-        if self.request.user.is_authenticated:
-            return {
-                "email": self.request.user.email,
-                "first_name": self.request.user.first_name,
-                "last_name": self.request.user.last_name,
-            }
-        return super().get_initial()
-
     def get_form(self, form_class=None):
         """
         Returns an instance of the form to be used in this view.
