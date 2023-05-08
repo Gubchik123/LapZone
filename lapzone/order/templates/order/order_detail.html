@@ -5,6 +5,14 @@
 
 
 {% block content %}
+<a 
+    title="Back to order list"
+    href="{% url 'order:list' %}" 
+    class="d-inline-flex content-center btn btn-dark opacity-75 rounded-circle border mt-1 mb-4"
+>
+    <ion-icon name="arrow-back-outline"></ion-icon>
+</a>
+
 <div class="row px-3 mb-5">
     <div class="panel-bg-color col-12 p-3">
         <div class="d-flex align-items-center fs-4 mb-3">
