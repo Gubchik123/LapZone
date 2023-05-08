@@ -45,7 +45,7 @@
                         </td>
                         <!-- Order created datetime -->
                         <td class="fs-5 me-2 white-space-normal">
-                            {{ order.created }}
+                            {{ order.created|date:"F d, Y, H:i A" }}
                         </td>
                         <!-- "Remove" button -->
                         <td class="me-2">
