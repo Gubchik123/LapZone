@@ -20,6 +20,15 @@
 </style>
 {% endblock styles %}
 
+{% block to_right_of_content_title %}
+<a
+    class="btn btn-warning"
+    href="{% url 'account_logout' %}"
+>
+    Log out
+</a>
+{% endblock to_right_of_content_title %} 
+
 
 {% block content %}
 <div class="row px-3 d-flex justify-content-between">
@@ -89,15 +98,6 @@
                     >
                 </div>
             </form>
-
-            <hr>
-
-            <a 
-                href="{% url 'account_logout' %}"
-                class="btn btn-warning btn-lg my-2"
-            >
-                Log out
-            </a>
         </div>
     </div>
 </div>
