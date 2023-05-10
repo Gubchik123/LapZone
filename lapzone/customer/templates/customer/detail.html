@@ -1,0 +1,143 @@
+{% extends '_base.html' %} 
+
+{% block title %}Customer profile{% endblock %} 
+{% block content_title %}Customer profile - {{ user.username }}{% endblock %}
+
+{% block styles %}
+<style>
+    #personal-details {
+        margin-left: 20px;
+        margin-right: 0px;
+    }
+
+    @media screen and (max-width: 576px) { /* Bootstrap5 .sm breakpoint */
+        .submit-btn { display: flex!important; }
+        .form-control.w-50 { width: 100%!important; }
+    }
+    @media screen and (max-width: 992px) { /* Bootstrap5 .lg breakpoint */
+        #personal-details { margin-left: 0px; }
+    }
+</style>
+{% endblock styles %}
+
+
+{% block content %}
+<div class="row px-3 d-flex justify-content-between">
+    <!-- Block with links to other pages -->
+    <div class="col-lg-3 col-md-12 p-0">
+        <div class="list-group">
+            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
+                Personal details
+            </a>
+            <a 
+                href="{% url 'account_change_password' %}" 
+                class="list-group-item list-group-item-action list-group-item-warning"
+            >
+                Change password
+            </a>
+            <a 
+                href="#" 
+                class="list-group-item list-group-item-action content-between"
+            >
+                Wish list
+                <span class="badge bg-primary rounded-pill">
+                    {{ user.like_set.count }}
+                </span>
+            </a>
+            <a 
+                href="{% url 'order:list' %}" 
+                class="list-group-item list-group-item-action content-between"
+            >
+                Order list
+                <span class="badge bg-primary rounded-pill">
+                    {{ user.order_set.count }}
+                </span>
+            </a>
+            <a 
+                href="{% url 'account_email' %}" 
+                class="list-group-item list-group-item-action content-between"
+            >
+                E-mail addresses
+                <span class="badge bg-primary rounded-pill">
+                    {{ user.emailaddress_set.count }}
+                </span>
+            </a>
+            <a 
+                href="{% url 'socialaccount_connections' %}" 
+                class="list-group-item list-group-item-action content-between"
+            >
+                OAuth connections
+                <span class="badge bg-primary rounded-pill">
+                    {{ user.socialaccount_set.count }}
+                </span>
+            </a>
+        </div>
+    </div>
+    <!-- Block with user personal details (form) -->
+    <div class="col-lg-9 col-md-12 px-0">
+        <div id="personal-details" class="panel-bg-color p-3 rounded">
+            <form action="" method="post">
+                {% csrf_token %}
+
+                {{ form.as_p }}
+
+                <div class="submit-btn my-2 d-block justify-content-center">
+                    <input
+                        type="submit"
+                        value="Update personal info"
+                        class="btn btn-success btn-lg mb-2"
+                    >
+                </div>
+            </form>
+
+            <hr>
+
+            <a 
+                href="{% url 'account_logout' %}"
+                class="btn btn-warning btn-lg my-2"
+            >
+                Log out
+            </a>
+        </div>
+    </div>
+</div>
+
+<h2 class="my-3">Danger zone</h2>
+
+<div class="row px-3">
+    <div 
+        class="panel-bg-color p-3 col-12 rounded border border-2 border-danger"
+    >
+        <h4>Attention!</h4>
+        <div class="fs-5">
+            <p>
+                You are about to permanently delete your account. This action cannot be undone. Your data, including all likes and orders, will be deleted permanently.
+            </p>
+            <p>
+                If you are sure you want to proceed with deleting your account, please click the button below.
+            </p>
+            <form action="" method="post">
+                {% csrf_token %}
+                <input
+                    type="submit"
+                    value="Delete my account"
+                    class="remove btn btn-danger btn-lg mb-3"
+                >
+            </form>
+            <p>
+                If you have changed your mind or accidentally clicked this button, you can click the "Cancel" button or simply navigate away from this zone.
+            </p>
+        </div>
+    </div>
+</div>
+{% endblock content %} 
+
+
+{% block scripts %}
+<!-- Script to disable profile button in the site header -->
+<script defer>
+    document.querySelector("ion-icon[name='person-circle']").parentElement.href = "#";
+</script>
+{% load static %}
+<script src="{% static 'js/remove_btn.js' %}" defer></script> 
+{% endblock scripts %} 
