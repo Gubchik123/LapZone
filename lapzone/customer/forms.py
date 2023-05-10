@@ -1,12 +1,7 @@
 from django import forms
 from django.contrib.auth.models import User
 
-
-def _get_field_widget_attrs_with_placeholder_(
-    placeholder: str,
-) -> dict[str, str]:
-    """Returns a dict of field widget attributes with the given placeholder."""
-    return {"class": "w-50 form-control mb-2", "placeholder": placeholder}
+from general.forms import get_field_widget_attrs_with_placeholder_
 
 
 class UserModelForm(forms.ModelForm):
@@ -26,12 +21,12 @@ class UserModelForm(forms.ModelForm):
         fields = ["username", "first_name", "last_name"]
         widgets = {
             "username": forms.TextInput(
-                attrs=_get_field_widget_attrs_with_placeholder_("Username")
+                attrs=get_field_widget_attrs_with_placeholder_("Username")
             ),
             "first_name": forms.TextInput(
-                attrs=_get_field_widget_attrs_with_placeholder_("First name")
+                attrs=get_field_widget_attrs_with_placeholder_("First name")
             ),
             "last_name": forms.TextInput(
-                attrs=_get_field_widget_attrs_with_placeholder_("Last name")
+                attrs=get_field_widget_attrs_with_placeholder_("Last name")
             ),
         }

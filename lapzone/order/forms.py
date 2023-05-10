@@ -2,12 +2,7 @@ from django import forms
 from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
-
-def _get_field_widget_attrs_with_placeholder_(
-    placeholder: str,
-) -> dict[str, str]:
-    """Returns a dict of field widget attributes with the given placeholder."""
-    return {"class": "w-50 form-control mb-2", "placeholder": placeholder}
+from general.forms import get_field_widget_attrs_with_placeholder_
 
 
 class OrderCheckoutModelForm(forms.ModelForm):
@@ -26,14 +21,14 @@ class OrderCheckoutModelForm(forms.ModelForm):
             RegexValidator(r"^\+?1?\d{9,15}$", "Invalid phone number.")
         ],
         widget=forms.TextInput(
-            attrs=_get_field_widget_attrs_with_placeholder_("+380501234567")
+            attrs=get_field_widget_attrs_with_placeholder_("+380501234567")
         ),
     )
     address = forms.CharField(
         label="Address",
         max_length=255,
         widget=forms.TextInput(
-            attrs=_get_field_widget_attrs_with_placeholder_(
+            attrs=get_field_widget_attrs_with_placeholder_(
                 "City, Street Name, House name / Flat number, Postcode"
             )
         ),
@@ -43,7 +38,7 @@ class OrderCheckoutModelForm(forms.ModelForm):
         max_length=255,
         required=False,
         widget=forms.Textarea(
-            attrs=_get_field_widget_attrs_with_placeholder_(
+            attrs=get_field_widget_attrs_with_placeholder_(
                 "Optional comment to seller"
             )
         ),
@@ -77,20 +72,20 @@ class OrderCheckoutModelForm(forms.ModelForm):
         )
         widgets = {
             "username": forms.TextInput(
-                attrs=_get_field_widget_attrs_with_placeholder_("Username")
+                attrs=get_field_widget_attrs_with_placeholder_("Username")
             ),
             "password": forms.PasswordInput(
-                attrs=_get_field_widget_attrs_with_placeholder_("Password")
+                attrs=get_field_widget_attrs_with_placeholder_("Password")
             ),
             "email": forms.EmailInput(
-                attrs=_get_field_widget_attrs_with_placeholder_(
+                attrs=get_field_widget_attrs_with_placeholder_(
                     "Where should we send the receipt?"
                 )
             ),
             "first_name": forms.TextInput(
-                attrs=_get_field_widget_attrs_with_placeholder_("First name")
+                attrs=get_field_widget_attrs_with_placeholder_("First name")
             ),
             "last_name": forms.TextInput(
-                attrs=_get_field_widget_attrs_with_placeholder_("Last name")
+                attrs=get_field_widget_attrs_with_placeholder_("Last name")
             ),
         }
