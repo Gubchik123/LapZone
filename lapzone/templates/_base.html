@@ -188,10 +188,9 @@
                                     </a>
 
                                     <!-- Link to either user profile or login page -->
-                                    <!-- TODO: add url to customer profile page instead of # -->
 									<a
                                         class="d-block text-decoration-none"
-                                        href="{% if user.is_authenticated %}#{% else %}{% url 'account_login' %}?next={{ request.path }}{% endif %}"
+                                        href="{% if user.is_authenticated %}{% url 'customer:detail' %}{% else %}{% url 'account_login' %}?next={{ request.path }}{% endif %}"
 									>
 										<ion-icon
 											class="pt-1"
