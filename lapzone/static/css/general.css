@@ -89,11 +89,12 @@ body, header, main, footer { transition: background 0.3s linear; }
 
 ion-icon { font-size: 2em; }
 
-.content-center {
+.content-center, .content-between {
     display: flex;
     align-items: center;
-    justify-content: center;
 }
+.content-center { justify-content: center; }
+.content-between { justify-content: space-between; }
 
 .disabled { cursor: not-allowed; }
 
