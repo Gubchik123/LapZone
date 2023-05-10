@@ -207,9 +207,12 @@
 			<main>
 				<div class="container-fluid">
 					<div class="row">
-						<h2 class="mt-4 mb-3">
-							{% block content_title %}{% endblock %}
-						</h2>
+						<div class="my-3 content-between">
+                            <h2>
+                                {% block content_title %}{% endblock %}
+                            </h2>
+                            {% block to_right_of_content_title %}{% endblock %} 
+                        </div>
                         {% block messages %}
                         <div>{% include 'utils/_messages.html' %}</div> 
                         {% endblock messages %} 
