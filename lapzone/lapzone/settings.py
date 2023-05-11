@@ -149,7 +149,7 @@ SOCIALACCOUNT_LOGIN_ON_GET = True
 
 LOGOUT_REDIRECT_URL = "/"
 LOGIN_URL = reverse_lazy("account_login")
-LOGIN_REDIRECT_URL = "/"  # TODO: add url to customer profile page
+LOGIN_REDIRECT_URL = reverse_lazy("customer:detail")
 
 MEDIA_URL = "/media/"
 MEDIA_ROOT = BASE_DIR / "media"
