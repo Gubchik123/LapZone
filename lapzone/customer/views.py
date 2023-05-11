@@ -7,7 +7,7 @@ from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
-from general.views import BaseView
+from general.views import BaseView, DeleteViewMixin
 from .forms import UserModelForm
 
 
@@ -54,14 +54,10 @@ class CustomerUpdateView(CustomerPOSTViewMixin, generic.UpdateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class CustomerDeleteView(CustomerPOSTViewMixin, generic.DeleteView):
+class CustomerDeleteView(
+    CustomerPOSTViewMixin, DeleteViewMixin, generic.DeleteView
+):
     """View for deleting the customer."""
 
     success_url = reverse_lazy("shop:home")
-
-    def post(
-        self, request: HttpRequest, *args, **kwargs
-    ) -> HttpResponseRedirect:
-        """Adds a success message and calls the super method."""
-        messages.success(request, "Profile has successfully deleted.")
-        return super().post(request, *args, **kwargs)
+    success_message = "Profile has successfully deleted."

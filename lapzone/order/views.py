@@ -7,8 +7,8 @@ from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import services
 from .models import Order
-from general.views import BaseView
 from .forms import OrderCheckoutModelForm
+from general.views import BaseView, DeleteViewMixin
 
 
 class OrderCheckoutFormView(generic.FormView):
@@ -69,15 +69,8 @@ class OrderDetailView(OrderViewMixin, generic.DetailView):
         )
 
 
-class OrderDeleteView(OrderDetailView, generic.DeleteView):
+class OrderDeleteView(OrderDetailView, DeleteViewMixin, generic.DeleteView):
     """View for deleting an order."""
 
-    http_method_names = ["post"]
     success_url = reverse_lazy("order:list")
-
-    def post(
-        self, request: HttpRequest, *args, **kwargs
-    ) -> HttpResponseRedirect:
-        """Adds a success message and calls the super().post() method."""
-        messages.success(request, "Order has successfully deleted.")
-        return super().post(request, *args, **kwargs)
+    success_message = "Order has successfully deleted."
