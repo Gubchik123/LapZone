@@ -23,17 +23,22 @@ class CustomerDetailView(BaseView, LoginRequiredMixin, generic.TemplateView):
         return context
 
 
-class CustomerUpdateView(BaseView, generic.UpdateView):
-    """View to handle the UserModelForm and update the customer data."""
+class CustomerPOSTViewMixin(BaseView):
+    """Mixin for the "Customer" app POST views."""
 
-    model = User
-    form_class = UserModelForm
     http_method_names = ["post"]
-    success_url = reverse_lazy("customer:detail")
 
     def get_object(self, queryset: QuerySet[User] | None = ...) -> User:
         """Returns the current user."""
         return self.request.user
+
+
+class CustomerUpdateView(CustomerPOSTViewMixin, generic.UpdateView):
+    """View to handle the UserModelForm and update the customer data."""
+
+    model = User
+    form_class = UserModelForm
+    success_url = reverse_lazy("customer:detail")
 
     def form_valid(self, form: UserModelForm) -> HttpResponse:
         """Adds a success message and returns the super method."""
@@ -49,15 +54,10 @@ class CustomerUpdateView(BaseView, generic.UpdateView):
         return HttpResponseRedirect(self.success_url)
 
 
-class CustomerDeleteView(BaseView, generic.DeleteView):
+class CustomerDeleteView(CustomerPOSTViewMixin, generic.DeleteView):
     """View for deleting the customer."""
 
-    http_method_names = ["post"]
     success_url = reverse_lazy("shop:home")
-
-    def get_object(self, queryset: QuerySet[User] | None = ...) -> User:
-        """Returns the current user."""
-        return self.request.user
 
     def post(
         self, request: HttpRequest, *args, **kwargs
