@@ -1,11 +1,12 @@
 from typing import Any
 from django.views import generic
+from django.contrib.auth.mixins import LoginRequiredMixin
 
 from general.views import BaseView
 from .forms import UserModelForm
 
 
-class CustomerDetailView(BaseView, generic.TemplateView):
+class CustomerDetailView(BaseView, LoginRequiredMixin, generic.TemplateView):
     """View for the customer detail page."""
 
     template_name = "customer/detail.html"
