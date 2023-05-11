@@ -5,7 +5,7 @@ from django.urls import reverse_lazy
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpResponse, HttpResponseRedirect
+from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
 from general.views import BaseView
 from .forms import UserModelForm
@@ -47,3 +47,21 @@ class CustomerUpdateView(BaseView, generic.UpdateView):
         for error in form.errors.as_data().values():
             messages.error(self.request, error[0].messages[0])
         return HttpResponseRedirect(self.success_url)
+
+
+class CustomerDeleteView(BaseView, generic.DeleteView):
+    """View for deleting the customer."""
+
+    http_method_names = ["post"]
+    success_url = reverse_lazy("shop:home")
+
+    def get_object(self, queryset: QuerySet[User] | None = ...) -> User:
+        """Returns the current user."""
+        return self.request.user
+
+    def post(
+        self, request: HttpRequest, *args, **kwargs
+    ) -> HttpResponseRedirect:
+        """Adds a success message and calls the super method."""
+        messages.success(request, "Profile has successfully deleted.")
+        return super().post(request, *args, **kwargs)
