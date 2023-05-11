@@ -5,8 +5,9 @@ from django.urls import reverse_lazy
 from django.db.models.query import QuerySet
 from django.contrib.auth.models import User
 from django.contrib.auth.mixins import LoginRequiredMixin
-from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
+from django.http import HttpResponse, HttpResponseRedirect
 
+from shop.models import Like
 from general.views import BaseView, DeleteViewMixin
 from .forms import UserModelForm
 
@@ -21,6 +22,17 @@ class CustomerDetailView(BaseView, LoginRequiredMixin, generic.TemplateView):
         context = super().get_context_data(**kwargs)
         context["form"] = UserModelForm(instance=self.request.user)
         return context
+
+
+class CustomerWishListView(BaseView, LoginRequiredMixin, generic.ListView):
+    """View for the customer wish list page."""
+
+    paginate_by = 12
+    template_name = "customer/wish_list.html"
+
+    def get_queryset(self) -> QuerySet[Like]:
+        """Returns the current user's wish list."""
+        return self.request.user.like_set.all()
 
 
 class CustomerPOSTViewMixin(BaseView):
