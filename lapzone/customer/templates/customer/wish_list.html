@@ -1,0 +1,52 @@
+{% extends 'shop/_base.html' %} 
+
+{% block title %}Wish list{% endblock %} 
+{% block content_title %}Wish list{% endblock %}
+
+
+{% block content %}
+<div class="row px-3 mb-5">
+    <div class="panel-bg-color p-3 col-12">
+        <div id="products" class="row">
+            {% for like in page_obj %}
+            <div 
+                class="col-lg-3 col-md-6 col-sm-12 d-flex align-items-stretch"
+            >
+                <div 
+                    class="product w-100 d-flex flex-column justify-content-between rounded mb-3"
+                >
+                    {% include 'shop/utils/_product_card.html' with product=like.product %}
+                </div>
+            </div>
+            {% endfor %}
+
+            {% if page_obj.paginator.num_pages > 1 %} 
+                {% include 'utils/_pagination_nav.html' with page_obj=page_obj %}
+            {% endif %}
+        </div>
+    </div>
+</div>
+{% endblock content %}
+
+
+{% block scripts %}
+{{ block.super }}
+
+{% load static %}
+<script defer src="{% static 'js/resize_pagination.js' %}"></script>
+<!-- 
+    Script for removing the product html element 
+    from the page when the user clicks the like button.
+-->
+<script defer>
+    const products = document.getElementById("products");
+
+	document.querySelectorAll(".like").forEach((like_btn) => {
+		like_btn.addEventListener("click", function () {
+			products.removeChild(
+				like_btn.parentElement.parentElement.parentElement
+			);
+		});
+	});
+</script>
+{% endblock %} 
