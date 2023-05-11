@@ -85,6 +85,10 @@
     <!-- Block with user personal details (form) -->
     <div class="col-lg-9 col-md-12 px-0">
         <div id="personal-details" class="panel-bg-color p-3 rounded">
+            <p>
+                <b>Date joined:</b> &nbsp; {{ user.date_joined|date:"F d, Y" }}
+            </p>
+
             <form action="{% url 'customer:update' %}" method="post">
                 {% csrf_token %}
 
@@ -94,7 +98,7 @@
                     <input
                         type="submit"
                         value="Update personal info"
-                        class="btn btn-success btn-lg mb-2"
+                        class="btn btn-success btn-lg"
                     >
                 </div>
             </form>
@@ -118,7 +122,7 @@
             </p>
             <form action="{% url 'customer:delete' %}" method="post">
                 {% csrf_token %}
-                
+
                 <input
                     type="submit"
                     value="Delete my account"
