@@ -187,10 +187,10 @@
                                         </span>
                                     </a>
 
-                                    <!-- Link to either user profile or login page -->
+                                    <!-- Link to customer profile page -->
 									<a
+                                        href="{% url 'customer:detail' %}"
                                         class="d-block text-decoration-none"
-                                        href="{% if user.is_authenticated %}{% url 'customer:detail' %}{% else %}{% url 'account_login' %}?next={{ request.path }}{% endif %}"
 									>
 										<ion-icon
 											class="pt-1"
