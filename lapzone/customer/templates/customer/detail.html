@@ -116,8 +116,9 @@
             <p>
                 If you are sure you want to proceed with deleting your account, please click the button below.
             </p>
-            <form action="" method="post">
+            <form action="{% url 'customer:delete' %}" method="post">
                 {% csrf_token %}
+                
                 <input
                     type="submit"
                     value="Delete my account"
