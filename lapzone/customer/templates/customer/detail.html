@@ -85,7 +85,7 @@
     <!-- Block with user personal details (form) -->
     <div class="col-lg-9 col-md-12 px-0">
         <div id="personal-details" class="panel-bg-color p-3 rounded">
-            <form action="" method="post">
+            <form action="{% url 'customer:update' %}" method="post">
                 {% csrf_token %}
 
                 {{ form.as_p }}
