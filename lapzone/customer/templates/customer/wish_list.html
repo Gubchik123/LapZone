@@ -5,6 +5,12 @@
 
 
 {% block content %}
+
+{% if not page_obj %}
+<div class="mb-5">
+    {% include 'utils/_alert.html' with message="Your wish list is empty yet." category="primary" dismissible=False only %}
+</div>
+{% else %}
 <div class="row px-3 mb-5">
     <div class="panel-bg-color p-3 col-12">
         <div id="products" class="row">
@@ -26,6 +32,8 @@
         </div>
     </div>
 </div>
+{% endif %}
+
 {% endblock content %}
 
 
