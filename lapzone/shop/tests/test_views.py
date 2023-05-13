@@ -5,11 +5,10 @@ from django.conf import settings
 from django.test import TestCase
 from django.http import HttpResponse
 from django.db.models import QuerySet
-from django.contrib.auth.models import User
 
-from general.test_mixins.for_views import ViewTestMixin
 from shop.forms import ProductFilterForm, ReviewModelForm
 from shop.models import Brand, Category, Product, CarouselImage
+from general.test_mixins.for_views import ViewTestMixin, UserTestMixin
 
 
 class ShopAppViewsTestMixin(ViewTestMixin):
@@ -441,7 +440,7 @@ class ReviewFormViewTestCase(ProductDetailViewTestMixin, TestCase):
         self.assertEqual(self.product.review_set.count(), 0)
 
 
-class LikeViewTestCase(ProductDetailViewTestMixin, TestCase):
+class LikeViewTestCase(TestCase):
     """Tests for the LikeView."""
 
     product_url = "/product/test-product/"
@@ -450,11 +449,9 @@ class LikeViewTestCase(ProductDetailViewTestMixin, TestCase):
 
     @classmethod
     def setUpTestData(cls) -> None:
-        """Set up test data by creating an user."""
-        super().setUpTestData()
-        cls.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass"
-        )
+        """Set up test data by creating 1 product and 1 user."""
+        ProductDetailViewTestMixin.setUpTestData()
+        UserTestMixin.setUpTestData()
 
     def test_there_is_no_like_icon_on_product_page_if_not_authenticated(self):
         """

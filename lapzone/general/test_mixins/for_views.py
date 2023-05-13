@@ -1,5 +1,6 @@
 from django.urls import reverse
 from django.contrib.messages import get_messages
+from django.contrib.auth.models import User
 
 
 class _ViewTestMixin:
@@ -51,6 +52,17 @@ class ViewNameTestMixin(_ViewTestMixin):
 
 class ViewTestMixin(ViewURLTestMixin, ViewNameTestMixin):
     """Base test mixin for views."""
+
+
+class UserTestMixin:
+    """Test mixin for testing views that work with a user."""
+
+    @classmethod
+    def setUpTestData(cls) -> None:
+        """Sets up test data by creating an user."""
+        cls.user = User.objects.create_user(
+            username="testuser", email="test@example.com", password="testpass"
+        )
 
 
 class LoginRequiredTestMixin:

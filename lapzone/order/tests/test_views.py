@@ -13,6 +13,7 @@ from order.forms import OrderCheckoutModelForm
 from shop.models import Brand, Category, Product
 from general.test_mixins.for_views import (
     ViewTestMixin,
+    UserTestMixin,
     LoginRequiredTestMixin,
     DeleteViewTestMixin,
 )
@@ -258,15 +259,13 @@ class OrderCheckoutFormViewTestCase(ViewTestMixin, TestCase):
         return order
 
 
-class OrderViewTestMixin:
+class OrderViewTestMixin(UserTestMixin):
     """Mixin for testing the "Order" app views."""
 
     @classmethod
     def setUpTestData(cls) -> None:
         """Creates two users and an order for the first user."""
-        cls.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass"
-        )
+        super().setUpTestData()
         cls.order = Order.objects.create(user=cls.user, total_price=1500)
         cls.user2 = User.objects.create_user(
             username="testuser2", email="test2@test.com", password="testpass"

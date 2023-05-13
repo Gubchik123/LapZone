@@ -9,24 +9,14 @@ from customer.forms import UserModelForm
 from shop.models import Brand, Category, Product, Like
 from general.test_mixins.for_views import (
     ViewTestMixin,
+    UserTestMixin,
     LoginRequiredTestMixin,
     DeleteViewTestMixin,
 )
 
 
-class CustomerViewTestMixin:
-    """Test mixin for the "Customer" app views."""
-
-    @classmethod
-    def setUpTestData(cls) -> None:
-        """Creates a user for the tests."""
-        cls.user = User.objects.create_user(
-            username="testuser", email="test@example.com", password="testpass"
-        )
-
-
 class CustomerDetailViewTestCase(
-    ViewTestMixin, LoginRequiredTestMixin, CustomerViewTestMixin, TestCase
+    ViewTestMixin, LoginRequiredTestMixin, UserTestMixin, TestCase
 ):
     """Tests for the CustomerDetailView."""
 
@@ -88,7 +78,7 @@ class CustomerDetailViewTestCase(
 
 
 class CustomerWishListViewTestCase(
-    ViewTestMixin, LoginRequiredTestMixin, CustomerViewTestMixin, TestCase
+    ViewTestMixin, LoginRequiredTestMixin, UserTestMixin, TestCase
 ):
     """Tests for the CustomerWishListView."""
 
@@ -146,7 +136,7 @@ class CustomerWishListViewTestCase(
         self.assertEqual(len(response.context["page_obj"]), 3)
 
 
-class CustomerUpdateViewTestCase(CustomerViewTestMixin, TestCase):
+class CustomerUpdateViewTestCase(UserTestMixin, TestCase):
     """Tests for the CustomerUpdateView."""
 
     url = "/profile/update/"
@@ -227,9 +217,7 @@ class CustomerUpdateViewTestCase(CustomerViewTestMixin, TestCase):
         self.assertEqual(messages[0].message, message)
 
 
-class CustomerDeleteViewTestCase(
-    CustomerViewTestMixin, DeleteViewTestMixin, TestCase
-):
+class CustomerDeleteViewTestCase(UserTestMixin, DeleteViewTestMixin, TestCase):
     """Tests for the CustomerDeleteView."""
 
     url = "/profile/delete/"
