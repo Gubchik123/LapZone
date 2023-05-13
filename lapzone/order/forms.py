@@ -1,11 +1,11 @@
 from django import forms
-from django.contrib.auth.models import User
 from django.core.validators import RegexValidator
 
+from customer.forms import UserModelForm
 from general.forms import get_field_widget_attrs_with_placeholder_
 
 
-class OrderCheckoutModelForm(forms.ModelForm):
+class OrderCheckoutModelForm(UserModelForm, forms.ModelForm):
     """Form for checking out an order."""
 
     is_create_profile = forms.ChoiceField(
@@ -47,18 +47,15 @@ class OrderCheckoutModelForm(forms.ModelForm):
     def __init__(self, *args, **kwargs):
         """Initializes the OrderCheckoutModelForm."""
         super().__init__(*args, **kwargs)
-        self.fields["username"].help_text = ""
         self.fields["username"].required = False
         self.fields["password"].required = False
-
         self.fields["email"].required = True
         self.fields["first_name"].required = True
         self.fields["last_name"].required = True
 
-    class Meta:
+    class Meta(UserModelForm.Meta):
         """Meta options for the OrderCreateModelForm."""
 
-        model = User
         fields = (
             "is_create_profile",
             "username",
@@ -70,22 +67,17 @@ class OrderCheckoutModelForm(forms.ModelForm):
             "address",
             "order_comment",
         )
-        widgets = {
-            "username": forms.TextInput(
-                attrs=get_field_widget_attrs_with_placeholder_("Username")
-            ),
-            "password": forms.PasswordInput(
-                attrs=get_field_widget_attrs_with_placeholder_("Password")
-            ),
-            "email": forms.EmailInput(
-                attrs=get_field_widget_attrs_with_placeholder_(
-                    "Where should we send the receipt?"
-                )
-            ),
-            "first_name": forms.TextInput(
-                attrs=get_field_widget_attrs_with_placeholder_("First name")
-            ),
-            "last_name": forms.TextInput(
-                attrs=get_field_widget_attrs_with_placeholder_("Last name")
-            ),
-        }
+        user_model_form_widgets = UserModelForm.Meta.widgets
+        user_model_form_widgets.update(
+            {
+                "password": forms.PasswordInput(
+                    attrs=get_field_widget_attrs_with_placeholder_("Password")
+                ),
+                "email": forms.EmailInput(
+                    attrs=get_field_widget_attrs_with_placeholder_(
+                        "Where should we send the receipt?"
+                    )
+                ),
+            }
+        )
+        widgets = user_model_form_widgets
