@@ -50,3 +50,26 @@ class ViewNameTestMixin(_ViewTestMixin):
 
 class ViewTestMixin(ViewURLTestMixin, ViewNameTestMixin):
     """Base test mixin for views."""
+
+
+class LoginRequiredTestMixin:
+    """Test mixin for testing login required views."""
+
+    def test_302_status_code_if_user_is_not_authenticated(self):
+        """
+        Test that the 302 status code is returned if the user is not authenticated.
+        """
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_login_required_redirect_url_if_user_is_not_authenticated(self):
+        """
+        Test that the user is redirected to the login page if not authenticated.
+        """
+        self.client.logout()
+        response = self.client.get(self.url)
+        self.assertEqual(
+            response.url,
+            f"{reverse('account_login')}?next={self.url}",
+        )

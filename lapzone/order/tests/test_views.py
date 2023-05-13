@@ -11,7 +11,7 @@ from django.contrib.messages import get_messages
 from order.models import Order, OrderItem
 from order.forms import OrderCheckoutModelForm
 from shop.models import Brand, Category, Product
-from general.test_mixins.for_views import ViewTestMixin
+from general.test_mixins.for_views import ViewTestMixin, LoginRequiredTestMixin
 
 
 class OrderCheckoutFormViewTestCase(ViewTestMixin, TestCase):
@@ -266,29 +266,6 @@ class OrderViewTestMixin:
         cls.order = Order.objects.create(user=cls.user, total_price=1500)
         cls.user2 = User.objects.create_user(
             username="testuser2", email="test2@test.com", password="testpass"
-        )
-
-
-class LoginRequiredTestMixin:
-    """Test mixin for testing login required views."""
-
-    def test_302_status_code_if_user_is_not_authenticated(self):
-        """
-        Test that the 302 status code is returned if the user is not authenticated.
-        """
-        self.client.logout()
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 302)
-
-    def test_login_required_redirect_url_if_user_is_not_authenticated(self):
-        """
-        Test that the user is redirected to the login page if not authenticated.
-        """
-        self.client.logout()
-        response = self.client.get(self.url)
-        self.assertEqual(
-            response.url,
-            f"{reverse('account_login')}?next={self.url}",
         )
 
 
