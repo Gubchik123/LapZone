@@ -1,24 +1,20 @@
 from django import forms
 from django.test import SimpleTestCase
-from django.contrib.auth.models import User
 
 from order.forms import OrderCheckoutModelForm
 from general.forms import FIELD_WIDGET_ATTRS_CLASS
+from customer.tests.test_forms import UserModelFormTestMixin
 
 
-class OrderCheckoutModelFormSimpleTestCase(SimpleTestCase):
+class OrderCheckoutModelFormSimpleTestCase(
+    UserModelFormTestMixin, SimpleTestCase
+):
     """Tests for the OrderCheckoutModelForm."""
 
     @classmethod
     def setUpClass(cls) -> None:
         super().setUpClass()
         cls.form = OrderCheckoutModelForm()
-
-    # * ---------------------- Testing the meta options ----------------------
-
-    def test_form_model(self):
-        """Tests the form model."""
-        self.assertEqual(self.form.Meta.model, User)
 
     def test_form_fields(self):
         """Tests the form fields."""
@@ -172,39 +168,11 @@ class OrderCheckoutModelFormSimpleTestCase(SimpleTestCase):
             "Optional comment to seller",
         )
 
-    # * -------------- Testing the 'username' field's parameters -------------
-
-    def test_username_field_help_text(self):
-        """Tests the username field help_text."""
-        self.assertEqual(self.form.fields["username"].help_text, "")
+    # * --------------- Testing the 'username' is not required ---------------
 
     def test_username_field_required(self):
         """Tests the username field is not required."""
         self.assertFalse(self.form.fields["username"].required)
-
-    def test_username_field_label(self):
-        """Tests the username field label."""
-        self.assertEqual(self.form.fields["username"].label, "Username")
-
-    def test_username_field_widget(self):
-        """Tests the username field widget."""
-        self.assertIsInstance(
-            self.form.fields["username"].widget, forms.TextInput
-        )
-
-    def test_username_field_widget_attrs_class(self):
-        """Tests the username field widget attrs class."""
-        self.assertEqual(
-            self.form.fields["username"].widget.attrs["class"],
-            FIELD_WIDGET_ATTRS_CLASS,
-        )
-
-    def test_username_field_widget_attrs_placeholder(self):
-        """Tests the username field widget attrs placeholder."""
-        self.assertEqual(
-            self.form.fields["username"].widget.attrs["placeholder"],
-            "Username",
-        )
 
     # * -------------- Testing the 'password' field's parameters -------------
 
@@ -266,62 +234,14 @@ class OrderCheckoutModelFormSimpleTestCase(SimpleTestCase):
             "Where should we send the receipt?",
         )
 
-    # * ------------- Testing the 'first_name' field's parameters ------------
+    # * ---------------- Testing the 'first_name' is required ----------------
 
     def test_first_name_field_required(self):
         """Tests the first_name field is required."""
         self.assertTrue(self.form.fields["first_name"].required)
 
-    def test_first_name_field_label(self):
-        """Tests the first_name field label."""
-        self.assertEqual(self.form.fields["first_name"].label, "First name")
-
-    def test_first_name_field_widget(self):
-        """Tests the first_name field widget."""
-        self.assertIsInstance(
-            self.form.fields["first_name"].widget, forms.TextInput
-        )
-
-    def test_first_name_field_widget_attrs_class(self):
-        """Tests the first_name field widget attrs class."""
-        self.assertEqual(
-            self.form.fields["first_name"].widget.attrs["class"],
-            FIELD_WIDGET_ATTRS_CLASS,
-        )
-
-    def test_first_name_field_widget_attrs_placeholder(self):
-        """Tests the first_name field widget attrs placeholder."""
-        self.assertEqual(
-            self.form.fields["first_name"].widget.attrs["placeholder"],
-            "First name",
-        )
-
-    # * ------------- Testing the 'last_name' field's parameters -------------
+    # * ---------------- Testing the 'last_name' is required -----------------
 
     def test_last_name_field_required(self):
         """Tests the last_name field is required."""
         self.assertTrue(self.form.fields["last_name"].required)
-
-    def test_last_name_field_label(self):
-        """Tests the last_name field label."""
-        self.assertEqual(self.form.fields["last_name"].label, "Last name")
-
-    def test_last_name_field_widget(self):
-        """Tests the last_name field widget."""
-        self.assertIsInstance(
-            self.form.fields["last_name"].widget, forms.TextInput
-        )
-
-    def test_last_name_field_widget_attrs_class(self):
-        """Tests the last_name field widget attrs class."""
-        self.assertEqual(
-            self.form.fields["last_name"].widget.attrs["class"],
-            FIELD_WIDGET_ATTRS_CLASS,
-        )
-
-    def test_last_name_field_widget_attrs_placeholder(self):
-        """Tests the last_name field widget attrs placeholder."""
-        self.assertEqual(
-            self.form.fields["last_name"].widget.attrs["placeholder"],
-            "Last name",
-        )
