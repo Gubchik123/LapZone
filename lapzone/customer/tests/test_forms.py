@@ -1,6 +1,8 @@
 from django import forms
+from django.test import SimpleTestCase
 from django.contrib.auth.models import User
 
+from customer.forms import UserModelForm
 from general.forms import FIELD_WIDGET_ATTRS_CLASS
 
 
@@ -92,3 +94,27 @@ class UserModelFormTestMixin:
             self.form.fields["last_name"].widget.attrs["placeholder"],
             "Last name",
         )
+
+
+class UserModelFormSimpleTestCase(UserModelFormTestMixin, SimpleTestCase):
+    """Tests for the UserModelForm."""
+
+    @classmethod
+    def setUpClass(cls) -> None:
+        super().setUpClass()
+        cls.form = UserModelForm()
+
+    def test_form_fields(self):
+        """Tests the form fields."""
+        self.assertEqual(
+            tuple(self.form.Meta.fields),
+            ("username", "first_name", "last_name"),
+        )
+
+    def test_first_name_field_required(self):
+        """Tests the first_name field is not required."""
+        self.assertFalse(self.form.fields["first_name"].required)
+
+    def test_last_name_field_required(self):
+        """Tests the last_name field is not required."""
+        self.assertFalse(self.form.fields["last_name"].required)
