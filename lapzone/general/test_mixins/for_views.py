@@ -1,4 +1,5 @@
 from django.urls import reverse
+from django.contrib.messages import get_messages
 
 
 class _ViewTestMixin:
@@ -72,4 +73,43 @@ class LoginRequiredTestMixin:
         self.assertEqual(
             response.url,
             f"{reverse('account_login')}?next={self.url}",
+        )
+
+
+class DeleteViewTestMixin:
+    """Test mixin for testing views that inherit from the DeleteView."""
+
+    success_url: str
+    success_message: str
+
+    def test_405_with_get_request(self):
+        """Test that GET request returns 405 status code."""
+        self._login()
+        response = self.client.get(self.url)
+        self.assertEqual(response.status_code, 405)
+
+    def test_object_deleting(self):
+        """Test that the object is deleted."""
+        self._login()
+        response = self.client.post(self.url)
+        self.assertEqual(response.status_code, 302)
+
+    def test_success_message(self):
+        """Test that a success message is added to messages framework."""
+        self._login()
+        response = self.client.post(self.url)
+        messages = list(get_messages(response.wsgi_request))
+        self.assertEqual(len(messages), 1)
+        self.assertEqual(messages[0].message, self.success_message)
+
+    def test_redirects_to_success_url(self):
+        """Test redirects to the success URL."""
+        self._login()
+        response = self.client.post(self.url)
+        self.assertRedirects(response, self.success_url)
+
+    def _login(self):
+        """Logs in the first user."""
+        self.assertTrue(
+            self.client.login(username="testuser", password="testpass")
         )

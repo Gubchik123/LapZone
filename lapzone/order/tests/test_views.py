@@ -2,16 +2,20 @@ import json
 from typing import Callable
 from unittest.mock import patch
 
-from django.urls import reverse
 from django.test import TestCase
 from django.http import HttpResponse
 from django.contrib.auth.models import User
+from django.urls import reverse, reverse_lazy
 from django.contrib.messages import get_messages
 
 from order.models import Order, OrderItem
 from order.forms import OrderCheckoutModelForm
 from shop.models import Brand, Category, Product
-from general.test_mixins.for_views import ViewTestMixin, LoginRequiredTestMixin
+from general.test_mixins.for_views import (
+    ViewTestMixin,
+    LoginRequiredTestMixin,
+    DeleteViewTestMixin,
+)
 
 
 class OrderCheckoutFormViewTestCase(ViewTestMixin, TestCase):
@@ -390,8 +394,13 @@ class OrderDetailViewTestCase(
         )
 
 
-class OrderDeleteViewTestCase(OrderViewTestMixin, TestCase):
+class OrderDeleteViewTestCase(
+    OrderViewTestMixin, DeleteViewTestMixin, TestCase
+):
     """Tests for the OrderDeleteView."""
+
+    success_url = reverse_lazy("order:list")
+    success_message = "Order has successfully deleted."
 
     @classmethod
     def setUpTestData(cls) -> None:
@@ -400,53 +409,7 @@ class OrderDeleteViewTestCase(OrderViewTestMixin, TestCase):
         cls.order_id = cls.order.id
         cls.url = f"/order/{cls.order.id}/delete/"
 
-    def test_404_with_non_existent_order(self):
-        """Test that the 404 page is returned if the order doesn't exist."""
-        # ! I think it's correct, but it doesn't work and returns 405.
-        # self._login()
-        # response = self.client.post("/order/wrong-uuid/delete/")
-        # self.assertEqual(response.status_code, 404)
-
-    def test_404_with_not_user_order(self):
-        """
-        Test that the 404 page is returned if the user doesn't own the order.
-        """
-        # ! I think it's correct, but it doesn't work and returns 405.
-        # self.client.login(username="testuser2", password="testpass")
-        # response = self.client.post(self.url)
-        # self.assertEqual(response.status_code, 404)
-
-    def test_405_with_get_request(self):
-        """Test that GET request returns 405 status code."""
-        self._login()
-        response = self.client.get(self.url)
-        self.assertEqual(response.status_code, 405)
-
-    def test_order_deleting(self):
+    def test_object_deleting(self):
         """Test that the order is deleted."""
-        self._login()
-        response = self.client.post(self.url)
-        self.assertEqual(response.status_code, 302)
+        super().test_object_deleting()
         self.assertFalse(Order.objects.filter(id=self.order_id).exists())
-
-    def test_success_message(self):
-        """Test that a success message is added to messages framework."""
-        self._login()
-        response = self.client.post(self.url)
-        messages = list(get_messages(response.wsgi_request))
-        self.assertEqual(len(messages), 1)
-        self.assertEqual(
-            messages[0].message, "Order has successfully deleted."
-        )
-
-    def test_redirects_to_success_url(self):
-        """Test redirects to the success URL."""
-        self._login()
-        response = self.client.post(self.url)
-        self.assertRedirects(response, reverse("order:list"))
-
-    def _login(self):
-        """Logs in the first user."""
-        self.assertTrue(
-            self.client.login(username="testuser", password="testpass")
-        )
