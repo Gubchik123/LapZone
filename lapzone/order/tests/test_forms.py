@@ -3,9 +3,7 @@ from django.test import SimpleTestCase
 from django.contrib.auth.models import User
 
 from order.forms import OrderCheckoutModelForm
-
-
-FIELD_WIDGET_ATTRS_CLASS = "w-50 form-control mb-2"
+from general.forms import FIELD_WIDGET_ATTRS_CLASS
 
 
 class OrderCheckoutModelFormSimpleTestCase(SimpleTestCase):
