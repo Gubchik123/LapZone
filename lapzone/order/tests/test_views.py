@@ -1,7 +1,10 @@
 import json
 from typing import Callable
+from datetime import datetime
 from unittest.mock import patch
 
+import pytz
+from django.conf import settings
 from django.test import TestCase
 from django.http import HttpResponse
 from django.contrib.auth.models import User
@@ -371,7 +374,10 @@ class OrderDetailViewTestCase(
         """Test that the order detail page contains the order date."""
         self.assertContains(self.response, f"Order date:")
         self.assertContains(
-            self.response, self.order.created.strftime("%B %d, %Y, %H:%M %p")
+            self.response,
+            datetime.now(pytz.timezone(settings.TIME_ZONE)).strftime(
+                "%B %d, %Y, %H:%M"
+            ),
         )
 
     def test_order_detail_page_contains_order_items(self):
