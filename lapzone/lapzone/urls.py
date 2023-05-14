@@ -23,6 +23,7 @@ urlpatterns = [
     path("cart/", include("cart.urls")),
     path("order/", include("order.urls")),
     path("profile/", include("customer.urls")),
+    path("mailing/", include("mailing.urls")),
     path(
         "faq/",
         TemplateView.as_view(template_name="pages/FAQs.html"),
