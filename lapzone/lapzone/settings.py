@@ -72,6 +72,7 @@ TEMPLATES = [
                 "django.contrib.messages.context_processors.messages",
                 # My custom context processors
                 "cart.context_processors.cart",
+                "mailing.context_processors.mailing_form",
             ],
         },
     },
