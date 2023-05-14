@@ -1,3 +1,5 @@
+from uuid import uuid4
+
 from django.db.models import Model
 from django.contrib.auth.models import User
 
@@ -44,6 +46,31 @@ class ModelMetaOptionsTestMixin:
         Test that the model's ordering is equal to the ordering attribute.
         """
         self.assertEqual(self.model._meta.ordering, self.ordering)
+
+
+class ModelWithUUIDPKTestMixin:
+    """Mixin for testing the 'id' field parameters
+    for models that inherited from abstract ModelWithUUIDPK."""
+
+    def test_id_unique(self):
+        """Test that the id field is unique."""
+        self.assertTrue(self.model._meta.get_field("id").unique)
+
+    def test_id_editable(self):
+        """Test that the id field is not editable."""
+        self.assertFalse(self.model._meta.get_field("id").editable)
+
+    def test_id_primary_key(self):
+        """Test that the id field is the primary key."""
+        self.assertTrue(self.model._meta.get_field("id").primary_key)
+
+    def test_id_verbose_name(self):
+        """Test that the id field's verbose name is "ID"."""
+        self.assertEqual(self.model._meta.get_field("id").verbose_name, "ID")
+
+    def test_id_default(self):
+        """Test that the id field has default value of uuid4."""
+        self.assertEqual(self.model._meta.get_field("id").default, uuid4)
 
 
 class ModelWithNameTestMixin(ModelTestMixin):

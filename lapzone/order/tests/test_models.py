@@ -1,11 +1,10 @@
-from uuid import uuid4
-
 from django.test import TestCase
 
 from shop import models as shop_models
 from order.models import Order, OrderItem
 from general.test_mixins.for_models import (
     ModelMetaOptionsTestMixin,
+    ModelWithUUIDPKTestMixin,
     ModelWithPriceTestMixin,
     ModelWithCreatedDateTimeTestMixin,
     ModelWithFKToProductTestMixin,
@@ -15,6 +14,7 @@ from general.test_mixins.for_models import (
 
 class OrderModelTestCase(
     ModelMetaOptionsTestMixin,
+    ModelWithUUIDPKTestMixin,
     ModelWithCreatedDateTimeTestMixin,
     ModelWithFKToUserTestMixin,
     TestCase,
@@ -47,26 +47,6 @@ class OrderModelTestCase(
         self.assertEqual(
             self.order.get_absolute_url(), f"/order/{self.order.id}/"
         )
-
-    def test_id_unique(self):
-        """Test that the id field is unique."""
-        self.assertTrue(self.model._meta.get_field("id").unique)
-
-    def test_id_editable(self):
-        """Test that the id field is not editable."""
-        self.assertFalse(self.model._meta.get_field("id").editable)
-
-    def test_id_primary_key(self):
-        """Test that the id field is the primary key."""
-        self.assertTrue(self.model._meta.get_field("id").primary_key)
-
-    def test_id_verbose_name(self):
-        """Test that the id field's verbose name is "ID"."""
-        self.assertEqual(self.model._meta.get_field("id").verbose_name, "ID")
-
-    def test_id_default(self):
-        """Test that the id field has default value of uuid4."""
-        self.assertEqual(self.model._meta.get_field("id").default, uuid4)
 
     def test_total_price_blank(self):
         """Test that the total_price field is not blank."""
