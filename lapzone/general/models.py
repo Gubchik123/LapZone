@@ -1,10 +1,26 @@
 from PIL import Image
+from uuid import uuid4
 
 from django.db import models
 from django.urls import reverse
 from django.conf import settings
 from django.utils.text import slugify
 from django.contrib.auth.models import User
+
+
+class ModelWithUUIDPK(models.Model):
+    """Abstract model with 'id' UUIDField as primary key"""
+
+    id = models.UUIDField(
+        unique=True,
+        editable=False,
+        primary_key=True,
+        verbose_name="ID",
+        default=uuid4,
+    )
+
+    class Meta:
+        abstract = True
 
 
 class ModelWithName(models.Model):

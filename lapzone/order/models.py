@@ -4,6 +4,7 @@ from django.db import models
 from django.urls import reverse
 
 from general.models import (
+    ModelWithUUIDPK,
     ModelWithPrice,
     ModelWithCreatedDateTime,
     ModelWithFKToProduct,
@@ -11,19 +12,14 @@ from general.models import (
 )
 
 
-class Order(ModelWithFKToUser, ModelWithCreatedDateTime, models.Model):
+class Order(
+    ModelWithUUIDPK, ModelWithFKToUser, ModelWithCreatedDateTime, models.Model
+):
     """
     A model representing a user order.
     Fields: id (uuid4), user, created, total_price.
     """
 
-    id = models.UUIDField(
-        unique=True,
-        editable=False,
-        primary_key=True,
-        verbose_name="ID",
-        default=uuid.uuid4,
-    )
     total_price = models.FloatField(blank=False, verbose_name="Total price")
 
     def __str__(self) -> str:
