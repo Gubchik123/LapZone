@@ -19,31 +19,17 @@
 
 
 {% block order_create_form %}
-<!-- Full screen loader -->
-<div
-    id="screen-loader"
-    style="z-index: 100; top: 0; left: 0;"
-    class="d-none content-center h-100 w-100 position-fixed bg-dark bg-opacity-75"
->
-    <div
-        role="status"
-        class="spinner-border text-white"
-        style="width: 3rem; height: 3rem"
-    ></div>
-</div>
-
 <div class="row px-3 mb-3">
     <div class="panel-bg-color col-12 p-3">
-        <form action="" method="post" id="checkout-form">
+        <form action="" method="post" class="loading">
             {% csrf_token %}
 
             {{ form.as_p }}
 
             <input 
                 type="submit" 
-                value="Checkout" 
-                id="checkout-submit-btn"
-                class="btn btn-success btn-lg mt-3"
+                value="Checkout"
+                class="loading btn btn-success btn-lg mt-3"
             >
         </form>
     </div>
@@ -60,7 +46,7 @@
 {% load static %}
 <script 
     defer
-    src="{% static 'js/order/submit_loader.js' %}" 
+    src="{% static 'js/loading_form_btn.js' %}" 
 ></script>
 <script 
     defer
