@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<title>[LapZone] {% block title %}{% endblock %}</title>
+
+        <style>
+            .container {
+                padding: 20px;
+                margin: 0 auto;
+                max-width: 600px;
+                border: 1px solid #ccc;
+                background-color: #fff;
+            }
+
+            .header { width: 100%; }
+            .header img { width: 100%; }
+            .header h1 {
+                font-size: 24px;
+                font-weight: bold;
+                margin-bottom: 10px;
+            }
+        </style>
+        {% block styles %}{% endblock %} 
+	</head>
+	<body style="background-color: #E6E4E4; padding: 30px 0; font-size: 1.5em;">
+		<div class="container">
+            <div class="header">
+                <img
+                    alt="LapZone header image"
+                    src="https://raw.githubusercontent.com/Gubchik123/LapZone/master/lapzone/static/images/site_header.webp"
+                />
+                <h1>{% block content_title %}{% endblock %}</h1>
+            </div>
+
+            {% block content %}{% endblock %}
+        </div> 
+	</body>
+</html>
