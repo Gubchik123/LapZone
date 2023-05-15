@@ -3,8 +3,9 @@ from django.contrib import messages
 from django.http import HttpRequest, HttpResponse, HttpResponseRedirect
 
 from . import services
-from general.views import BaseView
+from .models import MailingEmailAddress
 from .forms import MailingEmailAddressModelForm
+from general.views import BaseView, DeleteViewMixin
 
 
 class MailingCreateView(BaseView, generic.View):
@@ -16,8 +17,9 @@ class MailingCreateView(BaseView, generic.View):
         form = MailingEmailAddressModelForm(request.POST)
 
         if form.is_valid():
-            mailing_user = form.save()
-            services.send_mail_to_(mailing_user.email)
+            services.send_mail_to_(
+                mailing_email_address=form.save(), request=self.request
+            )
             messages.success(
                 self.request,
                 "You have successfully subscribed to our mailing.",
@@ -26,3 +28,13 @@ class MailingCreateView(BaseView, generic.View):
             for error in form.errors.as_data().values():
                 messages.warning(self.request, error[0].messages[0])
         return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
+
+
+class MailingDeleteView(BaseView, DeleteViewMixin, generic.DeleteView):
+    """View for deleting a mailing email address."""
+
+    success_url = "/"
+    model = MailingEmailAddress
+    http_method_names = ["get", "post"]
+    template_name = "mailing/confirm_delete.html"
+    success_message = "You have successfully unsubscribed from our mailing."
