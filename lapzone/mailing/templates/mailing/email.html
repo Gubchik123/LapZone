@@ -7,18 +7,30 @@
 {% block content %}
 <p>Dear {{ email }},</p>
 <p>
-    Thank you for subscribing to our mailing list. We're excited to have you on
+	Thank you for subscribing to our mailing list. We're excited to have you on
 	board and can't wait to share our latest news, updates, and offers with you.
 </p>
 <p>
-    As a subscriber, you'll be the first to know about our new products,
+	As a subscriber, you'll be the first to know about our new products,
 	upcoming events, and special promotions. Plus, you'll have access to
 	exclusive content, tips, and tricks to help you get the most out of our
 	services.
 </p>
 <p>
-    If you have any questions or concerns, please don't hesitate to contact us.
+	If you have any questions or concerns, please don't hesitate to contact us.
 	We're always here to help.
 </p>
-<p>Best regards, <strong>LapZone</strong></p>
+<p style="margin-bottom: 30px">Best regards, <strong>LapZone</strong></p>
+<hr />
+<p style="margin-top: 30px; text-align: center; font-size: 12px; color: #999">
+	You are receiving this email because you signed up to our mailing. If you no
+	longer wish to receive our emails, you may
+	<a 
+        style="color: #999" 
+        href="{{ request.scheme }}://{{ request.get_host }}{% url 'mailing:delete' pk %}"
+    >
+        unsubscribe
+    </a>
+	at any time.
+</p>
 {% endblock content %}
