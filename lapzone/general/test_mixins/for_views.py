@@ -93,22 +93,26 @@ class DeleteViewTestMixin:
 
     success_url: str
     success_message: str
+    is_login_required = True
 
     def test_405_with_get_request(self):
         """Test that GET request returns 405 status code."""
-        self._login()
+        if self.is_login_required:
+            self._login()
         response = self.client.get(self.url)
         self.assertEqual(response.status_code, 405)
 
     def test_object_deleting(self):
         """Test that the object is deleted."""
-        self._login()
+        if self.is_login_required:
+            self._login()
         response = self.client.post(self.url)
         self.assertEqual(response.status_code, 302)
 
     def test_success_message(self):
         """Test that a success message is added to messages framework."""
-        self._login()
+        if self.is_login_required:
+            self._login()
         response = self.client.post(self.url)
         messages = list(get_messages(response.wsgi_request))
         self.assertEqual(len(messages), 1)
@@ -116,7 +120,8 @@ class DeleteViewTestMixin:
 
     def test_redirects_to_success_url(self):
         """Test redirects to the success URL."""
-        self._login()
+        if self.is_login_required:
+            self._login()
         response = self.client.post(self.url)
         self.assertRedirects(response, self.success_url)
 
