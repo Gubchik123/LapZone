@@ -18,15 +18,14 @@ class MailingCreateView(BaseView, generic.View):
 
         if form.is_valid():
             services.send_mail_to_(
-                mailing_email_address=form.save(), request=self.request
+                mailing_email_address=form.save(), request=request
             )
             messages.success(
-                self.request,
-                "You have successfully subscribed to our mailing.",
+                request, "You have successfully subscribed to our mailing."
             )
         else:
             for error in form.errors.as_data().values():
-                messages.warning(self.request, error[0].messages[0])
+                messages.warning(request, error[0].messages[0])
         return HttpResponseRedirect(request.META.get("HTTP_REFERER", "/"))
 
 
