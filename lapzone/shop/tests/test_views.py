@@ -481,9 +481,10 @@ class LikeViewTestCase(UserTestMixin, TestCase):
 
     def _test_post_add_like_success(self):
         """Test adding a like to a product successfully."""
-        response = self._get_response(user_id=1)
-        self.assertContains(
-            response, "Product has successfully added to your wish list."
+        response = self._get_response(user_id=self.user.id)
+        self.assertEqual(
+            response.content.decode("utf-8"),
+            "Product has successfully added to your wish list.",
         )
         self.assertEqual(self.user.like_set.count(), 1)
 
@@ -495,9 +496,10 @@ class LikeViewTestCase(UserTestMixin, TestCase):
 
     def _test_post_delete_like_success(self):
         """Test deleting a like from a product successfully."""
-        response = self._get_response(user_id=1)
-        self.assertContains(
-            response, "Product has successfully deleted from your wish list."
+        response = self._get_response(user_id=self.user.id)
+        self.assertEqual(
+            response.content.decode("utf-8"),
+            "Product has successfully deleted from your wish list.",
         )
         self.assertEqual(self.user.like_set.count(), 0)
 
