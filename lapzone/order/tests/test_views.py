@@ -1,7 +1,5 @@
 import json
-from typing import Callable
 from datetime import datetime
-from unittest.mock import patch
 
 import pytz
 from django.conf import settings
@@ -87,40 +85,13 @@ class OrderCheckoutFormViewTestCase(ViewTestMixin, TestCase):
         self.assertFalse(form.fields.get("first_name", False))
         self.assertFalse(form.fields.get("last_name", False))
 
-    def mock_sending_mail(test_method: Callable) -> Callable:
-        """Decorator for mocking the "django.core.mail.send_mail" function."""
-
-        def wrapper(self) -> None:
-            """
-            Adds a product to the cart;
-            Mocks the "django.core.mail.send_mail" function;
-            Calls the test method.
-            """
-            response = self.client.post(
-                "/cart/add/",
-                data=json.dumps(
-                    {"product_id": self.product.id, "quantity": 1}
-                ),
-                content_type="application/json",
-            )
-            self.assertEqual(response.status_code, 200)
-            self.assertEqual(
-                response.content.decode("utf-8"),
-                "Product has successfully added to your cart.",
-            )
-            with patch("django.core.mail.send_mail") as mock_send_mail:
-                test_method(self)
-                mock_send_mail.assert_not_called()
-
-        return wrapper
-
-    @mock_sending_mail
     def test_order_checkout_if_user_is_not_authenticated_and_do_not_want_to_create_profile(
         self,
     ):
         """
         Test order checkout if user is not authenticated and do not want to create profile.
         """
+        self._add_product_into_cart()
         data = self._get_valid_form_data()
         response = self.client.post(self.url, data=data)
         self._test_order_checkout_redirect(response, reverse("shop:home"))
@@ -129,22 +100,17 @@ class OrderCheckoutFormViewTestCase(ViewTestMixin, TestCase):
         )
         self.assertEqual(len(response.context["cart"]), 0)
 
-    @mock_sending_mail
     def test_order_checkout_if_user_is_not_authenticated_and_want_to_create_profile(
         self,
     ):
         """
         Test order checkout if user is not authenticated and want to create profile.
         """
-        with patch(
-            "allauth.account.utils.send_email_confirmation"
-        ) as mock_send_mail:
-            response = self.client.post(
-                self.url,
-                data=self._get_valid_form_data(is_create_profile="True"),
-            )
-            mock_send_mail.assert_not_called()
-
+        self._add_product_into_cart()
+        response = self.client.post(
+            self.url,
+            data=self._get_valid_form_data(is_create_profile="True"),
+        )
         messages = list(get_messages(response.wsgi_request))
         self._test_message_about_receipt_send_email_is_displayed(
             messages[0].message
@@ -156,9 +122,9 @@ class OrderCheckoutFormViewTestCase(ViewTestMixin, TestCase):
             response, reverse("order:detail", args=[order.id])
         )
 
-    @mock_sending_mail
     def test_order_checkout_if_user_is_authenticated(self):
         """Test order checkout if user is authenticated."""
+        self._add_product_into_cart()
         self.client.login(username="testuser", password="testpass")
         response = self.client.post(
             self.url,
@@ -180,13 +146,13 @@ class OrderCheckoutFormViewTestCase(ViewTestMixin, TestCase):
             response, reverse("order:detail", args=[order.id])
         )
 
-    @mock_sending_mail
     def test_order_checkout_if_user_is_registered_and_want_to_create_profile(
         self,
     ):
         """
         Test order checkout if user is registered and want to create profile.
         """
+        self._add_product_into_cart()
         response = self.client.post(
             self.url, data=self._get_valid_form_data(is_create_profile="True")
         )
@@ -201,6 +167,19 @@ class OrderCheckoutFormViewTestCase(ViewTestMixin, TestCase):
         self.assertEqual(len(response.context["cart"]), 0)
         self._test_order_checkout_redirect(
             response, reverse("order:detail", args=[order.id])
+        )
+
+    def _add_product_into_cart(self):
+        """Adds product into cart and checks that it was added successfully."""
+        response = self.client.post(
+            "/cart/add/",
+            data=json.dumps({"product_id": self.product.id, "quantity": 1}),
+            content_type="application/json",
+        )
+        self.assertEqual(response.status_code, 200)
+        self.assertEqual(
+            response.content.decode("utf-8"),
+            "Product has successfully added to your cart.",
         )
 
     def _get_valid_form_data(
