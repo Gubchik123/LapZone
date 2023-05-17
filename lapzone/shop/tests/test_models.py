@@ -225,7 +225,7 @@ class LikeModelTestCase(
 
     def test_model_string_representation(self):
         """Test the model string representation by __str__."""
-        like = models.Like.objects.get(id=1)
+        like = models.Like.objects.first()
         self.assertEqual(str(like), f"From {like.user} for {like.product}")
 
 

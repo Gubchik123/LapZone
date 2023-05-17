@@ -6,19 +6,6 @@ from django.contrib.auth.models import User
 from shop.models import Product
 
 
-class ModelTestMixin:
-    """Base mixin with general methods."""
-
-    def _get_first_model(self) -> Model:
-        """Returns the first model depending on self.model"""
-
-        # * Workaround to avoid the DoesNotExist during ProductModelTest
-        try:
-            return self.model.objects.get(id=1)
-        except self.model.DoesNotExist:
-            return self.model.objects.get(name="Test laptop")
-
-
 class ModelMetaOptionsTestMixin:
     """Mixin for testing the base meta options of models."""
 
@@ -73,7 +60,7 @@ class ModelWithUUIDPKTestMixin:
         self.assertEqual(self.model._meta.get_field("id").default, uuid4)
 
 
-class ModelWithNameTestMixin(ModelTestMixin):
+class ModelWithNameTestMixin:
     """Mixin for testing the 'name' field parameters
     for models that inherited from abstract ModelWithNameTest."""
 
@@ -85,7 +72,7 @@ class ModelWithNameTestMixin(ModelTestMixin):
 
     def test_model_string_representation(self):
         """Test the model string representation by __str__."""
-        obj = self._get_first_model()
+        obj = self.model.objects.first()
         self.assertEqual(str(obj), obj.name)
 
     def test_name_verbose_name(self):
@@ -139,7 +126,7 @@ class ModelWithNameAndSlugTestMixin(ModelWithNameTestMixin):
 
     def test_slug_generating(self):
         """Test that the slug was generated correctly"""
-        obj = self._get_first_model()
+        obj = self.model.objects.first()
         self.assertEqual(obj.slug, self.expected_slug)
 
     def test_slug_verbose_name(self):
@@ -179,14 +166,14 @@ class ModelWithNameAndSlugTestMixin(ModelWithNameTestMixin):
         """
         Test that the instance's url_pattern_name is equal to the url_pattern_name attribute.
         """
-        obj: Model = self._get_first_model()
+        obj: Model = self.model.objects.first()
         self.assertEqual(obj.url_pattern_name, self.url_pattern_name)
 
     def test_get_absolute_url(self):
         """
         Test that the instance's get_absolute_url is equal to the expected_url attribute.
         """
-        obj: Model = self._get_first_model()
+        obj: Model = self.model.objects.first()
         self.assertEqual(obj.get_absolute_url(), self.expected_url)
 
 
@@ -217,7 +204,7 @@ class ModelWithDescriptionTestMixin:
         )
 
 
-class ModelWithImageTestMixin(ModelTestMixin):
+class ModelWithImageTestMixin:
     """Mixin for testing the 'image' field parameters
     for models that inherited from abstract ModelWithImage."""
 
@@ -260,11 +247,11 @@ class ModelWithImageTestMixin(ModelTestMixin):
         Test that the instance's image name is equal to the expected_image_name attribute.
         """
         self.assertEqual(
-            self._get_first_model().image.name, self.expected_image_name
+            self.model.objects.first().image.name, self.expected_image_name
         )
 
 
-class ModelWithPriceTestMixin(ModelTestMixin):
+class ModelWithPriceTestMixin:
     """Mixin for testing the 'price' field parameters
     for models that inherited from abstract ModelWithPrice."""
 
