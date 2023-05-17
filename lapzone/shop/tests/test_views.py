@@ -440,7 +440,7 @@ class ReviewFormViewTestCase(ProductDetailViewTestMixin, TestCase):
         self.assertEqual(self.product.review_set.count(), 0)
 
 
-class LikeViewTestCase(TestCase):
+class LikeViewTestCase(UserTestMixin, TestCase):
     """Tests for the LikeView."""
 
     product_url = "/product/test-product/"
@@ -450,8 +450,8 @@ class LikeViewTestCase(TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         """Set up test data by creating 1 product and 1 user."""
+        super().setUpTestData()
         ProductDetailViewTestMixin.setUpTestData()
-        UserTestMixin.setUpTestData()
 
     def test_there_is_no_like_icon_on_product_page_if_not_authenticated(self):
         """
