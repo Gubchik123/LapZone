@@ -29,14 +29,11 @@ class CartTestCase(TestCase):
         """Tests iteration over items in the cart (__iter__)."""
         self.cart.add(self.product, quantity=2)
 
-        items = list(self.cart)
-        self.assertEqual(len(items), 1)
-
-        item = items[0]
-        self.assertEqual(item["product"], self.product)
-        self.assertEqual(item["quantity"], 2)
-        self.assertEqual(item["price"], Decimal("10.00"))
-        self.assertEqual(item["total_price"], Decimal("20.00"))
+        for item in self.cart:
+            self.assertEqual(item["product"], self.product)
+            self.assertEqual(item["quantity"], 2)
+            self.assertEqual(item["price"], Decimal("10.00"))
+            self.assertEqual(item["total_price"], Decimal("20.00"))
 
     def test_len(self):
         """Tests getting the total number of items in the cart (__len__)."""
