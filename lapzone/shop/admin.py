@@ -261,11 +261,17 @@ class CarouselImageModelAdmin(
     BaseModelAdmin,
     ModelWithNameAdminMixin,
     ModelWithImageAdminMixin,
+    ModelWithFKToProductAdminMixin,
     admin.ModelAdmin,
 ):
     """Admin class for managing CarouselImage instances."""
 
-    readonly_fields = ("get_image",)
     list_display_links = ("id", "name")
-    list_display = ("id", "name", "get_image")
-    fields = ("name", "description", ("image", "get_image"))
+    readonly_fields = ("get_image", "get_product_link")
+    list_display = ("id", "name", "get_product_link", "get_image")
+    fields = (
+        "name",
+        "description",
+        ("image", "get_image"),
+        ("product", "get_product_link"),
+    )
