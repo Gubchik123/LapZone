@@ -32,7 +32,12 @@
 			<div class="carousel-inner">
 				{% for image in carousel_images %}
 				<div class="carousel-item" data-bs-interval="5000">
-					<img class="d-block mx-auto" src="{{ image.image.url }}" />
+					<a 
+                        class="opacity-1"
+                        href="{{ image.product.get_absolute_url }}"
+                    >
+                        <img class="d-block mx-auto" src="{{ image.image.url }}" />
+                    </a>
 				</div>
 				{% endfor %}
 			</div>
@@ -137,9 +142,14 @@
 {% block scripts %}
 {{ block.super }}
 
-<!-- Script to add "active" class selector for first carousel item -->
 <script defer>
+    // Script to add "active" class selector for first carousel item
 	let first_carousel_image = document.querySelectorAll(".carousel-item")[0];
 	first_carousel_image.classList.add("active");
+
+    // Script to replace empty links with "#" for carousel images
+    document.querySelectorAll(".carousel-item a").forEach(function (link) {
+        if (!link.href.includes("/product/")) link.href = "#";
+    });
 </script>
 {% endblock scripts %}
