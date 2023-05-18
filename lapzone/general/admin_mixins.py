@@ -20,14 +20,16 @@ class ModelWithFKToProductAdminMixin:
 
     list_filter = ("product",)
 
-    def get_product_link(self, model: Model) -> SafeText:
+    def get_product_link(self, model: Model) -> SafeText | str:
         """Returns link to the admin page for shot.product"""
-        link_to_product = reverse(
-            "admin:shop_product_change", args=(model.product.pk,)
-        )
-        return mark_safe(
-            f"<a href='{link_to_product}'>{model.product.name}</a>"
-        )
+        if model.product:
+            link_to_product = reverse(
+                "admin:shop_product_change", args=(model.product.pk,)
+            )
+            return mark_safe(
+                f"<a href='{link_to_product}'>{model.product.name}</a>"
+            )
+        return "None"
 
     get_product_link.short_description = "Product"
 
