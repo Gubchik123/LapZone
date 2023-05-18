@@ -309,6 +309,7 @@ class CarouselImageModelTestCase(
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
     ModelWithDescriptionAndImageTestMixin,
+    ModelWithFKToProductTestMixin,
     TestCase,
 ):
     """Test cases for the CarouselImage model."""
@@ -327,5 +328,23 @@ class CarouselImageModelTestCase(
     def setUpTestData(cls) -> None:
         """Creates the first CarouselImage for testing."""
         models.CarouselImage.objects.create(
-            name="test carousel image", image="./some_image.jpg"
+            name="test carousel image",
+            image="./some_image.jpg",
+            product=models.Product.objects.create(
+                name="Test laptop",
+                description="Some content",
+                image="./some_image.jpg",
+                price=1000,
+                year=2023,
+                brand=models.Brand.objects.create(name="test brand"),
+                category=models.Category.objects.create(name="test category"),
+            ),
         )
+
+    def test_product_blank(self):
+        """Test that the product field can be blank."""
+        self.assertTrue(self.model._meta.get_field("product").blank)
+
+    def test_product_null(self):
+        """Test that the product field can be null."""
+        self.assertTrue(self.model._meta.get_field("product").null)
