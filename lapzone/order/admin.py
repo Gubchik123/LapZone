@@ -10,8 +10,23 @@ from general.admin_mixins import (
 from .models import Order, OrderItem
 
 
+class ModelWithTotalPriceAdminMixin:
+    """Admin mixin for managing instances that
+    inherited form abstract ModelWithTotalPrice."""
+
+    def get_total_price(self, model: Order | OrderItem) -> str:
+        """Returns string: total_price + '$'."""
+        return f"{model.total_price} $"
+
+    get_total_price.short_description = "Total price"
+
+
 @admin.register(Order)
-class OrderModelAdmin(ModelWithFKToUserAdminMixin, admin.ModelAdmin):
+class OrderModelAdmin(
+    ModelWithFKToUserAdminMixin,
+    ModelWithTotalPriceAdminMixin,
+    admin.ModelAdmin,
+):
     """Admin class for managing Order instances."""
 
     list_filter = ("user__username",)
@@ -19,16 +34,13 @@ class OrderModelAdmin(ModelWithFKToUserAdminMixin, admin.ModelAdmin):
     list_display = ("id", "get_total_price", "get_user_link", "created")
     fields = (("user", "get_user_link"), "total_price", "created")
 
-    def get_total_price(self, order: Order) -> str:
-        """Returns string: total_price + '$'"""
-        return f"{order.total_price} $"
-
-    get_total_price.short_description = "Total price"
-
 
 @admin.register(OrderItem)
 class OrderItemModelAdmin(
-    ModelWithPriceAdminMixin, ModelWithFKToProductAdminMixin, admin.ModelAdmin
+    ModelWithPriceAdminMixin,
+    ModelWithFKToProductAdminMixin,
+    ModelWithTotalPriceAdminMixin,
+    admin.ModelAdmin,
 ):
     """Admin class for managing OrderItem instances."""
 
@@ -37,17 +49,18 @@ class OrderItemModelAdmin(
         "get_product_link",
         "get_price",
         "quantity",
+        "get_total_price",
         "get_order_link",
     )
     fields = (
-        ("price", "quantity"),
+        ("price", "quantity", "get_total_price"),
         ("product", "get_product_link"),
         ("order", "get_order_link"),
     )
     search_fields = ("product__name",)
     search_help_text = "Searching by product"
     list_filter = ("order__id", "product__name")
-    readonly_fields = ("get_product_link", "get_order_link")
+    readonly_fields = ("get_product_link", "get_order_link", "get_total_price")
 
     def get_order_link(self, order_item: OrderItem) -> SafeText:
         """Returns link to the admin page for order.order"""
