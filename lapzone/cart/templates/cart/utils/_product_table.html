@@ -1,0 +1,92 @@
+<div class="white-space-nowrap overflow-auto">
+    <table class="table">
+        <thead>
+            <tr
+                class="d-flex justify-content-between align-items-center border-1 border-bottom"
+            >
+                <th class="me-4">Image</th>
+                <th>Product</th>
+                <th>Unit price</th>
+                <th>Quantity</th>
+                <th>Price</th>
+                {% if app == "cart" %}
+                <th>Remove</th>
+                {% endif %}
+            </tr>
+        </thead>
+        <tbody>
+            {% for item in collection %}
+            {% with product_url=item.product.get_absolute_url %}
+            <tr
+                class="d-flex justify-content-between align-items-center border-1 border-bottom py-2"
+            >
+                <!-- Product image -->
+                <td class="image-td me-4">
+                    <a href="{{ product_url }}" class="opacity-1">
+                        <img
+                            class="img-fluid w-100"
+                            alt="{{ item.product.name }} image"
+                            src="{{ item.product.image.url }}"
+                        />
+                    </a>
+                </td>
+                <!-- Product name -->
+                <td>
+                    <a href="{{ product_url }}" class="fs-5 white-space-normal">
+                        {{ item.product.name }}
+                    </a>
+                </td>
+                <!-- Product unit price -->
+                <td 
+                    class="unit_price fs-4"
+                    id="unit_price_{{ forloop.counter }}"
+                >
+                    {{ item.price }}$
+                </td>
+                <!-- Quantity number input -->
+                <td>
+                    {% if app == "cart" %}
+                    <input 
+                        min="1" 
+                        max="10" 
+                        type="number"
+                        name="quantity" 
+                        value="{{ item.quantity }}"
+                        id="quantity_field_{{ forloop.counter }}"
+                        data-product_id="{{ item.product.id }}"
+                        class="form-control text-center fs-5 me-auto ms-auto"
+                    >
+                    {% else %}
+                    <span class="fs-4">
+                        {{ item.quantity }}
+                    </span>
+                    {% endif %} 
+                </td>
+                <!-- Product total price -->
+                <td 
+                    class="fs-4"
+                    id="total_price_{{ forloop.counter }}"
+                >
+                    {{ item.total_price }}$
+                </td>
+                {% if app == "cart" %}
+                <!-- "Remove" button -->
+                <td>
+                    <button 
+                        title="Remove"
+                        data-product_id="{{ item.product.id }}"
+                        class="remove btn fs-6 border-0 panel-bg-color"
+                    >
+                        <ion-icon 
+                            name="trash" 
+                            style="color: red;"
+                        ></ion-icon>
+                    </button>
+                </td>
+                {% endif %}
+            </tr>
+            {% endwith %}
+            {% endfor %}
+        </tbody>
+    </table>
+</div>
