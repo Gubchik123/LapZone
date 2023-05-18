@@ -315,6 +315,7 @@ class OrderDetailViewTestCase(
                 order=cls.order,
                 price=500,
                 quantity=1,
+                total_price=500,
                 product=Product.objects.create(
                     name=f"Test product {count}",
                     description="Some content",

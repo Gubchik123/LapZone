@@ -1,5 +1,3 @@
-import uuid
-
 from django.db import models
 from django.urls import reverse
 
@@ -12,15 +10,26 @@ from general.models import (
 )
 
 
+class ModelWithTotalPrice(models.Model):
+    """Abstract model with 'total_price' FloatField"""
+
+    total_price = models.FloatField(blank=False, verbose_name="Total price")
+
+    class Meta:
+        abstract = True
+
+
 class Order(
-    ModelWithUUIDPK, ModelWithFKToUser, ModelWithCreatedDateTime, models.Model
+    ModelWithUUIDPK,
+    ModelWithFKToUser,
+    ModelWithCreatedDateTime,
+    ModelWithTotalPrice,
+    models.Model,
 ):
     """
     A model representing a user order.
     Fields: id (uuid4), user, created, total_price.
     """
-
-    total_price = models.FloatField(blank=False, verbose_name="Total price")
 
     def __str__(self) -> str:
         """Returns string representation of the Order model."""
@@ -38,10 +47,12 @@ class Order(
         ordering = ["-created", "-total_price"]
 
 
-class OrderItem(ModelWithFKToProduct, ModelWithPrice, models.Model):
+class OrderItem(
+    ModelWithFKToProduct, ModelWithPrice, ModelWithTotalPrice, models.Model
+):
     """
     A model representing an item in the order.
-    Fields: product, price, quantity, order.
+    Fields: product, price, total_price, quantity, order.
     """
 
     quantity = models.PositiveIntegerField(

@@ -108,6 +108,7 @@ def _create_order_for_user_with_data_from_(
             product=item_dict["product"],
             quantity=item_dict["quantity"],
             price=item_dict["price"],
+            total_price=item_dict["price"] * item_dict["quantity"],
         )
     return order.get_absolute_url()
 
