@@ -13,11 +13,28 @@ from general.test_mixins.for_models import (
 )
 
 
+class ModelWithTotalPriceTestMixin:
+    """Mixin for testing the 'total_price' field parameters
+    for models that inherited from abstract ModelWithTotalPrice."""
+
+    def test_total_price_blank(self):
+        """Test that the total_price field is not blank."""
+        self.assertFalse(self.model._meta.get_field("total_price").blank)
+
+    def test_total_price_verbose_name(self):
+        """Test that the total_price field's verbose name is "Total price"."""
+        self.assertEqual(
+            self.model._meta.get_field("total_price").verbose_name,
+            "Total price",
+        )
+
+
 class OrderModelTestCase(
     ModelMetaOptionsTestMixin,
     ModelWithUUIDPKTestMixin,
     ModelWithCreatedDateTimeTestMixin,
     ModelWithFKToUserTestMixin,
+    ModelWithTotalPriceTestMixin,
     TestCase,
 ):
     """Tests for the Order model."""
@@ -49,22 +66,12 @@ class OrderModelTestCase(
             self.order.get_absolute_url(), f"/order/{self.order.id}/"
         )
 
-    def test_total_price_blank(self):
-        """Test that the total_price field is not blank."""
-        self.assertFalse(self.model._meta.get_field("total_price").blank)
-
-    def test_total_price_verbose_name(self):
-        """Test that the total_price field's verbose name is "Total price"."""
-        self.assertEqual(
-            self.model._meta.get_field("total_price").verbose_name,
-            "Total price",
-        )
-
 
 class OrderItemModelTestCase(
     ProductTestMixin,
     ModelMetaOptionsTestMixin,
     ModelWithPriceTestMixin,
+    ModelWithTotalPriceTestMixin,
     ModelWithFKToProductTestMixin,
     TestCase,
 ):
@@ -86,7 +93,11 @@ class OrderItemModelTestCase(
             total_price=1000,
         )
         cls.order_item = OrderItem.objects.create(
-            order=cls.order, product=cls.product, price=1000, quantity=1
+            order=cls.order,
+            product=cls.product,
+            price=1000,
+            quantity=1,
+            total_price=1000,
         )
 
     def test_model_string_representation(self):
