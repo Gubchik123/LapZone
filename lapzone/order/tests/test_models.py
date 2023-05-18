@@ -2,6 +2,7 @@ from django.test import TestCase
 
 from shop import models as shop_models
 from order.models import Order, OrderItem
+from general.test_mixins.for_views import ProductTestMixin
 from general.test_mixins.for_models import (
     ModelMetaOptionsTestMixin,
     ModelWithUUIDPKTestMixin,
@@ -61,6 +62,7 @@ class OrderModelTestCase(
 
 
 class OrderItemModelTestCase(
+    ProductTestMixin,
     ModelMetaOptionsTestMixin,
     ModelWithPriceTestMixin,
     ModelWithFKToProductTestMixin,
@@ -76,6 +78,7 @@ class OrderItemModelTestCase(
     @classmethod
     def setUpTestData(cls) -> None:
         """Creates the first OrderItem for testing."""
+        super().setUpTestData()
         cls.order = Order.objects.create(
             user=shop_models.User.objects.create(
                 username="Someone", email="test@test.com", password="123"
@@ -83,20 +86,7 @@ class OrderItemModelTestCase(
             total_price=1000,
         )
         cls.order_item = OrderItem.objects.create(
-            order=cls.order,
-            product=shop_models.Product.objects.create(
-                name="Test laptop",
-                description="Some content",
-                image="./some_image.jpg",
-                price=1000,
-                year=2023,
-                brand=shop_models.Brand.objects.create(name="test brand"),
-                category=shop_models.Category.objects.create(
-                    name="test category"
-                ),
-            ),
-            price=1000,
-            quantity=1,
+            order=cls.order, product=cls.product, price=1000, quantity=1
         )
 
     def test_model_string_representation(self):

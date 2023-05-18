@@ -8,7 +8,11 @@ from django.db.models import QuerySet
 
 from shop.forms import ProductFilterForm, ReviewModelForm
 from shop.models import Brand, Category, Product, CarouselImage
-from general.test_mixins.for_views import ViewTestMixin, UserTestMixin
+from general.test_mixins.for_views import (
+    ViewTestMixin,
+    UserTestMixin,
+    ProductTestMixin,
+)
 
 
 class ShopAppViewsTestMixin(ViewTestMixin):
@@ -326,26 +330,7 @@ class ProductListByBrandViewTestCase(ProductListViewTestMixin, TestCase):
     queryset = Product.objects.filter(brand__slug="test-brand")
 
 
-class ProductDetailViewTestMixin:
-    """Test mixin with creating one product before testing."""
-
-    @classmethod
-    def setUpTestData(cls) -> None:
-        """Set up test data by creating 1 product with brand and category."""
-        cls.product = Product.objects.create(
-            name=f"Test product",
-            description="Some content",
-            image=f"./some_image.jpg",
-            price=1500,
-            year=2023,
-            brand=Brand.objects.create(name="Test brand"),
-            category=Category.objects.create(name="Test category"),
-        )
-
-
-class ProductDetailViewTestCase(
-    ProductDetailViewTestMixin, ViewTestMixin, TestCase
-):
+class ProductDetailViewTestCase(ProductTestMixin, ViewTestMixin, TestCase):
     """Tests for the ProductDetailView."""
 
     name = "shop:product_detail"
@@ -384,7 +369,7 @@ class ProductDetailViewTestCase(
         )
 
 
-class ReviewFormViewTestCase(ProductDetailViewTestMixin, TestCase):
+class ReviewFormViewTestCase(ProductTestMixin, TestCase):
     """Tests for the ReviewFormView."""
 
     def check_review_form_for_validity_by_(
@@ -451,7 +436,7 @@ class LikeViewTestCase(UserTestMixin, TestCase):
     def setUpTestData(cls) -> None:
         """Set up test data by creating 1 product and 1 user."""
         super().setUpTestData()
-        ProductDetailViewTestMixin.setUpTestData()
+        ProductTestMixin.setUpTestData()
 
     def test_there_is_no_like_icon_on_product_page_if_not_authenticated(self):
         """

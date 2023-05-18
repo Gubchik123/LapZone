@@ -5,28 +5,10 @@ from django.test import TestCase
 from django.http import HttpResponse
 from django.contrib.messages import get_messages
 
-from general.test_mixins.for_views import ViewTestMixin
-from shop.models import Brand, Category, Product
+from general.test_mixins.for_views import ViewTestMixin, ProductTestMixin
 
 
-class CartViewTestMixin:
-    """Mixin for testing the "Cart" app views."""
-
-    @classmethod
-    def setUpTestData(cls) -> None:
-        """Creates a product for testing the cart views."""
-        cls.product = Product.objects.create(
-            name=f"Test product",
-            description="Some content",
-            image=f"./some_image.jpg",
-            price=1500,
-            year=2023,
-            brand=Brand.objects.create(name="Test brand"),
-            category=Category.objects.create(name="Test category"),
-        )
-
-
-class CartTemplateViewTestCase(ViewTestMixin, CartViewTestMixin, TestCase):
+class CartTemplateViewTestCase(ViewTestMixin, ProductTestMixin, TestCase):
     """Tests for the CartTemplateView."""
 
     url = "/cart/"
@@ -67,7 +49,7 @@ class CartTemplateViewTestCase(ViewTestMixin, CartViewTestMixin, TestCase):
         self.assertContains(response, f"{self.product.price}.0$")
 
 
-class CartPOSTViewWithRequiredProductIDTestMixin(CartViewTestMixin):
+class CartPOSTViewWithRequiredProductIDTestMixin(ProductTestMixin):
     """Mixin for testing the "Cart" app views
     that handles POST HTTP method with required product ID in request body."""
 

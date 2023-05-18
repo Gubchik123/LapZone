@@ -15,12 +15,13 @@ from shop.models import Brand, Category, Product
 from general.test_mixins.for_views import (
     ViewTestMixin,
     UserTestMixin,
+    ProductTestMixin,
     LoginRequiredTestMixin,
     DeleteViewTestMixin,
 )
 
 
-class OrderCheckoutFormViewTestCase(ViewTestMixin, TestCase):
+class OrderCheckoutFormViewTestCase(ProductTestMixin, ViewTestMixin, TestCase):
     """Tests for the OrderCheckoutFormView."""
 
     url = "/order/checkout/"
@@ -30,21 +31,13 @@ class OrderCheckoutFormViewTestCase(ViewTestMixin, TestCase):
     @classmethod
     def setUpTestData(cls) -> None:
         """Creates a user and a product for testing the order checkout page."""
+        super().setUpTestData()
         cls.user = User.objects.create_user(
             username="testuser",
             email="test@example.com",
             password="testpass",
             first_name="Test",
             last_name="User",
-        )
-        cls.product = Product.objects.create(
-            name=f"Test product",
-            description="Some content",
-            image=f"./some_image.jpg",
-            price=1500,
-            year=2023,
-            brand=Brand.objects.create(name="Test brand"),
-            category=Category.objects.create(name="Test category"),
         )
 
     def test_order_checkout_page_message_with_empty_cart(self):

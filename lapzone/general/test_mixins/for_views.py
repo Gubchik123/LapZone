@@ -2,6 +2,8 @@ from django.urls import reverse
 from django.contrib.messages import get_messages
 from django.contrib.auth.models import User
 
+from shop.models import Category, Brand, Product
+
 
 class _ViewTestMixin:
     """Base test mixin for view test mixins."""
@@ -62,6 +64,23 @@ class UserTestMixin:
         """Sets up test data by creating an user."""
         cls.user = User.objects.create_user(
             username="testuser", email="test@example.com", password="testpass"
+        )
+
+
+class ProductTestMixin:
+    """Test mixin for testing views that work with a product."""
+
+    @classmethod
+    def setUpTestData(cls) -> None:
+        """Sets up test data by creating an user."""
+        cls.product = Product.objects.create(
+            name="Test product",
+            description="Some content",
+            image="./some_image.jpg",
+            price=1500,
+            year=2023,
+            brand=Brand.objects.create(name="Test brand"),
+            category=Category.objects.create(name="Test category"),
         )
 
 

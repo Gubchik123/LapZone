@@ -1,6 +1,7 @@
 from django.test import TestCase
 
 from shop import models
+from general.test_mixins.for_views import ProductTestMixin
 from general.test_mixins.for_models import (
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
@@ -71,6 +72,7 @@ class ModelWithDescriptionAndImageTestMixin(
 
 
 class ProductModelTestCase(
+    ProductTestMixin,
     ModelMetaOptionsTestMixin,
     ModelWithNameAndSlugTestMixin,
     ModelWithDescriptionAndImageTestMixin,
@@ -88,22 +90,9 @@ class ProductModelTestCase(
 
     url_pattern_name = "product_detail"
 
-    expected_slug = "test-laptop"
-    expected_url = "/product/test-laptop/"
-    expected_image_name = "test-laptop.webp"
-
-    @classmethod
-    def setUpTestData(cls) -> None:
-        """Creates the first Product for testing."""
-        models.Product.objects.create(
-            name="Test laptop",
-            description="Some content",
-            image="./some_image.jpg",
-            price=1000,
-            year=2023,
-            brand=models.Brand.objects.create(name="test brand"),
-            category=models.Category.objects.create(name="test category"),
-        )
+    expected_slug = "test-product"
+    expected_url = "/product/test-product/"
+    expected_image_name = "test-product.webp"
 
     def test_year_verbose_name(self):
         """Test that the year field's verbose name is "Year"."""
@@ -129,7 +118,7 @@ class ProductModelTestCase(
 
     def test_brand_on_delete_cascade(self):
         """Test that the brand field's on_delete is CASCADE."""
-        models.Product.objects.get(name="Test laptop").delete()
+        models.Product.objects.get(name="Test product").delete()
         with self.assertRaises(models.Brand.DoesNotExist):
             models.Brand.objects.get(id=1)
 
@@ -154,6 +143,7 @@ class ProductModelTestCase(
 
 
 class ProductShotModelTestCase(
+    ProductTestMixin,
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
     ModelWithDescriptionAndImageTestMixin,
@@ -170,28 +160,22 @@ class ProductShotModelTestCase(
     description_blank = True
     image_upload_to = "product_shots/"
 
-    expected_image_name = "test-laptop-shot-1.webp"
+    expected_image_name = "test-product-shot-1.webp"
 
     @classmethod
     def setUpTestData(cls) -> None:
         """Creates the first ProductShot for testing."""
+        super().setUpTestData()
         models.ProductShot.objects.create(
             name="test product shot",
             description="For the first product",
             image="./some_image.jpg",
-            product=models.Product.objects.create(
-                name="Test laptop",
-                description="Some content",
-                image="./some_image.jpg",
-                price=1000,
-                year=2023,
-                brand=models.Brand.objects.create(name="test brand"),
-                category=models.Category.objects.create(name="test category"),
-            ),
+            product=cls.product,
         )
 
 
 class LikeModelTestCase(
+    ProductTestMixin,
     ModelMetaOptionsTestMixin,
     ModelWithCreatedDateTimeTestMixin,
     ModelWithFKToProductTestMixin,
@@ -208,19 +192,12 @@ class LikeModelTestCase(
     @classmethod
     def setUpTestData(cls) -> None:
         """Creates the first Like for testing."""
+        super().setUpTestData()
         models.Like.objects.create(
             user=models.User.objects.create(
                 username="Someone", email="test@test.com", password="123"
             ),
-            product=models.Product.objects.create(
-                name="Test laptop",
-                description="Some content",
-                image="./some_image.jpg",
-                price=1000,
-                year=2023,
-                brand=models.Brand.objects.create(name="test brand"),
-                category=models.Category.objects.create(name="test category"),
-            ),
+            product=cls.product,
         )
 
     def test_model_string_representation(self):
@@ -230,6 +207,7 @@ class LikeModelTestCase(
 
 
 class ReviewModelTestCase(
+    ProductTestMixin,
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
     ModelWithCreatedDateTimeTestMixin,
@@ -249,19 +227,12 @@ class ReviewModelTestCase(
     @classmethod
     def setUpTestData(cls) -> None:
         """Creates the first Review for testing."""
+        super().setUpTestData()
         models.Review.objects.create(
             name="Test user",
             body="Some content",
             parent=None,
-            product=models.Product.objects.create(
-                name="Test laptop",
-                description="Some content",
-                image="./some_image.jpg",
-                price=1000,
-                year=2023,
-                brand=models.Brand.objects.create(name="test brand"),
-                category=models.Category.objects.create(name="test category"),
-            ),
+            product=cls.product,
         )
 
     def test_model_string_representation(self):
@@ -306,6 +277,7 @@ class ReviewModelTestCase(
 
 
 class CarouselImageModelTestCase(
+    ProductTestMixin,
     ModelMetaOptionsTestMixin,
     ModelWithNameTestMixin,
     ModelWithDescriptionAndImageTestMixin,
@@ -327,18 +299,11 @@ class CarouselImageModelTestCase(
     @classmethod
     def setUpTestData(cls) -> None:
         """Creates the first CarouselImage for testing."""
+        super().setUpTestData()
         models.CarouselImage.objects.create(
             name="test carousel image",
             image="./some_image.jpg",
-            product=models.Product.objects.create(
-                name="Test laptop",
-                description="Some content",
-                image="./some_image.jpg",
-                price=1000,
-                year=2023,
-                brand=models.Brand.objects.create(name="test brand"),
-                category=models.Category.objects.create(name="test category"),
-            ),
+            product=cls.product,
         )
 
     def test_product_blank(self):

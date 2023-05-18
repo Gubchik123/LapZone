@@ -329,7 +329,7 @@ class ModelWithFKToProductTestMixin:
 
     def test_product_on_delete_cascade(self):
         """Test that the product field's on_delete is CASCADE."""
-        Product.objects.get(name="Test laptop").delete()
+        Product.objects.get(name="Test product").delete()
         with self.assertRaises(self.model.DoesNotExist):
             self.model.objects.get(id=1)
 
