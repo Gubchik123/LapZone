@@ -210,11 +210,12 @@ class Review(
 class CarouselImage(
     ModelWithName,
     ModelWithDescriptionAndImage,
+    ModelWithFKToProduct,
     models.Model,
 ):
     """
     A model representing a carousel image.
-    Fields: name, description, image
+    Fields: name, description, image, product.
     """
 
     def save(self, *args, **kwargs):
@@ -234,3 +235,5 @@ class CarouselImage(
 # Redefining an abstract model field parameters
 CarouselImage._meta.get_field("description").blank = True
 CarouselImage._meta.get_field("image").upload_to = "carousel_images/"
+CarouselImage._meta.get_field("product").blank = True
+CarouselImage._meta.get_field("product").null = True
