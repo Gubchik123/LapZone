@@ -226,9 +226,12 @@
                             </h2>
                             {% block to_right_of_content_title %}{% endblock %} 
                         </div>
-                        {% block messages %}
-                        <div>{% include 'utils/_messages.html' %}</div> 
-                        {% endblock messages %} 
+                        {# Flashed messages #} 
+                        <div>
+                        {% for message in messages %}
+                            {% include 'utils/_alert.html' with message=message category=message.level_tag dismissible=True only %}
+                        {% endfor %}
+                        </div>
 					</div>
 					{% block content %}{% endblock %}
 				</div>
