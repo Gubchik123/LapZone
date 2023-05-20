@@ -36,7 +36,7 @@
 	<span></span>
 	{% endif %} 
     
-    {% if product.id|stringformat:"s" in cart.cart %}
+    {% if product.id|stringformat:"s" in cart %}
 	<a href="{% url 'cart:detail' %}" class="btn btn-success ms-2">
 		<ion-icon name="cart"></ion-icon>
 	</a>

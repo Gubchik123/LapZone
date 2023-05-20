@@ -97,7 +97,7 @@
 				<div
 					class="product d-inline-block d-flex flex-column justify-content-between rounded p-2 m-0 me-3"
 				>
-					{% include 'shop/utils/_product_card.html' with product=product %} 
+                    {% include 'shop/utils/_product_card.html' with product=product liked_products=liked_products user=user cart=cart.cart only %} 
 				</div>
 				{% endfor %}
 			</div>
