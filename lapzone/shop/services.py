@@ -36,7 +36,7 @@ def get_all_categories() -> QuerySet[models.Category]:
 
 def get_all_carousel_images() -> QuerySet[models.CarouselImage]:
     """Returns a QuerySet with all carousel images."""
-    return models.CarouselImage.objects.all()
+    return models.CarouselImage.objects.all().select_related("product")
 
 
 def are_ordering_parameters_valid(order_by: str, order_dir: str) -> bool:
