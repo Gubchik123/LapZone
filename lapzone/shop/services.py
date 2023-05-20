@@ -16,7 +16,9 @@ logger = logging.getLogger(__name__)
 
 def get_recently_added_products(count: int) -> QuerySet[models.Product]:
     """Returns the given number of recently added products."""
-    return models.Product.objects.order_by("-id")[:count]
+    return models.Product.objects.order_by("-id").only(
+        "name", "slug", "image", "price"
+    )[:count]
 
 
 def get_liked_products_for_(user: User) -> list[int]:
@@ -36,7 +38,11 @@ def get_all_categories() -> QuerySet[models.Category]:
 
 def get_all_carousel_images() -> QuerySet[models.CarouselImage]:
     """Returns a QuerySet with all carousel images."""
-    return models.CarouselImage.objects.all().select_related("product")
+    return (
+        models.CarouselImage.objects.all()
+        .select_related("product")
+        .only("image", "product__slug")
+    )
 
 
 def are_ordering_parameters_valid(order_by: str, order_dir: str) -> bool:
