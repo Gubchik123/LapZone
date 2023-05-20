@@ -13,42 +13,8 @@ from .models import Product, Category, Brand
 from .forms import ProductFilterForm, ReviewModelForm
 
 
-class HomeView(BaseView, generic.TemplateView):
-    """View for the home page and the "/" site URL."""
-
-    template_name = "shop/home.html"
-
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
-        """Adds some content in context data and returns it."""
-        context = super().get_context_data(**kwargs)
-        context[
-            "recently_added_products"
-        ] = services.get_recently_added_products(10)
-        if self.request.user.is_authenticated:
-            context["liked_products"] = services.get_liked_products_for_(
-                self.request.user
-            )
-        context["brands"] = services.get_all_brands()
-        context["categories"] = services.get_all_categories()
-        context["carousel_images"] = services.get_all_carousel_images()
-        return context
-
-
-class _ProductListView(BaseView, generic.ListView):
-    """Base ListView for displaying products."""
-
-    model = Product
-    paginate_by = 12
-    object_list = Product.objects.all()
-
-    def get_ordering(self) -> list[str]:
-        """Returns list of ordering after checking GET parameters"""
-        order_by = self.request.GET.get("orderby")
-        order_dir = self.request.GET.get("orderdir")
-
-        if services.are_ordering_parameters_valid(order_by, order_dir):
-            return [services.get_order_symbol_by_(order_dir) + order_by]
-        return []
+class ShopViewMixin(BaseView):
+    """Mixin for the "Shop" views that handles GET requests."""
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         """
@@ -60,6 +26,40 @@ class _ProductListView(BaseView, generic.ListView):
                 self.request.user
             )
         return context
+
+
+class HomeView(ShopViewMixin, generic.TemplateView):
+    """View for the home page and the "/" site URL."""
+
+    template_name = "shop/home.html"
+
+    def get_context_data(self, **kwargs) -> dict[str, Any]:
+        """Adds some content in context data and returns it."""
+        context = super().get_context_data(**kwargs)
+        context[
+            "recently_added_products"
+        ] = services.get_recently_added_products(10)
+        context["brands"] = services.get_all_brands()
+        context["categories"] = services.get_all_categories()
+        context["carousel_images"] = services.get_all_carousel_images()
+        return context
+
+
+class _ProductListView(ShopViewMixin, generic.ListView):
+    """Base ListView for displaying products."""
+
+    model = Product
+    paginate_by = 12
+    queryset = Product.objects.all()
+
+    def get_ordering(self) -> list[str]:
+        """Returns list of ordering after checking GET parameters"""
+        order_by = self.request.GET.get("orderby")
+        order_dir = self.request.GET.get("orderdir")
+
+        if services.are_ordering_parameters_valid(order_by, order_dir):
+            return [services.get_order_symbol_by_(order_dir) + order_by]
+        return []
 
 
 class AllProductsListView(_ProductListView):
