@@ -50,7 +50,7 @@ class _ProductListView(_ShopViewMixin, generic.ListView):
 
     model = Product
     paginate_by = 12
-    queryset = Product.objects.all()
+    queryset = Product.objects.all().only("name", "slug", "image", "price")
 
     def get_ordering(self) -> list[str]:
         """Returns list of ordering after checking GET parameters"""
