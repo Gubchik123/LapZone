@@ -21,7 +21,7 @@
                 <div 
                     class="product w-100 d-flex flex-column justify-content-between rounded mb-3"
                 >
-                    {% include 'shop/utils/_product_card.html' with product=like.product %}
+                    {% include 'shop/utils/_product_card.html' with product=like.product user=user cart=cart.cart only %}
                 </div>
             </div>
             {% endfor %}
