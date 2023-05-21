@@ -47,6 +47,20 @@ class Order(
         ordering = ["-created", "-total_price"]
 
 
+class OrderItemCustomManager(models.Manager):
+    """Custom manager for the OrderItem model."""
+
+    def all(self):
+        """Returns all OrderItem objects using the select_related and defer."""
+        defer_fields = ("description", "price", "year", "brand", "category")
+        return (
+            super()
+            .all()
+            .select_related("product")
+            .defer(*[f"product__{field}" for field in defer_fields])
+        )
+
+
 class OrderItem(
     ModelWithFKToProduct, ModelWithPrice, ModelWithTotalPrice, models.Model
 ):
@@ -61,6 +75,8 @@ class OrderItem(
     order = models.ForeignKey(
         Order, on_delete=models.CASCADE, verbose_name="Order"
     )
+
+    objects = OrderItemCustomManager()
 
     def __str__(self) -> str:
         """Returns string representation of the OrderItem model."""
