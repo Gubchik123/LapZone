@@ -22,7 +22,9 @@ class Cart:
         """
         Iterates over the items in the cart and yield each item dictionary.
         """
-        for product in Product.objects.filter(id__in=self.cart.keys()):
+        for product in Product.objects.filter(id__in=self.cart.keys()).only(
+            "name", "slug", "image"
+        ):
             self.cart[str(product.id)]["product"] = product
 
         for item in self.cart.values():
