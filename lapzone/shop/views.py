@@ -13,7 +13,7 @@ from .models import Product, Category, Brand
 from .forms import ProductFilterForm, ReviewModelForm
 
 
-class ShopViewMixin(BaseView):
+class _ShopViewMixin(BaseView):
     """Mixin for the "Shop" views that handles GET requests."""
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
@@ -28,7 +28,7 @@ class ShopViewMixin(BaseView):
         return context
 
 
-class HomeView(ShopViewMixin, generic.TemplateView):
+class HomeView(_ShopViewMixin, generic.TemplateView):
     """View for the home page and the "/" site URL."""
 
     template_name = "shop/home.html"
@@ -45,7 +45,7 @@ class HomeView(ShopViewMixin, generic.TemplateView):
         return context
 
 
-class _ProductListView(ShopViewMixin, generic.ListView):
+class _ProductListView(_ShopViewMixin, generic.ListView):
     """Base ListView for displaying products."""
 
     model = Product
