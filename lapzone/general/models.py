@@ -154,6 +154,22 @@ class ModelWithCreatedDateTime(models.Model):
         abstract = True
 
 
+class _ModelWithFKToProductCustomManager(models.Manager):
+    """Custom manager for the models that inherit from ModelWithFKToProduct."""
+
+    def all(self):
+        """
+        Returns all objects using the select_related and defer for 'product'.
+        """
+        defer_fields = ("description", "year", "brand", "category")
+        return (
+            super()
+            .all()
+            .select_related("product")
+            .defer(*[f"product__{field}" for field in defer_fields])
+        )
+
+
 class ModelWithFKToProduct(models.Model):
     """Abstract model with 'product' ForeignKey field"""
 
@@ -162,6 +178,8 @@ class ModelWithFKToProduct(models.Model):
         on_delete=models.CASCADE,
         verbose_name="Product",
     )
+
+    objects = _ModelWithFKToProductCustomManager()
 
     class Meta:
         abstract = True

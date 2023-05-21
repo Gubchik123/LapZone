@@ -153,20 +153,6 @@ class ModelWithCreatedDateTimeAndFKToProduct(
         abstract = True
 
 
-class LikeCustomManager(models.Manager):
-    """Custom manager for the Like model."""
-
-    def all(self):
-        """Returns all Like objects using the select_related and defer."""
-        defer_fields = ("description", "year", "brand", "category")
-        return (
-            super()
-            .all()
-            .select_related("product")
-            .defer(*[f"product__{field}" for field in defer_fields])
-        )
-
-
 class Like(
     ModelWithCreatedDateTimeAndFKToProduct, ModelWithFKToUser, models.Model
 ):
@@ -174,8 +160,6 @@ class Like(
     A model representing a product like from user.
     Fields: created, product, user
     """
-
-    objects = LikeCustomManager()
 
     def __str__(self) -> str:
         """Gets string representation of the Like model."""
