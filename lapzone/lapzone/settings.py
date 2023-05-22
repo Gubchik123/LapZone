@@ -1,11 +1,11 @@
+import logging
 import os
 import sys
-import logging
 from pathlib import Path
 
-from dotenv import load_dotenv
-from django.urls import reverse_lazy
 from django.contrib.messages import constants as messages
+from django.urls import reverse_lazy
+from dotenv import load_dotenv
 
 
 load_dotenv()
@@ -48,12 +48,14 @@ INSTALLED_APPS = [
 
 MIDDLEWARE = [
     "django.middleware.security.SecurityMiddleware",
+    "django.middleware.cache.UpdateCacheMiddleware",
     "django.contrib.sessions.middleware.SessionMiddleware",
     "django.middleware.common.CommonMiddleware",
     "django.middleware.csrf.CsrfViewMiddleware",
     "django.contrib.auth.middleware.AuthenticationMiddleware",
     "django.contrib.messages.middleware.MessageMiddleware",
     "django.middleware.clickjacking.XFrameOptionsMiddleware",
+    "django.middleware.cache.FetchFromCacheMiddleware",
 ]
 
 ROOT_URLCONF = "lapzone.urls"
@@ -306,11 +308,12 @@ CKEDITOR_CONFIGS = {
 if DEBUG and not TESTING:
     import mimetypes
 
+
     mimetypes.add_type("application/javascript", ".js", True)
 
     INSTALLED_APPS.insert(15, "debug_toolbar")
 
-    MIDDLEWARE.insert(1, "debug_toolbar.middleware.DebugToolbarMiddleware")
+    MIDDLEWARE.insert(2, "debug_toolbar.middleware.DebugToolbarMiddleware")
 
     INTERNAL_IPS = ["127.0.0.1", "localhost"]
 
