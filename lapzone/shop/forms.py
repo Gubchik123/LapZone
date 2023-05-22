@@ -3,7 +3,8 @@ from django.conf import settings
 from django.db.models import QuerySet
 from snowpenguin.django.recaptcha3.fields import ReCaptchaField
 
-from .models import Product, Category, Brand, Review
+from . import services
+from .models import Product, Review
 
 
 class ProductFilterForm(forms.Form):
@@ -28,12 +29,12 @@ class ProductFilterForm(forms.Form):
         ),
     )
     category = forms.ModelChoiceField(
-        queryset=Category.objects.all(),
+        queryset=services.get_all_categories(),
         widget=forms.RadioSelect,
         required=False,
     )
     brands = forms.ModelMultipleChoiceField(
-        queryset=Brand.objects.all(),
+        queryset=services.get_all_brands(),
         widget=forms.CheckboxSelectMultiple,
         label="Brand",
         required=False,
