@@ -22,7 +22,7 @@
 <!-- Row with product shots and the main buttons -->
 <div class="row px-3">
 	<!-- Col with Bootstrap5 carousel with product shots -->
-	<div class="col-lg-6 col-md-12 panel-bg-color py-3">
+	<div class="col-lg-6 col-md-12 panel-bg-color py-3 rounded">
 		<div class="w-100 h-100 d-flex content-center">
 			<div
 				id="productCarousel"
@@ -76,7 +76,7 @@
 	</div>
 	<!-- Col with short product description and the main buttons -->
 	<div
-		class="col-lg-6 col-md-12 d-flex flex-column justify-content-between panel-bg-color py-4"
+		class="col-lg-6 col-md-12 d-flex flex-column justify-content-between panel-bg-color py-4 rounded"
 	>
 		<!-- "Like" and "Cart" buttons -->
 		<div class="d-flex mb-4">
@@ -194,7 +194,7 @@
 
 <!-- Row with product description -->
 <div class="row px-3">
-	<div class="panel-bg-color col-12 pt-4 pb-3">
+	<div class="panel-bg-color col-12 pt-4 pb-3 rounded">
 		<p>{{ product.description |safe }}</p>
 	</div>
 </div>
@@ -203,7 +203,7 @@
 
 <!-- Row with review form and product reviews -->
 <div class="row px-3">
-	<div class="panel-bg-color col-12 py-3">
+	<div class="panel-bg-color col-12 py-3 rounded">
 		<form
 			class="mb-3"
 			method="post"
