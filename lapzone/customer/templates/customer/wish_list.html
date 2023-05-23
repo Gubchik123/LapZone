@@ -11,24 +11,28 @@
     {% include 'utils/_alert.html' with message="Your wish list is empty yet." category="primary" dismissible=False only %}
 </div>
 {% else %}
-<div class="row px-3 mb-5">
-    <div class="panel-bg-color p-3 col-12">
-        <div id="products" class="row">
-            {% for like in page_obj %}
-            <div 
-                class="col-lg-3 col-md-6 col-sm-12 d-flex align-items-stretch"
-            >
-                <div 
-                    class="product w-100 d-flex flex-column justify-content-between rounded mb-3"
-                >
-                    {% include 'shop/utils/_product_card.html' with product=like.product user=user cart=cart.cart only %}
-                </div>
-            </div>
-            {% endfor %}
+<div class="row px-3 mb-5 d-flex justify-content-between">
+    {% include "customer/utils/_link_list_group.html" with page="wishes" user=user only %}
 
-            {% if page_obj.paginator.num_pages > 1 %} 
-                {% include 'utils/_pagination_nav.html' with page_obj=page_obj %}
-            {% endif %}
+    <div class="col-lg-9 col-md-12 px-0">
+        <div id="content" class="panel-bg-color p-3 rounded">
+            <div id="products" class="row">
+                {% for like in page_obj %}
+                <div
+                    class="col-lg-3 col-md-6 col-sm-12 d-flex align-items-stretch"
+                >
+                    <div
+                        class="product w-100 d-flex flex-column justify-content-between rounded mb-3"
+                    >
+                        {% include 'shop/utils/_product_card.html' with product=like.product user=user cart=cart.cart only %}
+                    </div>
+                </div>
+                {% endfor %}
+
+                {% if page_obj.paginator.num_pages > 1 %}
+                    {% include 'utils/_pagination_nav.html' with page_obj=page_obj %}
+                {% endif %}
+            </div>
         </div>
     </div>
 </div>

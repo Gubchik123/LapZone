@@ -11,71 +11,76 @@
         {% include 'utils/_alert.html' with message="You don't have any orders yet." category="primary" dismissible=False only %}
     </div>
 {% else %}
-<div class="row px-3 mb-5">
-    <div class="panel-bg-color col-12 p-3">
-        <div class="white-space-nowrap overflow-auto">
-            <table class="table">
-                <thead>
-                    <tr
-                        class="d-flex justify-content-between align-items-center border-1 border-bottom"
-                    >
-                        <th class="ms-3 me-4">Order ID</th>
-                        <th class="me-4">Total price</th>
-                        <th class="me-4">Created at</th>
-                        <th class="me-4">Remove</th>
-                    </tr>
-                </thead>
-                <tbody>
-                    {% for order in page_obj %}
-                    <tr
-                        class="d-flex justify-content-between align-items-center border-1 border-bottom py-2"
-                    >
-                        <!-- Order ID -->
-                        <td class="me-2">
-                            <a 
-                                class="fs-5 white-space-normal"
-                                href="{{ order.get_absolute_url }}" 
-                            >
-                                {{ order.id }}
-                            </a>
-                        </td>
-                        <!-- Order total price -->
-                        <td class="fs-4 me-2">
-                            {{ order.total_price }}$
-                        </td>
-                        <!-- Order created datetime -->
-                        <td class="fs-5 me-2 white-space-normal">
-                            {{ order.created|date:"F d, Y, H:i" }}
-                        </td>
-                        <!-- "Remove" button -->
-                        <td class="me-2">
-                            <form 
-                                method="post"
-                                action="{% url 'order:delete' order.pk %}"
-                            >
-                                {% csrf_token %}
+<div class="row px-3 mb-5 d-flex justify-content-between">
+    {% include "customer/utils/_link_list_group.html" with page="orders" user=user only %}
 
-                                <button 
-                                    type="submit"
-                                    title="Remove"
-                                    class="remove btn fs-6 border-0 panel-bg-color"
+    <div class="col-lg-9 col-md-12 px-0">
+        <div id="content" class="panel-bg-color p-3 rounded">
+            <!-- Horizontal scroll block with orders table -->
+            <div class="white-space-nowrap overflow-auto">
+                <table class="table">
+                    <thead>
+                        <tr
+                            class="d-flex justify-content-between align-items-center border-1 border-bottom"
+                        >
+                            <th class="ms-3 me-4">Order ID</th>
+                            <th class="me-4">Total price</th>
+                            <th class="me-4">Created at</th>
+                            <th class="me-4">Remove</th>
+                        </tr>
+                    </thead>
+                    <tbody>
+                        {% for order in page_obj %}
+                        <tr
+                            class="d-flex justify-content-between align-items-center border-1 border-bottom py-2"
+                        >
+                            <!-- Order ID -->
+                            <td class="me-2">
+                                <a
+                                    class="fs-5 white-space-normal"
+                                    href="{{ order.get_absolute_url }}"
                                 >
-                                    <ion-icon 
-                                        name="trash" 
-                                        style="color: red;"
-                                    ></ion-icon>
-                                </button>
-                            </form>
-                        </td>
-                    </tr>
-                    {% endfor %}
-                </tbody>
-            </table>
-        </div>
+                                    {{ order.id }}
+                                </a>
+                            </td>
+                            <!-- Order total price -->
+                            <td class="fs-4 me-2">
+                                {{ order.total_price }}$
+                            </td>
+                            <!-- Order created datetime -->
+                            <td class="fs-5 me-2 white-space-normal">
+                                {{ order.created|date:"F d, Y, H:i" }}
+                            </td>
+                            <!-- "Remove" button -->
+                            <td class="me-2">
+                                <form
+                                    method="post"
+                                    action="{% url 'order:delete' order.pk %}"
+                                >
+                                    {% csrf_token %}
 
-        {% if page_obj.paginator.num_pages > 1 %} 
-            {% include 'utils/_pagination_nav.html' with page_obj=page_obj %}
-        {% endif %}
+                                    <button
+                                        type="submit"
+                                        title="Remove"
+                                        class="remove btn fs-6 border-0 panel-bg-color"
+                                    >
+                                        <ion-icon
+                                            name="trash"
+                                            style="color: red;"
+                                        ></ion-icon>
+                                    </button>
+                                </form>
+                            </td>
+                        </tr>
+                        {% endfor %}
+                    </tbody>
+                </table>
+            </div>
+
+            {% if page_obj.paginator.num_pages > 1 %}
+                {% include 'utils/_pagination_nav.html' with page_obj=page_obj %}
+            {% endif %}
+        </div>
     </div>
 </div>
 {% endif %} 

@@ -5,17 +5,9 @@
 
 {% block styles %}
 <style>
-    #personal-details {
-        margin-left: 20px;
-        margin-right: 0px;
-    }
-
     @media screen and (max-width: 576px) { /* Bootstrap5 .sm breakpoint */
         .submit-btn { display: flex!important; }
         .form-control.w-50 { width: 100%!important; }
-    }
-    @media screen and (max-width: 992px) { /* Bootstrap5 .lg breakpoint */
-        #personal-details { margin-left: 0px; }
     }
 </style>
 {% endblock styles %}
@@ -32,59 +24,11 @@
 
 {% block content %}
 <div class="row px-3 d-flex justify-content-between">
-    <!-- Block with links to other pages -->
-    <div class="col-lg-3 col-md-12 p-0">
-        <div class="list-group">
-            <a href="#" class="list-group-item list-group-item-action active" aria-current="true">
-                Personal details
-            </a>
-            <a 
-                href="{% url 'account_change_password' %}" 
-                class="list-group-item list-group-item-action list-group-item-warning"
-            >
-                Change password
-            </a>
-            <a 
-                href="{% url 'customer:wish_list' %}" 
-                class="list-group-item list-group-item-action content-between"
-            >
-                Wish list
-                <span class="badge bg-primary rounded-pill">
-                    {{ user.like_set.count }}
-                </span>
-            </a>
-            <a 
-                href="{% url 'order:list' %}" 
-                class="list-group-item list-group-item-action content-between"
-            >
-                Order list
-                <span class="badge bg-primary rounded-pill">
-                    {{ user.order_set.count }}
-                </span>
-            </a>
-            <a 
-                href="{% url 'account_email' %}" 
-                class="list-group-item list-group-item-action content-between"
-            >
-                E-mail addresses
-                <span class="badge bg-primary rounded-pill">
-                    {{ user.emailaddress_set.count }}
-                </span>
-            </a>
-            <a 
-                href="{% url 'socialaccount_connections' %}" 
-                class="list-group-item list-group-item-action content-between"
-            >
-                OAuth connections
-                <span class="badge bg-primary rounded-pill">
-                    {{ user.socialaccount_set.count }}
-                </span>
-            </a>
-        </div>
-    </div>
+    {% include "customer/utils/_link_list_group.html" with page="details" user=user only %}
+
     <!-- Block with user personal details (form) -->
     <div class="col-lg-9 col-md-12 px-0">
-        <div id="personal-details" class="panel-bg-color p-3 rounded">
+        <div id="content" class="panel-bg-color p-3 rounded">
             <p>
                 <b>Date joined:</b> &nbsp; {{ user.date_joined|date:"F d, Y" }}
             </p>
