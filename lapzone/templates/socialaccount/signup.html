@@ -1,35 +1,31 @@
 {% extends "socialaccount/base.html" %}
 
-{% block title %}Signup{% endblock %} 
-{% block content_title %}Sign Up{% endblock %} 
+{% block title %}Signup{% endblock %}
+{% block content_title %}Sign Up{% endblock %}
 
 
 {% block content %}
-<div class="row px-3 mb-5">
-    <div class="panel-bg-color col-12 py-3 px-3">
-        <p>
-			You are about to use your {{account.get_provider.name}} account to
-			login to {{site.name}}. As a final step, please complete the
-			following form:
-		</p>
-            
-        <form id="signup_form" method="post" action="">
-            {% csrf_token %}
+    <p>
+        You are about to use your {{ account.get_provider.name }} account to
+        login to {{ site.name }}. As a final step, please complete the
+        following form:
+    </p>
 
-            {{ form.as_p }}
+    <form id="signup_form" method="post" action="">
+        {% csrf_token %}
 
-            {% if redirect_field_value %}
-            <input 
-                type="hidden" 
-                name="{{ redirect_field_name }}" 
-                value="{{ redirect_field_value }}" 
+        {{ form.as_p }}
+
+        {% if redirect_field_value %}
+            <input
+                    type="hidden"
+                    name="{{ redirect_field_name }}"
+                    value="{{ redirect_field_value }}"
             />
-            {% endif %}
+        {% endif %}
 
-            <button type="submit" class="btn btn-success btn-lg mt-3">
-                Sign Up &raquo;
-            </button>
-        </form>
-    </div>
-</div>
+        <button type="submit" class="btn btn-success btn-lg mt-3">
+            Sign Up &raquo;
+        </button>
+    </form>
 {% endblock content %}

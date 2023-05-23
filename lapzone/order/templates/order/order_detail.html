@@ -15,36 +15,32 @@
 
 
 {% block content %}
-<div class="row px-3 mb-5">
-    <div class="panel-bg-color col-12 p-3">
-        <div class="d-flex align-items-center fs-4 mb-3">
-            <b>Order date: </b> &nbsp;
-            <span>{{ order.created|date:"F d, Y, H:i" }}</span>
-        </div>
-        
-        <div class="fs-4 mb-1">
-            <b class="mb-4">Order items</b>
-        </div>
+<div class="d-flex align-items-center fs-4 mb-3">
+    <b>Order date: </b> &nbsp;
+    <span>{{ order.created|date:"F d, Y, H:i" }}</span>
+</div>
 
-        {% include 'cart/utils/_product_table.html' with collection=order.orderitem_set.all app="order" only %}
+<div class="fs-4 mb-1">
+    <b class="mb-4">Order items</b>
+</div>
 
-        <div 
-            class="d-flex justify-content-between align-items-center fs-4 mt-3"
+{% include 'cart/utils/_product_table.html' with collection=order.orderitem_set.all app="order" only %}
+
+<div
+    class="d-flex justify-content-between align-items-center fs-4 mt-3"
+>
+    <b>Order total price: </b>
+    <span>{{ order.total_price }}$</span>
+</div>
+
+<div class="d-flex justify-content-end mt-4">
+    <form action="{% url 'order:delete' order.pk %}" method="post">
+        {% csrf_token %}
+        <input
+            type="submit"
+            value="Remove"
+            class="remove btn btn-danger btn-lg"
         >
-            <b>Order total price: </b>
-            <span>{{ order.total_price }}$</span>
-        </div>
-
-        <div class="d-flex justify-content-end mt-4">
-            <form action="{% url 'order:delete' order.pk %}" method="post">
-                {% csrf_token %}
-                <input 
-                    type="submit" 
-                    value="Remove" 
-                    class="remove btn btn-danger btn-lg"
-                >
-            </form>
-        </div>
-    </div>
+    </form>
 </div>
 {% endblock content %} 
