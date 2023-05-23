@@ -4,7 +4,7 @@
 {% block content_title %}Account Connections{% endblock %} 
 
 
-{% block content %}
+{% block advanced_content %}
 <div class="row px-3 mb-5 d-flex justify-content-between">
     {% include "customer/utils/_link_list_group.html" with page="connections" user=user only %}
 
@@ -64,4 +64,4 @@
         </div>
     </div>
 </div>
-{% endblock content %}
+{% endblock advanced_content %}
