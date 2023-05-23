@@ -1,0 +1,18 @@
+{% extends "_base_email.html" %}
+
+{% block title %}Account Already Exists{% endblock %}
+{% block content_title %}Account Already Exists{% endblock %}
+
+{% block content %}
+{% autoescape off %}
+<p>
+    You are receiving this e-mail because you or someone else tried to signup for an
+    account using e-mail address: {{ email }}
+</p>
+<p>
+    However, an account using that e-mail address already exists. In case you have
+    forgotten about this, please use the password forgotten procedure to recover
+    your account: {{ password_reset_url }}
+</p>
+{% endautoescape %}
+{% endblock content %}

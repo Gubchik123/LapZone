@@ -1,0 +1,17 @@
+{% extends "_base_email.html" %}
+
+{% block title %}Password Reset E-mail{% endblock %}
+{% block content_title %}Password Reset E-mail{% endblock %}
+
+{% block content %}
+{% autoescape off %}
+<p>
+    You are receiving this e-mail because you or someone else has requested a
+    password for your user account. However, we do not have any record of a user
+    with email {{ email }} in our database.
+</p>
+<p>This mail can be safely ignored if you did not request a password reset.</p>
+<p>If it was you, you can sign up for an account using the link below.</p>
+<p>{{ signup_url }}</p>
+{% endautoescape %}
+{% endblock content %}
