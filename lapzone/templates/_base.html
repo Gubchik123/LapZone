@@ -232,7 +232,13 @@
                         {% endfor %}
                         </div>
 					</div>
-					{% block content %}{% endblock %}
+					{% block advanced_content %}
+                    <div class="row rounded px-3 {% block content_mb_5 %}mb-5{% endblock %}">
+                        <div class="panel-bg-color col-12 rounded p-3">
+                            {% block content %}{% endblock %}
+                        </div>
+                    </div>
+                    {% endblock advanced_content %}
 				</div>
 			</main>
 
