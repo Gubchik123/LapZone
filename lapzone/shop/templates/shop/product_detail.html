@@ -220,43 +220,49 @@
 			/>
 		</form>
 
-		{% for review in product.get_reviews %}
-		<div class="review mb-4">
-			<div
-				class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
-			>
-				<b>{{ review.name }}</b>
-				{{ review.created |date:"d.m.Y | H:i" }}
-			</div>
-			<div
-				class="review__body d-flex justify-content-between align-items-center"
-			>
-				<p class="mb-0"><b>Review:</b> {{ review.body }}</p>
-				<a
-					href="#review_form"
-					class="btn btn-outline-info btn-sm"
-					onclick="add_answer_for_('{{ review.name }}', '{{ review.id }}')"
-				>
-					Answer
-				</a>
-			</div>
-			{% for child_review in review.review_set.all %}
-			<div class="review mt-2 d-flex justify-content-end">
-				<div class="child-review">
-					<div
-						class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
-					>
-						<b>{{ child_review.name }}</b>
-						{{ child_review.created |date:"d.m.Y | H:i" }}
-					</div>
-					<p class="mb-0"><b>Answer:</b> {{ child_review.body }}</p>
-				</div>
-			</div>
-			{% endfor %}
-		</div>
-		{% empty %} 
-            {% include 'utils/_alert.html' with message="There are no reviews yet." category="primary" dismissible=False only %}
-        {% endfor %}
+        <div class="reviews">
+            {% for review in product.review_set.all %}
+            {% if not review.parent %}
+            <div class="review review-{{ review.id }} mt-4">
+                <div
+                    class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
+                >
+                    <b>{{ review.name }}</b>
+                    {{ review.created |date:"d.m.Y | H:i" }}
+                </div>
+                <div
+                    class="review__body d-flex justify-content-between align-items-center"
+                >
+                    <p class="mb-0"><b>Review:</b> {{ review.body }}</p>
+                    <a
+                        href="#review_form"
+                        class="btn btn-outline-info btn-sm"
+                        onclick="add_answer_for_('{{ review.name }}', '{{ review.id }}')"
+                    >
+                        Answer
+                    </a>
+                </div>
+            </div>
+            {% else %}
+            <div
+                data-parent_id="{{ review.parent.id }}"
+                class="review child mt-2 d-flex justify-content-end"
+            >
+                <div class="child-review">
+                    <div
+                        class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
+                    >
+                        <b>{{ review.name }}</b>
+                        {{ review.created |date:"d.m.Y | H:i" }}
+                    </div>
+                    <p class="mb-0"><b>Answer:</b> {{ review.body }}</p>
+                </div>
+            </div>
+            {% endif %}
+            {% empty %}
+                {% include 'utils/_alert.html' with message="There are no reviews yet." category="primary" dismissible=False only %}
+            {% endfor %}
+	    </div>
 	</div>
 </div>
 {% endblock advanced_content %}
@@ -272,5 +278,15 @@
 		document.querySelector("label[for='id_body']").textContent = "Answer:";
 		document.querySelector("#review_form .btn").value = "Add answer";
 	}
+
+    const reviews_block = document.querySelector(".reviews");
+
+    reviews_block.querySelectorAll(".review.child").forEach((child_review) => {
+        const parent_id = child_review.attributes["data-parent_id"].nodeValue;
+        const parent = reviews_block.querySelector(`.review-${parent_id}`);
+
+        reviews_block.removeChild(child_review);
+        parent.after(child_review);
+    });
 </script>
 {% endblock scripts %}
