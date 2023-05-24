@@ -2,6 +2,7 @@ import json
 import logging
 
 from django.conf import settings
+from django.core.cache import cache
 from django.contrib.auth.models import User
 from django.db.models import QuerySet
 from django.http import HttpResponseRedirect
@@ -14,10 +15,15 @@ logger = logging.getLogger(__name__)
 
 
 def get_recently_added_products(count: int) -> QuerySet[models.Product]:
-    """Returns the given number of recently added products."""
-    return models.Product.objects.order_by("-id").only(
-        "name", "slug", "image", "price"
-    )[:count]
+    """
+    Returns the given number of recently added products from cache or database.
+    """
+    if not (recently_added_products := cache.get('recently_added_products')):
+        recently_added_products = models.Product.objects.order_by("-id").only(
+            "name", "slug", "image", "price"
+        )[:count]
+        cache.set('recently_added_products', recently_added_products)
+    return recently_added_products
 
 
 def get_liked_products_for_(user: User) -> list[int]:
@@ -26,22 +32,31 @@ def get_liked_products_for_(user: User) -> list[int]:
 
 
 def get_all_brands() -> QuerySet[models.Brand]:
-    """Returns a QuerySet with all brands."""
-    return models.Brand.objects.all()
+    """Returns a QuerySet with all brands from cache or database."""
+    if not (brands := cache.get('all_brands')):
+        brands = models.Brand.objects.all()
+        cache.set('all_brands', brands)
+    return brands
 
 
 def get_all_categories() -> QuerySet[models.Category]:
-    """Returns a QuerySet with all categories."""
-    return models.Category.objects.all()
+    """Returns a QuerySet with all categories from cache or database."""
+    if not (categories := cache.get('all_categories')):
+        categories = models.Category.objects.all()
+        cache.set('all_categories', categories)
+    return categories
 
 
 def get_all_carousel_images() -> QuerySet[models.CarouselImage]:
-    """Returns a QuerySet with all carousel images."""
-    return (
-        models.CarouselImage.objects.all()
-        .select_related("product")
-        .only("image", "product__slug")
-    )
+    """Returns a QuerySet with all carousel images from cache or database."""
+    if not (carousel_images := cache.get('all_carousel_images')):
+        carousel_images = (
+            models.CarouselImage.objects.all()
+            .select_related("product")
+            .only("image", "product__slug")
+        )
+        cache.set('all_carousel_images', carousel_images)
+    return carousel_images
 
 
 def are_ordering_parameters_valid(order_by: str, order_dir: str) -> bool:
