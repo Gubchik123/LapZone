@@ -93,12 +93,6 @@ class Product(
         self.image_name = self.slug
         super().save(*args, **kwargs)
 
-    def get_reviews(self):
-        """Returns all top-level reviews and their child reviews."""
-        return self.review_set.filter(parent__isnull=True).prefetch_related(
-            "review_set"
-        )
-
     class Meta:
         """Meta options for the Product model."""
 
@@ -173,6 +167,14 @@ class Like(
         ordering = ["-created", "product_id"]
 
 
+class _ReviewCustomManager(models.Manager):
+    """Custom manager for the Review model."""
+
+    def all(self):
+        """Returns all reviews using the select_related for the 'parent'"""
+        return super().all().select_related("parent")
+
+
 class Review(
     ModelWithCreatedDateTimeAndFKToProduct,
     models.Model,
@@ -195,6 +197,8 @@ class Review(
         on_delete=models.CASCADE,
         verbose_name="Parent",
     )
+
+    objects = _ReviewCustomManager()
 
     def __str__(self) -> str:
         """Gets string representation of the Review model."""
