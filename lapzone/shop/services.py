@@ -18,11 +18,11 @@ def get_recently_added_products(count: int) -> QuerySet[models.Product]:
     """
     Returns the given number of recently added products from cache or database.
     """
-    if not (recently_added_products := cache.get('recently_added_products')):
+    if not (recently_added_products := cache.get("recently_added_products")):
         recently_added_products = models.Product.objects.order_by("-id").only(
             "name", "slug", "image", "price"
         )[:count]
-        cache.set('recently_added_products', recently_added_products)
+        cache.set("recently_added_products", recently_added_products)
     return recently_added_products
 
 
@@ -33,43 +33,43 @@ def get_liked_products_for_(user: User) -> list[int]:
 
 def get_all_brands() -> QuerySet[models.Brand]:
     """Returns a QuerySet with all brands from cache or database."""
-    if not (brands := cache.get('all_brands')):
+    if not (brands := cache.get("all_brands")):
         brands = models.Brand.objects.all()
-        cache.set('all_brands', brands)
+        cache.set("all_brands", brands)
     return brands
 
 
 def get_all_categories() -> QuerySet[models.Category]:
     """Returns a QuerySet with all categories from cache or database."""
-    if not (categories := cache.get('all_categories')):
+    if not (categories := cache.get("all_categories")):
         categories = models.Category.objects.all()
-        cache.set('all_categories', categories)
+        cache.set("all_categories", categories)
     return categories
 
 
 def get_all_carousel_images() -> QuerySet[models.CarouselImage]:
     """Returns a QuerySet with all carousel images from cache or database."""
-    if not (carousel_images := cache.get('all_carousel_images')):
+    if not (carousel_images := cache.get("all_carousel_images")):
         carousel_images = (
             models.CarouselImage.objects.all()
             .select_related("product")
             .only("image", "product__slug")
         )
-        cache.set('all_carousel_images', carousel_images)
+        cache.set("all_carousel_images", carousel_images)
     return carousel_images
 
 
 def are_ordering_parameters_valid(order_by: str, order_dir: str) -> bool:
     """Checks if the given order_by and order_dir are valid"""
     if (
-            # there are not order_by and order_dir
-            (not order_by and not order_dir)
-            # there is order_by but there is not order_dir
-            or (order_by and not order_dir)
-            # there is order_dir but there is not order_by
-            or (order_dir and not order_by)
-            or (order_dir not in ("asc", "desc"))
-            or (order_by not in ("name", "price"))
+        # there are not order_by and order_dir
+        (not order_by and not order_dir)
+        # there is order_by but there is not order_dir
+        or (order_by and not order_dir)
+        # there is order_dir but there is not order_by
+        or (order_dir and not order_by)
+        or (order_dir not in ("asc", "desc"))
+        or (order_by not in ("name", "price"))
     ):
         return False
     return True
@@ -81,7 +81,7 @@ def get_order_symbol_by_(order_dir: str) -> str:
 
 
 def get_products_that_contains_(
-        user_input: str, products: QuerySet[models.Product]
+    user_input: str, products: QuerySet[models.Product]
 ) -> QuerySet[models.Product]:
     """Returns the given products filtered by user search input"""
     return products.filter(name__icontains=user_input)
@@ -100,9 +100,9 @@ def check_and_get_redirect_response_by_(form) -> HttpResponseRedirect | None:
         return redirect("shop:category", slug=category.slug)
 
     if (  # checked only one brand in the form
-            brands
-            and len(brands) == 1
-            and not any([max_price, min_price, category, years])
+        brands
+        and len(brands) == 1
+        and not any([max_price, min_price, category, years])
     ):
         return redirect("shop:brand", slug=brands.first().slug)
 
@@ -110,21 +110,21 @@ def check_and_get_redirect_response_by_(form) -> HttpResponseRedirect | None:
 
 
 def get_products_filtered_by_category_(
-        slug: str, products: QuerySet[models.Product]
+    slug: str, products: QuerySet[models.Product]
 ) -> QuerySet[models.Product]:
     """Returns the given products filtered by category slug."""
     return products.filter(category__slug=slug)
 
 
 def get_products_filtered_by_brand_(
-        slug: str, products: QuerySet[models.Product]
+    slug: str, products: QuerySet[models.Product]
 ) -> QuerySet[models.Product]:
     """Returns the given products filtered by brand slug."""
     return products.filter(brand__slug=slug)
 
 
 def create_review_with_data_from_(
-        form, product_slug: str, review_parent_id: str | None
+    form, product_slug: str, review_parent_id: str | None
 ) -> None:
     """Saves model form (creates review) with product by the given slug."""
     review: models.Review = form.save(commit=False)
@@ -144,7 +144,7 @@ def _get_user_id_from_(request_body: bytes) -> int:
 
 
 def add_or_delete_like_and_get_response_message(
-        request_body: bytes, product_slug: str
+    request_body: bytes, product_slug: str
 ) -> str:
     """
     Adds or deletes a 'like' record

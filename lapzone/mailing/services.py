@@ -6,7 +6,9 @@ from django.template.loader import render_to_string
 from .models import MailingEmailAddress
 
 
-def send_mail_to_(mailing_email_address: MailingEmailAddress, request: HttpRequest) -> None:
+def send_mail_to_(
+    mailing_email_address: MailingEmailAddress, request: HttpRequest
+) -> None:
     """Sends an email to the given email address."""
     subject_prefix = settings.ACCOUNT_EMAIL_SUBJECT_PREFIX
     send_mail(

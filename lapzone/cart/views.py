@@ -13,7 +13,7 @@ class CartAddView(BaseView, generic.View):
         return HttpResponse(
             services.add_product_to_cart_and_get_response_message(request)
         )
-    
+
 
 class CartUpdateView(BaseView, generic.View):
     """View for updating a product in the user's cart via POST request."""

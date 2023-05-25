@@ -306,7 +306,6 @@ CKEDITOR_CONFIGS = {
 if DEBUG and not TESTING:
     import mimetypes
 
-
     mimetypes.add_type("application/javascript", ".js", True)
 
     INSTALLED_APPS.insert(15, "debug_toolbar")
