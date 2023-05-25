@@ -107,6 +107,10 @@ body, header, main, footer {
     transition: background 0.3s linear;
 }
 
+body {
+    font-family: 'Inter', sans-serif;
+}
+
 ion-icon {
     font-size: 2em;
 }
