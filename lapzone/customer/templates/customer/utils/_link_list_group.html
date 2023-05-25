@@ -16,23 +16,23 @@
 <div class="col-lg-3 col-md-12 p-0">
     <div class="list-group">
         <a
-                {% if page == 'details' %}aria-current="true"{% endif %}
-                href="{% if page == 'details' %}#{% else %}{% url 'customer:detail' %}{% endif %}"
-                class="list-group-item list-group-item-action {% if page == 'details' %}active{% endif %}"
+            {% if page == 'details' %}aria-current="true"{% endif %}
+            href="{% if page == 'details' %}#{% else %}{% url 'customer:detail' %}{% endif %}"
+            class="list-group-item list-group-item-action {% if page == 'details' %}active{% endif %}"
         >
             Personal details
         </a>
         <a
-                {% if page == 'password' %}aria-current="true"{% endif %}
-                href="{% if page == 'password' %}#{% else %}{% url 'account_change_password' %}{% endif %}"
-                class="list-group-item list-group-item-action {% if page == 'password' %}active{% endif %}"
+            {% if page == 'password' %}aria-current="true"{% endif %}
+            href="{% if page == 'password' %}#{% else %}{% url 'account_change_password' %}{% endif %}"
+            class="list-group-item list-group-item-action {% if page == 'password' %}active{% endif %}"
         >
             Change password
         </a>
         <a
-                {% if page == 'wishes' %}aria-current="true"{% endif %}
-                href="{% if page == 'wishes' %}#{% else %}{% url 'customer:wish_list' %}{% endif %}"
-                class="list-group-item list-group-item-action content-between {% if page == 'wishes' %}active{% endif %}"
+            {% if page == 'wishes' %}aria-current="true"{% endif %}
+            href="{% if page == 'wishes' %}#{% else %}{% url 'customer:wish_list' %}{% endif %}"
+            class="list-group-item list-group-item-action content-between {% if page == 'wishes' %}active{% endif %}"
         >
             Wish list
             <span class="badge bg-secondary rounded-pill">
@@ -40,9 +40,9 @@
             </span>
         </a>
         <a
-                {% if page == 'orders' %}aria-current="true"{% endif %}
-                href="{% if page == 'orders' %}#{% else %}{% url 'order:list' %}{% endif %}"
-                class="list-group-item list-group-item-action content-between {% if page == 'orders' %}active{% endif %}"
+            {% if page == 'orders' %}aria-current="true"{% endif %}
+            href="{% if page == 'orders' %}#{% else %}{% url 'order:list' %}{% endif %}"
+            class="list-group-item list-group-item-action content-between {% if page == 'orders' %}active{% endif %}"
         >
             Order list
             <span class="badge bg-secondary rounded-pill">
@@ -50,9 +50,9 @@
             </span>
         </a>
         <a
-                {% if page == 'emails' %}aria-current="true"{% endif %}
-                href="{% if page == 'emails' %}#{% else %}{% url 'account_email' %}{% endif %}"
-                class="list-group-item list-group-item-action content-between {% if page == 'emails' %}active{% endif %}"
+            {% if page == 'emails' %}aria-current="true"{% endif %}
+            href="{% if page == 'emails' %}#{% else %}{% url 'account_email' %}{% endif %}"
+            class="list-group-item list-group-item-action content-between {% if page == 'emails' %}active{% endif %}"
         >
             E-mail addresses
             <span class="badge bg-secondary rounded-pill">
@@ -60,9 +60,9 @@
             </span>
         </a>
         <a
-                {% if page == 'connections' %}aria-current="true"{% endif %}
-                href="{% if page == 'connections' %}#{% else %}{% url 'socialaccount_connections' %}{% endif %}"
-                class="list-group-item list-group-item-action content-between {% if page == 'connections' %}active{% endif %}"
+            {% if page == 'connections' %}aria-current="true"{% endif %}
+            href="{% if page == 'connections' %}#{% else %}{% url 'socialaccount_connections' %}{% endif %}"
+            class="list-group-item list-group-item-action content-between {% if page == 'connections' %}active{% endif %}"
         >
             OAuth connections
             <span class="badge bg-secondary rounded-pill">

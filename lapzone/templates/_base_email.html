@@ -4,36 +4,46 @@
 		<meta charset="UTF-8" />
 		<title>[LapZone] {% block title %}{% endblock %}</title>
 
-        <style>
-            .container {
-                padding: 20px;
-                margin: 0 auto;
-                max-width: 600px;
-                border: 1px solid #ccc;
-                background-color: #fff;
-            }
+		<style>
+			.container {
+				padding: 20px;
+				margin: 0 auto;
+				max-width: 600px;
+				border: 1px solid #ccc;
+				background-color: #fff;
+			}
 
-            .header { width: 100%; }
-            .header img { width: 100%; }
-            .header h1 {
-                font-size: 24px;
-                font-weight: bold;
-                margin-bottom: 10px;
-            }
-        </style>
-        {% block styles %}{% endblock %} 
+			.header {
+				width: 100%;
+			}
+
+			.header img {
+				width: 100%;
+			}
+
+			.header h1 {
+				font-size: 24px;
+				font-weight: bold;
+				margin-bottom: 10px;
+			}
+		</style>
+		{% block styles %}{% endblock %}
 	</head>
-	<body style="background-color: #E6E4E4; padding: 30px 0; font-size: 1.5em;">
+	<body style="background-color: #e6e4e4; padding: 30px 0; font-size: 1.5em">
 		<div class="container">
-            <div class="header">
-                <img
-                    alt="LapZone header image"
-                    src="https://raw.githubusercontent.com/Gubchik123/LapZone/master/lapzone/static/images/site_header.webp"
-                />
-                <h1>{% block content_title %}{% endblock %}</h1>
-            </div>
+			<div class="header">
+				<img
+					alt="LapZone header image"
+					src="https://raw.githubusercontent.com/Gubchik123/LapZone/master/lapzone/static/images/site_header.webp"
+				/>
+				<h1>{% block content_title %}{% endblock %}</h1>
+			</div>
 
-            {% block content %}{% endblock %}
-        </div> 
+			{% block content %}{% endblock %}
+
+			<p style="text-align: center">
+				<small>Thank you for using LapZone!</small>
+			</p>
+		</div>
 	</body>
 </html>

@@ -51,14 +51,14 @@
             </tr>
         </thead>
         <tbody>
-            {% for item_dict in cart %}
+        {% for item_dict in cart %}
             <tr>
                 <td>{{ item_dict.product.name }}</td>
                 <td>{{ item_dict.price }}$</td>
                 <td>{{ item_dict.quantity }}</td>
                 <td>{{ item_dict.total_price }}$</td>
             </tr>
-            {% endfor %}
+        {% endfor %}
         </tbody>
     </table>
 </div>

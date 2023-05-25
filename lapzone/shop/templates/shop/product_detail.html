@@ -37,7 +37,8 @@
 							alt="{{ product.name }} image"
 						/>
 					</div>
-					{% for shot in product.productshot_set.all %}
+
+				{% for shot in product.productshot_set.all %}
 					<div class="carousel-item" data-bs-interval="3000">
 						<img
 							class="d-block w-100"
@@ -45,7 +46,7 @@
 							src="{{ shot.image.url }}"
 						/>
 					</div>
-					{% endfor %}
+				{% endfor %}
 				</div>
 				<!-- Carousel control to previous image -->
 				<button
@@ -80,32 +81,31 @@
 	>
 		<!-- "Like" and "Cart" buttons -->
 		<div class="d-flex mb-4">
-        {% if user.is_authenticated %}
-            <button
-                class="like btn btn-danger me-auto"
-                data-href="{{ product.get_absolute_url }}like/"
-            >
-                <ion-icon name="heart{% if not is_liked %}-outline{% endif %}"></ion-icon>
-            </button>
-        {% else %}
-            <span></span>
-        {% endif %}
-			
+		{% if user.is_authenticated %}
+			<button
+				class="like btn btn-danger me-auto"
+				data-href="{{ product.get_absolute_url }}like/"
+			>
+				<ion-icon
+					name="heart{% if not is_liked %}-outline{% endif %}"
+				></ion-icon>
+			</button>
+		{% else %}
+			<span></span>
+		{% endif %} 
+            
         {% if product.id|stringformat:"s" in cart.cart %}
-            <a
-                href="{% url 'cart:detail' %}"
-                class="btn btn-success ms-2"
-            >
-                <ion-icon name="cart"></ion-icon>
-            </a>
-        {% else %} 
-            <button
-                class="cart btn btn-success ms-2"
-                data-product_id="{{ product.id }}"
-            >
-                <ion-icon name="cart-outline"></ion-icon>
-            </button>
-        {% endif %}
+			<a href="{% url 'cart:detail' %}" class="btn btn-success ms-2">
+				<ion-icon name="cart"></ion-icon>
+			</a>
+		{% else %}
+			<button
+				class="cart btn btn-success ms-2"
+				data-product_id="{{ product.id }}"
+			>
+				<ion-icon name="cart-outline"></ion-icon>
+			</button>
+		{% endif %}
 		</div>
 		<!-- Price and link to reviews -->
 		<div class="d-flex justify-content-between align-items-center">
@@ -129,7 +129,7 @@
 		<div>
 			<h5 class="mb-4">Share</h5>
 			<div class="row share-links">
-				{% with current_url=request.build_absolute_uri %}
+			{% with current_url=request.build_absolute_uri %}
 				<div
 					class="col-md-6 col-sm-12 d-flex justify-content-end align-items-center"
 				>
@@ -184,7 +184,7 @@
 						<ion-icon name="mail-outline"></ion-icon>
 					</a>
 				</div>
-				{% endwith %}
+			{% endwith %}
 			</div>
 		</div>
 	</div>
@@ -211,7 +211,9 @@
 			action="{{ request.path }}review/"
 		>
 			{% csrf_token %} 
+            
             {{ review_form.as_div }}
+
 			<input type="hidden" id="review_parent" name="review_parent_id" />
 			<input
 				type="submit"
@@ -220,55 +222,55 @@
 			/>
 		</form>
 
-        <div class="reviews">
-            {% for review in product.review_set.all %}
+		<div class="reviews">
+		{% for review in product.review_set.all %} 
             {% if not review.parent %}
-            <div class="review review-{{ review.id }} mt-4">
-                <div
-                    class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
-                >
-                    <b>{{ review.name }}</b>
-                    {{ review.created |date:"d.m.Y | H:i" }}
-                </div>
-                <div
-                    class="review__body d-flex justify-content-between align-items-center"
-                >
-                    <p class="mb-0"><b>Review:</b> {{ review.body }}</p>
-                    <a
-                        href="#review_form"
-                        class="btn btn-outline-info btn-sm"
-                        onclick="add_answer_for_('{{ review.name }}', '{{ review.id }}')"
-                    >
-                        Answer
-                    </a>
-                </div>
-            </div>
-            {% else %}
-            <div
-                data-parent_id="{{ review.parent.id }}"
-                class="review child mt-2 d-flex justify-content-end"
-            >
-                <div class="child-review">
-                    <div
-                        class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
-                    >
-                        <b>{{ review.name }}</b>
-                        {{ review.created |date:"d.m.Y | H:i" }}
-                    </div>
-                    <p class="mb-0"><b>Answer:</b> {{ review.body }}</p>
-                </div>
-            </div>
-            {% endif %}
-            {% empty %}
-                {% include 'utils/_alert.html' with message="There are no reviews yet." category="primary" dismissible=False only %}
-            {% endfor %}
-	    </div>
+			<div class="review review-{{ review.id }} mt-4">
+				<div
+					class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
+				>
+					<b>{{ review.name }}</b>
+					{{ review.created |date:"d.m.Y | H:i" }}
+				</div>
+				<div
+					class="review__body d-flex justify-content-between align-items-center"
+				>
+					<p class="mb-0"><b>Review:</b> {{ review.body }}</p>
+					<a
+						href="#review_form"
+						class="btn btn-outline-info btn-sm"
+						onclick="add_answer_for_('{{ review.name }}', '{{ review.id }}')"
+					>
+						Answer
+					</a>
+				</div>
+			</div>
+			{% else %}
+			<div
+				data-parent_id="{{ review.parent.id }}"
+				class="review child mt-2 d-flex justify-content-end"
+			>
+				<div class="child-review">
+					<div
+						class="review__header p-2 mb-1 bg-primary bg-opacity-50 text-white d-flex justify-content-between"
+					>
+						<b>{{ review.name }}</b>
+						{{ review.created |date:"d.m.Y | H:i" }}
+					</div>
+					<p class="mb-0"><b>Answer:</b> {{ review.body }}</p>
+				</div>
+			</div>
+			{% endif %} 
+        {% empty %} 
+            {% include 'utils/_alert.html' with message="There are no reviews yet." category="primary" dismissible=False only %} 
+        {% endfor %}
+		</div>
 	</div>
 </div>
-{% endblock advanced_content %}
+{% endblock advanced_content %} 
 
 
-{% block scripts %}
+{% block scripts %} 
 {{ block.super }}
 
 <script defer>
@@ -279,14 +281,14 @@
 		document.querySelector("#review_form .btn").value = "Add answer";
 	}
 
-    const reviews_block = document.querySelector(".reviews");
+	const reviews_block = document.querySelector(".reviews");
 
-    reviews_block.querySelectorAll(".review.child").forEach((child_review) => {
-        const parent_id = child_review.attributes["data-parent_id"].nodeValue;
-        const parent = reviews_block.querySelector(`.review-${parent_id}`);
+	reviews_block.querySelectorAll(".review.child").forEach((child_review) => {
+		const parent_id = child_review.attributes["data-parent_id"].nodeValue;
+		const parent = reviews_block.querySelector(`.review-${parent_id}`);
 
-        reviews_block.removeChild(child_review);
-        parent.after(child_review);
-    });
+		reviews_block.removeChild(child_review);
+		parent.after(child_review);
+	});
 </script>
 {% endblock scripts %}

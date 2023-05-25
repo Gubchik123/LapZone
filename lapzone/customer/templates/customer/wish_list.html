@@ -17,7 +17,7 @@
     <div class="col-lg-9 col-md-12 px-0">
         <div id="content" class="panel-bg-color p-3 rounded">
             <div id="products" class="row">
-                {% for like in page_obj %}
+            {% for like in page_obj %}
                 <div
                     class="col-lg-3 col-md-6 col-sm-12 d-flex align-items-stretch"
                 >
@@ -27,11 +27,11 @@
                         {% include 'shop/utils/_product_card.html' with product=like.product user=user cart=cart.cart only %}
                     </div>
                 </div>
-                {% endfor %}
+            {% endfor %}
 
-                {% if page_obj.paginator.num_pages > 1 %}
-                    {% include 'utils/_pagination_nav.html' with page_obj=page_obj %}
-                {% endif %}
+            {% if page_obj.paginator.num_pages > 1 %}
+                {% include 'utils/_pagination_nav.html' with page_obj=page_obj %}
+            {% endif %}
             </div>
         </div>
     </div>

@@ -4,43 +4,43 @@
 {% block content_title %}Checkout{% endblock %}
 
 {% block styles %}
-    {{ block.super }}
+{{ block.super }}
 
-    <style>
-        .row:last-child {
-            margin-bottom: 0 !important;
-        }
+<style>
+    .row:last-child {
+        margin-bottom: 0 !important;
+    }
 
-        textarea {
-            height: 150px;
-        }
+    textarea {
+        height: 150px;
+    }
 
-        @media screen and (max-width: 576px) {
-            /* Bootstrap5 .sm breakpoint */
-            .form-control {
-                width: 100% !important;
-            }
+    @media screen and (max-width: 576px) {
+        /* Bootstrap5 .sm breakpoint */
+        .form-control {
+            width: 100% !important;
         }
-    </style>
+    }
+</style>
 {% endblock styles %}
 
 
 {% block order_create_form %}
-    <div class="row px-3 mb-3">
-        <div class="panel-bg-color col-12 p-3 rounded">
-            <form action="" method="post" class="loading">
-                {% csrf_token %}
+<div class="row px-3 mb-3">
+    <div class="panel-bg-color col-12 p-3 rounded">
+        <form action="" method="post" class="loading">
+            {% csrf_token %}
 
-                {{ form.as_p }}
+            {{ form.as_p }}
 
-                <input
-                        type="submit"
-                        value="Checkout"
-                        class="loading btn btn-success btn-lg mt-3"
-                >
-            </form>
-        </div>
+            <input
+                type="submit"
+                value="Checkout"
+                class="loading btn btn-success btn-lg mt-3"
+            >
+        </form>
     </div>
+</div>
 {% endblock order_create_form %}
 
 
@@ -48,11 +48,11 @@
 {% block script_to_disable_cart_btn %}{% endblock %}
 
 {% block scripts %}
-    {{ block.super }}
+{{ block.super }}
 
-    {% load static %}
-    <script
-            defer
-            src="{% static 'js/order/is_create_profile_switcher.js' %}"
-    ></script>
+{% load static %}
+<script
+        defer
+        src="{% static 'js/order/is_create_profile_switcher.js' %}"
+></script>
 {% endblock scripts %} 

@@ -5,18 +5,18 @@
 
 
 {% block content %}
-    <h4>Attention!</h4>
-    <div class="fs-5">
-        <p>
-            Are you sure you want to unsubscribe from our mailing?
-            You'll miss out on the latest news and updates.
-        </p>
-        <form method="post" action="">
-            {% csrf_token %}
+<h4>Attention!</h4>
+<div class="fs-5">
+    <p>
+        Are you sure you want to unsubscribe from our mailing?
+        You'll miss out on the latest news and updates.
+    </p>
+    <form method="post" action="">
+        {% csrf_token %}
 
-            <button type="submit" class="btn btn-danger">
-                Unsubscribe :(
-            </button>
-        </form>
-    </div>
+        <button type="submit" class="btn btn-danger">
+            Unsubscribe :(
+        </button>
+    </form>
+</div>
 {% endblock content %}

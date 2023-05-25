@@ -30,7 +30,7 @@
                         </tr>
                     </thead>
                     <tbody>
-                        {% for order in page_obj %}
+                    {% for order in page_obj %}
                         <tr
                             class="d-flex justify-content-between align-items-center border-1 border-bottom py-2"
                         >
@@ -72,14 +72,14 @@
                                 </form>
                             </td>
                         </tr>
-                        {% endfor %}
+                    {% endfor %}
                     </tbody>
                 </table>
             </div>
 
-            {% if page_obj.paginator.num_pages > 1 %}
-                {% include 'utils/_pagination_nav.html' with page_obj=page_obj %}
-            {% endif %}
+        {% if page_obj.paginator.num_pages > 1 %}
+            {% include 'utils/_pagination_nav.html' with page_obj=page_obj %}
+        {% endif %}
         </div>
     </div>
 </div>

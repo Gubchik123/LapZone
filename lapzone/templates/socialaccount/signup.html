@@ -5,27 +5,26 @@
 
 
 {% block content %}
-    <p>
-        You are about to use your {{ account.get_provider.name }} account to
-        login to {{ site.name }}. As a final step, please complete the
-        following form:
-    </p>
+<p>
+	You are about to use your {{ account.get_provider.name }} account to login
+	to {{ site.name }}. As a final step, please complete the following form:
+</p>
 
-    <form id="signup_form" method="post" action="">
-        {% csrf_token %}
+<form id="signup_form" method="post" action="">
+	{% csrf_token %} 
+    
+    {{ form.as_p }} 
+    
+    {% if redirect_field_value %}
+	<input
+		type="hidden"
+		name="{{ redirect_field_name }}"
+		value="{{ redirect_field_value }}"
+	/>
+	{% endif %}
 
-        {{ form.as_p }}
-
-        {% if redirect_field_value %}
-            <input
-                    type="hidden"
-                    name="{{ redirect_field_name }}"
-                    value="{{ redirect_field_value }}"
-            />
-        {% endif %}
-
-        <button type="submit" class="btn btn-success btn-lg mt-3">
-            Sign Up &raquo;
-        </button>
-    </form>
+	<button type="submit" class="btn btn-success btn-lg mt-3">
+		Sign Up &raquo;
+	</button>
+</form>
 {% endblock content %}
