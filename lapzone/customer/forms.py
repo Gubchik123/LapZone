@@ -7,7 +7,7 @@ from general.forms import get_field_widget_attrs_with_placeholder_
 class UserModelForm(forms.ModelForm):
     """Form for the User model."""
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initializes the UserModelForm."""
         super().__init__(*args, **kwargs)
         self.fields["username"].help_text = ""

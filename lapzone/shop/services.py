@@ -10,7 +10,6 @@ from django.shortcuts import redirect
 
 from . import models
 
-
 logger = logging.getLogger(__name__)
 
 
@@ -62,14 +61,14 @@ def get_all_carousel_images() -> QuerySet[models.CarouselImage]:
 def are_ordering_parameters_valid(order_by: str, order_dir: str) -> bool:
     """Checks if the given order_by and order_dir are valid"""
     if (
-        # there are not order_by and order_dir
-        (not order_by and not order_dir)
-        # there is order_by but there is not order_dir
-        or (order_by and not order_dir)
-        # there is order_dir but there is not order_by
-        or (order_dir and not order_by)
-        or (order_dir not in ("asc", "desc"))
-        or (order_by not in ("name", "price"))
+            # there are not order_by and order_dir
+            (not order_by and not order_dir)
+            # there is order_by but there is not order_dir
+            or (order_by and not order_dir)
+            # there is order_dir but there is not order_by
+            or (order_dir and not order_by)
+            or (order_dir not in ("asc", "desc"))
+            or (order_by not in ("name", "price"))
     ):
         return False
     return True
@@ -81,7 +80,7 @@ def get_order_symbol_by_(order_dir: str) -> str:
 
 
 def get_products_that_contains_(
-    user_input: str, products: QuerySet[models.Product]
+        user_input: str, products: QuerySet[models.Product]
 ) -> QuerySet[models.Product]:
     """Returns the given products filtered by user search input"""
     return products.filter(name__icontains=user_input)
@@ -100,9 +99,9 @@ def check_and_get_redirect_response_by_(form) -> HttpResponseRedirect | None:
         return redirect("shop:category", slug=category.slug)
 
     if (  # checked only one brand in the form
-        brands
-        and len(brands) == 1
-        and not any([max_price, min_price, category, years])
+            brands
+            and len(brands) == 1
+            and not any([max_price, min_price, category, years])
     ):
         return redirect("shop:brand", slug=brands.first().slug)
 
@@ -110,21 +109,21 @@ def check_and_get_redirect_response_by_(form) -> HttpResponseRedirect | None:
 
 
 def get_products_filtered_by_category_(
-    slug: str, products: QuerySet[models.Product]
+        slug: str, products: QuerySet[models.Product]
 ) -> QuerySet[models.Product]:
     """Returns the given products filtered by category slug."""
     return products.filter(category__slug=slug)
 
 
 def get_products_filtered_by_brand_(
-    slug: str, products: QuerySet[models.Product]
+        slug: str, products: QuerySet[models.Product]
 ) -> QuerySet[models.Product]:
     """Returns the given products filtered by brand slug."""
     return products.filter(brand__slug=slug)
 
 
 def create_review_with_data_from_(
-    form, product_slug: str, review_parent_id: str | None
+        form, product_slug: str, review_parent_id: str | None
 ) -> None:
     """Saves model form (creates review) with product by the given slug."""
     review: models.Review = form.save(commit=False)
@@ -134,7 +133,7 @@ def create_review_with_data_from_(
     review.save()
 
 
-def _get_user_id_from_(request_body: bytes) -> int:
+def _get_user_id_from_(request_body: bytes) -> int | None:
     """Extracts and returns the user ID from a JSON request body."""
     data = json.loads(request_body)
     try:
@@ -144,7 +143,7 @@ def _get_user_id_from_(request_body: bytes) -> int:
 
 
 def add_or_delete_like_and_get_response_message(
-    request_body: bytes, product_slug: str
+        request_body: bytes, product_slug: str
 ) -> str:
     """
     Adds or deletes a 'like' record

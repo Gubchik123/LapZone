@@ -13,7 +13,6 @@ from general.admin_mixins import (
     ModelWithFKToUserAdminMixin,
 )
 
-
 admin.site.site_title = admin.site.site_header = "LapZone Admin"
 
 
@@ -197,8 +196,8 @@ class ReviewParentListFilter(admin.SimpleListFilter):
     parameter_name = "parent"
 
     def lookups(
-        self, request: HttpRequest, model_admin: models.Review
-    ) -> tuple[tuple[str, str]]:
+            self, request: HttpRequest, model_admin: models.Review
+    ) -> tuple[tuple[str, str], tuple[str, str]]:
         """Returns variants of filtering"""
         return (("Yes", "There is"), ("No", "There is not"))
 

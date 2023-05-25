@@ -44,7 +44,7 @@ class OrderCheckoutModelForm(UserModelForm, forms.ModelForm):
         ),
     )
 
-    def __init__(self, *args, **kwargs):
+    def __init__(self, *args, **kwargs) -> None:
         """Initializes the OrderCheckoutModelForm."""
         super().__init__(*args, **kwargs)
         self.fields["username"].required = False

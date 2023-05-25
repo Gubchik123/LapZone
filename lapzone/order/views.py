@@ -17,7 +17,9 @@ class OrderCheckoutFormView(generic.FormView):
     form_class = OrderCheckoutModelForm
     template_name = "order/order_checkout.html"
 
-    def get_form(self, form_class=None):
+    def get_form(
+            self, form_class: OrderCheckoutModelForm | None = None
+    ) -> OrderCheckoutModelForm:
         """
         Returns an instance of the form to be used in this view.
         Checks if the user is authenticated and removes the fields that user already has.
@@ -45,7 +47,7 @@ class OrderViewMixin(BaseView, LoginRequiredMixin):
 
     model = Order
 
-    def get_queryset(self):
+    def get_queryset(self) -> QuerySet[Order]:
         """Returns a queryset of orders that belong to the current user."""
         return super().get_queryset().filter(user=self.request.user)
 

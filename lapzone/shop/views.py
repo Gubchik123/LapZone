@@ -20,7 +20,7 @@ class _ShopViewMixin(BaseView):
         """
         Adds list of product IDs that user liked in context data and returns it.
         """
-        context = super().get_context_data(**kwargs)
+        context: dict[str, Any] = super().get_context_data(**kwargs)
         if self.request.user.is_authenticated:
             context["liked_products"] = services.get_liked_products_for_(
                 self.request.user
@@ -33,9 +33,9 @@ class HomeView(_ShopViewMixin, generic.TemplateView):
 
     template_name = "shop/home.html"
 
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         """Adds some content in context data and returns it."""
-        context = super().get_context_data(**kwargs)
+        context: dict[str, Any] = super().get_context_data(**kwargs)
         context[
             "recently_added_products"
         ] = services.get_recently_added_products(10)
@@ -54,8 +54,8 @@ class _ProductListView(_ShopViewMixin, generic.ListView):
 
     def get_ordering(self) -> list[str]:
         """Returns list of ordering after checking GET parameters"""
-        order_by = self.request.GET.get("orderby")
-        order_dir = self.request.GET.get("orderdir")
+        order_by: str | Any = self.request.GET.get("orderby")
+        order_dir: str | Any = self.request.GET.get("orderdir")
 
         if services.are_ordering_parameters_valid(order_by, order_dir):
             return [services.get_order_symbol_by_(order_dir) + order_by]
@@ -67,7 +67,7 @@ class AllProductsListView(_ProductListView):
 
     def get_queryset(self) -> QuerySet[Product]:
         """Returns QuerySet with either searched or filtered products."""
-        user_search_input = self.request.GET.get("q", None)
+        user_search_input: str | None = self.request.GET.get("q", None)
         form = ProductFilterForm(self.request.POST)
         products = super().get_queryset()
 
@@ -80,9 +80,9 @@ class AllProductsListView(_ProductListView):
 
         return products
 
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         """Adds page title and filter form in context data and returns it."""
-        context = super().get_context_data(**kwargs)
+        context: dict[str, Any] = super().get_context_data(**kwargs)
         context["page_title"] = "All products"
         context["filter_form"] = ProductFilterForm(self.request.POST)
         return context
@@ -109,9 +109,9 @@ class ProductListByCategoryView(_ProductListView):
             self.kwargs["slug"], products=super().get_queryset()
         )
 
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         """Adds page title and filter form in context data and returns it."""
-        context = super().get_context_data(**kwargs)
+        context: dict[str, Any] = super().get_context_data(**kwargs)
         category = get_object_or_404(Category, slug=self.kwargs["slug"])
         context["page_title"] = category.name.capitalize()
         context["filter_form"] = ProductFilterForm({"category": category})
@@ -127,9 +127,9 @@ class ProductListByBrandView(_ProductListView):
             self.kwargs["slug"], products=super().get_queryset()
         )
 
-    def get_context_data(self, **kwargs) -> dict[str, Any]:
+    def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         """Adds page title and filter form in context data and returns it."""
-        context = super().get_context_data(**kwargs)
+        context: dict[str, Any] = super().get_context_data(**kwargs)
         brand = get_object_or_404(Brand, slug=self.kwargs["slug"])
         context["page_title"] = f"{brand.name.capitalize()} products"
         context["filter_form"] = ProductFilterForm({"brands": [brand]})
@@ -145,12 +145,12 @@ class ProductDetailView(BaseView, generic.DetailView):
         """
         Adds is_liked: bool and review form in context data and returns it.
         """
-        context = super().get_context_data(**kwargs)
+        context: dict[str, Any] = super().get_context_data(**kwargs)
         context["review_form"] = ReviewModelForm()
         if self.request.user.is_authenticated:
             context["is_liked"] = context[
-                "product"
-            ].id in services.get_liked_products_for_(self.request.user)
+                                      "product"
+                                  ].id in services.get_liked_products_for_(self.request.user)
         return context
 
 
@@ -167,7 +167,9 @@ class ReviewFormView(BaseView, generic.FormView):
     def form_valid(self, form: ReviewModelForm) -> HttpResponseRedirect:
         """Adds success message, creates review
         and returns redirect to product_detail page."""
-        review_parent_id = self.request.POST.get("review_parent_id", None)
+        review_parent_id: str | None = self.request.POST.get(
+            "review_parent_id", None
+        )
         services.create_review_with_data_from_(
             form,
             product_slug=self.kwargs["slug"],

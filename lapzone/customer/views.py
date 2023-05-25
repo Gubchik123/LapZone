@@ -19,7 +19,7 @@ class CustomerDetailView(BaseView, LoginRequiredMixin, generic.TemplateView):
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         """Adds the UserModelForm to the context and returns it."""
-        context = super().get_context_data(**kwargs)
+        context: dict[str, Any] = super().get_context_data(**kwargs)
         context["form"] = UserModelForm(instance=self.request.user)
         return context
 
@@ -40,7 +40,7 @@ class CustomerPOSTViewMixin(BaseView):
 
     http_method_names = ["post"]
 
-    def get_object(self, queryset: QuerySet[User] | None = ...) -> User:
+    def get_object(self, queryset: QuerySet[User] | None = None) -> User:
         """Returns the current user."""
         return self.request.user
 
