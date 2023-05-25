@@ -21,7 +21,7 @@ class ModelWithFKToProductAdminMixin:
     list_filter = ("product",)
 
     def get_product_link(self, model: Model) -> SafeText | str:
-        """Returns link to the admin page for shot.product"""
+        """Returns link to the admin page for shot product."""
         if model.product:
             link_to_product = reverse(
                 "admin:shop_product_change", args=(model.product.pk,)
@@ -39,7 +39,7 @@ class ModelWithFKToUserAdminMixin:
     inherited form abstract ModelWithFKToUser."""
 
     def get_user_link(self, model: Model) -> SafeText:
-        """Returns link to the admin page for like.user"""
+        """Returns link to the admin page for user like."""
         link_to_user = reverse("admin:auth_user_change", args=(model.user.pk,))
         return mark_safe(f"<a href='{link_to_user}'>{model.user.username}</a>")
 

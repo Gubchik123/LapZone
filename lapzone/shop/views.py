@@ -14,7 +14,7 @@ from .forms import ProductFilterForm, ReviewModelForm
 
 
 class _ShopViewMixin(BaseView):
-    """Mixin for the "Shop" views that handles GET requests."""
+    """Mixin for the "Shop" views that handle GET requests."""
 
     def get_context_data(self, **kwargs: Any) -> dict[str, Any]:
         """
@@ -53,7 +53,7 @@ class _ProductListView(_ShopViewMixin, generic.ListView):
     queryset = Product.objects.all().only("name", "slug", "image", "price")
 
     def get_ordering(self) -> list[str]:
-        """Returns list of ordering after checking GET parameters"""
+        """Returns list of ordering after checking GET parameters."""
         order_by: str | Any = self.request.GET.get("orderby")
         order_dir: str | Any = self.request.GET.get("orderdir")
 
@@ -137,7 +137,7 @@ class ProductListByBrandView(_ProductListView):
 
 
 class ProductDetailView(BaseView, generic.DetailView):
-    """View for displaying detailed information about a single product."""
+    """View for the detail product page."""
 
     model = Product
 

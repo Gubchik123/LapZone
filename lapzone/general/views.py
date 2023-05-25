@@ -6,17 +6,16 @@ from django.core.exceptions import BadRequest, PermissionDenied
 
 from general.error_views import Error, CustomServerErrorView, render_error_page
 
-
 logger = logging.getLogger(__name__)
 
 
 class BaseView:
-    """Base view for all other views with exception handling"""
+    """Base view for all other views with exception handling."""
 
     def dispatch(
-        self, request: http.HttpRequest, *args, **kwargs
+            self, request: http.HttpRequest, *args, **kwargs
     ) -> http.HttpResponse:
-        """Handles exceptions during dispatch and returns a response"""
+        """Handles exceptions during dispatch and returns a response."""
         try:
             return super().dispatch(request, *args, **kwargs)
         except Exception as e:
@@ -46,7 +45,7 @@ class DeleteViewMixin:
     http_method_names = ["post"]
 
     def post(
-        self, request: http.HttpRequest, *args, **kwargs
+            self, request: http.HttpRequest, *args, **kwargs
     ) -> http.HttpResponseRedirect:
         """Adds the success_message and calls the super method."""
         messages.success(request, self.success_message)

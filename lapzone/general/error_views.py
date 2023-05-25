@@ -15,7 +15,7 @@ class Error(NamedTuple):
 
 
 def render_error_page(request: HttpRequest, error: Error) -> HttpResponse:
-    """Renders error page (if template exist) by given error"""
+    """Renders error page (if template exist) by given error."""
     try:
         return render(
             request, "pages/error.html", {"error": error}, status=error.code
@@ -46,7 +46,7 @@ class ErrorView(View):
 
 
 class CustomBadRequestView(ErrorView):
-    """Custom view for handling the 400 HTTP status code"""
+    """Custom view for handling the 400 HTTP status code."""
 
     code = 400
     name = "Bad Request"
@@ -54,7 +54,7 @@ class CustomBadRequestView(ErrorView):
 
 
 class CustomPermissionDeniedView(ErrorView):
-    """Custom view for handling the 403 HTTP status code"""
+    """Custom view for handling the 403 HTTP status code."""
 
     code = 403
     name = "Permission denied"
@@ -62,7 +62,7 @@ class CustomPermissionDeniedView(ErrorView):
 
 
 class CustomNotFoundView(ErrorView):
-    """Custom view for handling the 404 HTTP status code"""
+    """Custom view for handling the 404 HTTP status code."""
 
     code = 404
     name = "Not Found"
@@ -72,7 +72,7 @@ class CustomNotFoundView(ErrorView):
 
 
 class CustomServerErrorView(ErrorView):
-    """Custom view for handling the 500 HTTP status code"""
+    """Custom view for handling the 500 HTTP status code."""
 
     code = 500
     name = "Internal Server Error"

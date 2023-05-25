@@ -11,7 +11,7 @@ from general.models import (
 
 
 class ModelWithTotalPrice(models.Model):
-    """Abstract model with 'total_price' FloatField"""
+    """Abstract model with 'total_price' FloatField."""
 
     total_price = models.FloatField(blank=False, verbose_name="Total price")
 

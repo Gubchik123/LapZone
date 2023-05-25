@@ -1,8 +1,7 @@
 from django.views import generic
-from django.contrib import messages
 from django.urls import reverse_lazy
 from django.db.models import QuerySet
-from django.http import HttpResponseRedirect, HttpRequest
+from django.http import HttpResponseRedirect
 from django.contrib.auth.mixins import LoginRequiredMixin
 
 from . import services

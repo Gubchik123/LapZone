@@ -63,7 +63,7 @@ class OrderItemModelAdmin(
     readonly_fields = ("get_product_link", "get_order_link", "get_total_price")
 
     def get_order_link(self, order_item: OrderItem) -> SafeText:
-        """Returns link to the admin page for order.order"""
+        """Returns link to the admin page for order."""
         link_to_order = reverse(
             "admin:order_order_change", args=(order_item.order.pk,)
         )

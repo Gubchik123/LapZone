@@ -9,7 +9,7 @@ from django.contrib.auth.models import User
 
 
 class ModelWithUUIDPK(models.Model):
-    """Abstract model with 'id' UUIDField as primary key"""
+    """Abstract model with 'id' UUIDField as primary key."""
 
     id = models.UUIDField(
         unique=True,
@@ -24,7 +24,7 @@ class ModelWithUUIDPK(models.Model):
 
 
 class ModelWithName(models.Model):
-    """Abstract model with 'name' CharField"""
+    """Abstract model with 'name' CharField."""
 
     name = models.CharField(
         max_length=100, unique=True, blank=False, verbose_name="Name"
@@ -39,7 +39,7 @@ class ModelWithName(models.Model):
 
 
 class ModelWithNameAndSlug(ModelWithName, models.Model):
-    """Abstract model with 'name' CharField and 'slug' SlugField"""
+    """Abstract model with 'name' CharField and 'slug' SlugField."""
 
     # Class attribute
     url_pattern_name: str
@@ -68,7 +68,7 @@ class ModelWithNameAndSlug(ModelWithName, models.Model):
 
 
 class ModelWithDescription(models.Model):
-    """Abstract model with 'description' TextField"""
+    """Abstract model with 'description' TextField."""
 
     description = models.TextField(blank=False, verbose_name="Description")
 
@@ -77,7 +77,7 @@ class ModelWithDescription(models.Model):
 
 
 class ModelWithImage(models.Model):
-    """Abstract model with 'image' ImageField"""
+    """Abstract model with 'image' ImageField."""
 
     image = models.ImageField(
         upload_to="content/", blank=False, verbose_name="Image"
@@ -88,9 +88,9 @@ class ModelWithImage(models.Model):
         is_allow_to_resize_image = self._get_allow_for_image_resizing()
         super().save(*args, **kwargs)
         if (
-            is_allow_to_resize_image
-            and self.is_allow_to_resize
-            and not settings.TESTING
+                is_allow_to_resize_image
+                and self.is_allow_to_resize
+                and not settings.TESTING
         ):
             self._resize_and_optimize_image()
 
@@ -135,7 +135,7 @@ class ModelWithImage(models.Model):
 
 
 class ModelWithPrice(models.Model):
-    """Abstract model with 'price' FloatField"""
+    """Abstract model with 'price' FloatField."""
 
     price = models.FloatField(blank=False, verbose_name="Price")
 
@@ -144,7 +144,7 @@ class ModelWithPrice(models.Model):
 
 
 class ModelWithCreatedDateTime(models.Model):
-    """Abstract model with 'created' DateTimeField"""
+    """Abstract model with 'created' DateTimeField."""
 
     created = models.DateTimeField(
         auto_now_add=True, verbose_name="Created datetime"
@@ -171,7 +171,7 @@ class _ModelWithFKToProductCustomManager(models.Manager):
 
 
 class ModelWithFKToProduct(models.Model):
-    """Abstract model with 'product' ForeignKey field"""
+    """Abstract model with 'product' ForeignKey field."""
 
     product = models.ForeignKey(
         "shop.Product",
@@ -186,7 +186,7 @@ class ModelWithFKToProduct(models.Model):
 
 
 class ModelWithFKToUser(models.Model):
-    """Abstract model with 'user' ForeignKey field"""
+    """Abstract model with 'user' ForeignKey field."""
 
     user = models.ForeignKey(
         User, on_delete=models.CASCADE, verbose_name="User"

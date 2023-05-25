@@ -17,7 +17,7 @@ from general.models import (
 class Brand(ModelWithNameAndSlug, models.Model):
     """
     A model representing a product brand, for example, Asus.
-    Fields: name, slug
+    Fields: name, slug.
     """
 
     url_pattern_name = "brand"
@@ -38,7 +38,7 @@ Brand._meta.get_field("slug").max_length = 30
 class Category(ModelWithNameAndSlug, models.Model):
     """
     A model representing a product category, for example, laptops.
-    Fields: name, slug
+    Fields: name, slug.
     """
 
     url_pattern_name = "category"
@@ -57,7 +57,7 @@ Category._meta.get_field("slug").max_length = 50
 
 
 class ModelWithDescriptionAndImage(ModelWithDescription, ModelWithImage):
-    """Abstract model with 'description' TextField and 'image' ImageField"""
+    """Abstract model with 'description' TextField and 'image' ImageField."""
 
     class Meta:
         abstract = True
@@ -71,7 +71,7 @@ class Product(
 ):
     """
     A model representing a product, for example, 'ASUS ROG Zephyrus M16'.
-    Fields: name, slug, description, image, price, year, brand, category
+    Fields: name, slug, description, image, price, year, brand, category.
     """
 
     # Class attribute
@@ -113,7 +113,7 @@ class ProductShot(
 ):
     """
     A model representing a product shot.
-    Fields: name, description, image, product
+    Fields: name, description, image, product.
     """
 
     def save(self, *args, **kwargs):
@@ -152,7 +152,7 @@ class Like(
 ):
     """
     A model representing a product like from user.
-    Fields: created, product, user
+    Fields: created, product, user.
     """
 
     def __str__(self) -> str:
@@ -171,7 +171,7 @@ class _ReviewCustomManager(models.Manager):
     """Custom manager for the Review model."""
 
     def all(self):
-        """Returns all reviews using the select_related for the 'parent'"""
+        """Returns all reviews using the select_related for the 'parent'."""
         return super().all().select_related("parent")
 
 
@@ -181,7 +181,7 @@ class Review(
 ):
     """
     A model representing a product review from someone.
-    Fields: username, body, created, parent, product
+    Fields: username, body, created, parent, product.
     """
 
     name = models.CharField(

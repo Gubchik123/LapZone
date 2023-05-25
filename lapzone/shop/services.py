@@ -59,7 +59,7 @@ def get_all_carousel_images() -> QuerySet[models.CarouselImage]:
 
 
 def are_ordering_parameters_valid(order_by: str, order_dir: str) -> bool:
-    """Checks if the given order_by and order_dir are valid"""
+    """Checks if the given order_by and order_dir are valid."""
     if (
             # there are not order_by and order_dir
             (not order_by and not order_dir)
@@ -75,19 +75,19 @@ def are_ordering_parameters_valid(order_by: str, order_dir: str) -> bool:
 
 
 def get_order_symbol_by_(order_dir: str) -> str:
-    """Returns the Django order symbol."""
+    """Returns the Django order symbol (dash or empty string)."""
     return "-" if order_dir == "desc" else ""
 
 
 def get_products_that_contains_(
         user_input: str, products: QuerySet[models.Product]
 ) -> QuerySet[models.Product]:
-    """Returns the given products filtered by user search input"""
+    """Returns the given products filtered by user search input."""
     return products.filter(name__icontains=user_input)
 
 
 def check_and_get_redirect_response_by_(form) -> HttpResponseRedirect | None:
-    """Checks filter form and returns redirect response or None"""
+    """Checks filter form and returns redirect response or None."""
     max_price = form.cleaned_data["max_price"]
     min_price = form.cleaned_data["min_price"]
     category = form.cleaned_data["category"]

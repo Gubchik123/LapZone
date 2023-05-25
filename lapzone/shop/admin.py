@@ -17,7 +17,7 @@ admin.site.site_title = admin.site.site_header = "LapZone Admin"
 
 
 class BaseModelAdmin:
-    """Base admin class with general options"""
+    """Base admin class with general options."""
 
     list_per_page = 25
     ordering = ("id",)
@@ -25,7 +25,7 @@ class BaseModelAdmin:
 
 class ModelWithNameAdminMixin:
     """Admin mixin for managing instances
-    that inherited from abstract ModelWithName"""
+    that inherited from abstract ModelWithName."""
 
     search_fields = ("name",)
     search_help_text = "Searching by name"
@@ -33,7 +33,7 @@ class ModelWithNameAdminMixin:
 
 class ModelWithNameAndSlugAdminMixin(ModelWithNameAdminMixin):
     """Admin mixin for managing instances that
-    inherited from abstract ModelWithNameAndSlug"""
+    inherited from abstract ModelWithNameAndSlug."""
 
     prepopulated_fields = {"slug": ("name",)}
 
@@ -60,7 +60,7 @@ class CategoryModelAdmin(
 
 class ModelWithImageAdminMixin:
     """Admin mixin for managing instances
-    that inherited from abstract ModeWithImage"""
+    that inherited from abstract ModeWithImage."""
 
     def get_image(self, obj: models.Product | models.ProductShot) -> SafeText:
         """Returns HTML image tag with product or product shot image url"""
@@ -73,7 +73,7 @@ class ModelWithImageAdminMixin:
 
 class ProductAdminForm(forms.ModelForm):
     """
-    Model form for adding 'ckeditor' uploading widget to 'description' field
+    Model form for adding 'ckeditor' uploading widget to 'description' field.
     """
 
     description = forms.CharField(
@@ -86,7 +86,7 @@ class ProductAdminForm(forms.ModelForm):
 
 
 class ProductShotInline(ModelWithImageAdminMixin, admin.TabularInline):
-    """Custom admin TabularInline for embedded product shots"""
+    """Custom admin TabularInline for embedded product shots."""
 
     extra = 0
     max_num = 5
@@ -136,7 +136,7 @@ class ProductModelAdmin(
     inlines = (ProductShotInline,)
 
     def get_brand_link(self, product: models.Product) -> SafeText:
-        """Returns link to the admin page for product.brand"""
+        """Returns link to the admin page for product brand."""
         link_to_brand = reverse(
             "admin:shop_brand_change", args=(product.brand.pk,)
         )
@@ -145,7 +145,7 @@ class ProductModelAdmin(
     get_brand_link.short_description = "Brand"
 
     def get_category_link(self, product: models.Product) -> SafeText:
-        """Returns link to the admin page for product.category"""
+        """Returns link to the admin page for product category."""
         link_to_category = reverse(
             "admin:shop_category_change", args=(product.category.pk,)
         )
@@ -190,7 +190,7 @@ class LikeModelAdmin(
 
 
 class ReviewParentListFilter(admin.SimpleListFilter):
-    """Custom list filter by review parent"""
+    """Custom list filter by review parent."""
 
     title = "Parent review"
     parameter_name = "parent"
@@ -241,7 +241,7 @@ class ReviewModelAdmin(
 
     def get_parent_link(self, review: models.Review) -> SafeText | str:
         """
-        Returns link to the admin page for parent review if this one has it
+        Returns link to the admin page for parent review if this one has it.
         """
         if review.parent:
             link_to_user = reverse(
