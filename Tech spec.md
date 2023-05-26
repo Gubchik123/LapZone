@@ -229,132 +229,306 @@ LapZone
 │
 │   .gitattributes
 │   .gitignore
+│   README.md
 │   Tech spec.md
-│
+│   
 ├───lapzone
 │   │   .env
+│   │   file_env_example.txt
 │   │   manage.py
-│   │
+│   │   
 │   ├───cart
-│   │   │   __init__.py       
-│   │   │   admin.py
 │   │   │   apps.py
-│   │   │   forms.py
-│   │   │   models.py
-│   │   │   services.py       
-│   │   │   views.py
-│   │   │
-│   │   ├───migrations        
-│   │   │       __init__.py   
-│   │   │
-│   │   └───tests
-│   │           __init__.py   
-│   │           test_forms.py 
-│   │           test_models.py
-│   │           test_views.py 
-│   │
-│   ├───customer
-│   │   │   __init__.py
-│   │   │   admin.py
-│   │   │   apps.py
-│   │   │   forms.py
-│   │   │   models.py
+│   │   │   cart.py
+│   │   │   context_processors.py
 │   │   │   services.py
+│   │   │   urls.py
 │   │   │   views.py
-│   │   │
+│   │   │   __init__.py
+│   │   │   
 │   │   ├───migrations
 │   │   │       __init__.py
-│   │   │
+│   │   │       
+│   │   ├───templates
+│   │   │   └───cart
+│   │   │       │   detail.html
+│   │   │       │   _base.html
+│   │   │       │   
+│   │   │       └───utils
+│   │   │               _product_table.html
+│   │   │               
 │   │   └───tests
-│   │           __init__.py
-│   │           test_forms.py
-│   │           test_models.py
+│   │           test_cart.py
 │   │           test_views.py
-│   │
+│   │           __init__.py
+│   │           
+│   ├───customer
+│   │   │   apps.py
+│   │   │   forms.py
+│   │   │   urls.py
+│   │   │   views.py
+│   │   │   __init__.py
+│   │   │   
+│   │   ├───templates
+│   │   │   └───customer
+│   │   │       │   detail.html
+│   │   │       │   wish_list.html
+│   │   │       │   
+│   │   │       └───utils
+│   │   │               _link_list_group.html
+│   │   │               
+│   │   └───tests
+│   │           test_forms.py
+│   │           test_views.py
+│   │           __init__.py
+│   │           
 │   ├───general
-│   │       __init__.py
-│   │       error_views.py
-│   │       models.py
-│   │       views.py
-│   │
+│   │   │   admin_mixins.py
+│   │   │   error_views.py
+│   │   │   forms.py
+│   │   │   models.py
+│   │   │   views.py
+│   │   │   __init__.py
+│   │   │   
+│   │   ├───tests
+│   │   │       test_error_views.py
+│   │   │       __init__.py
+│   │   │       
+│   │   └───test_mixins
+│   │           for_models.py
+│   │           for_views.py
+│   │           __init__.py
+│   │           
 │   ├───lapzone
-│   │       __init__.py
 │   │       asgi.py
 │   │       settings.py
 │   │       urls.py
 │   │       wsgi.py
-│   │
+│   │       __init__.py
+│   │       
 │   ├───mailing
-│   │   │   __init__.py
 │   │   │   admin.py
 │   │   │   apps.py
+│   │   │   context_processors.py
 │   │   │   forms.py
 │   │   │   models.py
 │   │   │   services.py
+│   │   │   urls.py
 │   │   │   views.py
-│   │   │
+│   │   │   __init__.py
+│   │   │   
 │   │   ├───migrations
+│   │   │       0001_initial.py
 │   │   │       __init__.py
-│   │   │
+│   │   │       
+│   │   ├───templates
+│   │   │   └───mailing
+│   │   │           confirm_delete.html
+│   │   │           email.html
+│   │   │           
 │   │   └───tests
-│   │           __init__.py
 │   │           test_forms.py
 │   │           test_models.py
 │   │           test_views.py
-│   │
+│   │           __init__.py
+│   │           
 │   ├───media
+│   │   ├───carousel_images
+│   │   │       ASUS_ROG_Strix_G15_banner.webp
+│   │   │       Asus_ROG_Zephyrus_M16_banner.webp
+│   │   │       Site_header.webp
+│   │   │       
+│   │   ├───products
+│   │   │       asus-rog-strix-g15-g513ic.webp
+│   │   │       asus-rog-zephyrus-m16.webp
+│   │   │       asus-tuf-gaming-f15.webp
+│   │   │       bag-for-laptop-asus-rog-bp4701-17.jpg
+│   │   │       corsair-k70-rgb-mk2-cherry-mx-red-usb-black.jpg
+│   │   │       dell-g15-5520.webp
+│   │   │       lenovo-legion-5-15ach6h_EgkN0aa.webp
+│   │   │       logitech-g502-special-edition.jpg
+│   │   │       steelseries-aerox-3-wireless-onyx.webp
+│   │   │       
+│   │   └───product_shots
+│   │           asus-rog-strix-g15-g513ic-shot-1.webp
+│   │           asus-rog-zephyrus-m16-shot-1.jpg
+│   │           asus-rog-zephyrus-m16-shot-2.jpg
+│   │           asus-rog-zephyrus-m16-shot-3.jpg
+│   │           asus-rog-zephyrus-m16-shot-4.jpg
+│   │           asus-rog-zephyrus-m16-shot-5.webp
+│   │           
 │   ├───order
-│   │   │   __init__.py
 │   │   │   admin.py
 │   │   │   apps.py
 │   │   │   forms.py
 │   │   │   models.py
 │   │   │   services.py
+│   │   │   urls.py
 │   │   │   views.py
-│   │   │
+│   │   │   __init__.py
+│   │   │   
 │   │   ├───migrations
+│   │   │       0001_initial.py
+│   │   │       0002_orderitem_total_price.py
 │   │   │       __init__.py
-│   │   │
+│   │   │       
+│   │   ├───templates
+│   │   │   └───order
+│   │   │           email.html
+│   │   │           order_checkout.html
+│   │   │           order_detail.html
+│   │   │           order_list.html
+│   │   │           _base.html
+│   │   │           
 │   │   └───tests
-│   │           __init__.py
 │   │           test_forms.py
 │   │           test_models.py
 │   │           test_views.py
-│   │
+│   │           __init__.py
+│   │           
 │   ├───shop
-│   │   │   __init__.py
 │   │   │   admin.py
 │   │   │   apps.py
 │   │   │   forms.py
 │   │   │   models.py
 │   │   │   services.py
+│   │   │   urls.py
 │   │   │   views.py
-│   │   │
+│   │   │   __init__.py
+│   │   │   
 │   │   ├───migrations
+│   │   │       0001_initial.py
+│   │   │       0002_alter_review_parent.py
+│   │   │       0003_alter_like_created_alter_like_product_and_more.py
+│   │   │       0004_carouselimage_alter_brand_slug_alter_category_slug_and_more.py
+│   │   │       0005_carouselimage_product.py
 │   │   │       __init__.py
-│   │   │
+│   │   │       
+│   │   ├───templates
+│   │   │   └───shop
+│   │   │       │   home.html
+│   │   │       │   product_detail.html
+│   │   │       │   product_list.html
+│   │   │       │   _base.html
+│   │   │       │   
+│   │   │       └───utils
+│   │   │               _product_card.html
+│   │   │               
 │   │   └───tests
-│   │           __init__.py
 │   │           test_forms.py
 │   │           test_models.py
 │   │           test_views.py
-│   │
+│   │           __init__.py
+│   │           
 │   ├───static
 │   │   ├───css
+│   │   │   │   general.css
+│   │   │   │   
+│   │   │   └───shop
+│   │   │           product_detail.css
+│   │   │           
 │   │   ├───images
+│   │   │       favicon.ico
+│   │   │       logo.ico
+│   │   │       site_header.webp
+│   │   │       
 │   │   └───js
+│   │       │   go_to_top_btn.js
+│   │       │   loading_form_btn.js
+│   │       │   remove_btn.js
+│   │       │   resize_pagination.js
+│   │       │   toggle_theme.js
+│   │       │   
+│   │       ├───cart
+│   │       │       cart_btn.js
+│   │       │       quantity_field.js
+│   │       │       remove_btn.js
+│   │       │       
+│   │       ├───order
+│   │       │       is_create_profile_switcher.js
+│   │       │       
+│   │       └───shop
+│   │               like_btn.js
+│   │               product_list.js
+│   │               
 │   └───templates
 │       │   _base.html
-│       │
+│       │   _base_email.html
+│       │   
+│       ├───account
+│       │   │   account_inactive.html
+│       │   │   base.html
+│       │   │   email.html
+│       │   │   email_confirm.html
+│       │   │   login.html
+│       │   │   password_change.html
+│       │   │   password_reset.html
+│       │   │   password_reset_done.html
+│       │   │   password_reset_from_key.html
+│       │   │   password_reset_from_key_done.html
+│       │   │   password_set.html
+│       │   │   signup.html
+│       │   │   signup_closed.html
+│       │   │   verification_sent.html
+│       │   │   verified_email_required.html
+│       │   │   
+│       │   ├───email
+│       │   │       account_already_exists_message.html
+│       │   │       email_confirmation_message.html
+│       │   │       email_confirmation_signup_message.html
+│       │   │       password_reset_key_message.html
+│       │   │       unknown_account_message.html
+│       │   │       
+│       │   ├───messages
+│       │   │       cannot_delete_primary_email.txt
+│       │   │       email_confirmation_sent.txt
+│       │   │       email_confirmed.txt
+│       │   │       email_deleted.txt
+│       │   │       logged_in.txt
+│       │   │       logged_out.txt
+│       │   │       password_changed.txt
+│       │   │       password_set.txt
+│       │   │       primary_email_set.txt
+│       │   │       unverified_primary_email.txt
+│       │   │       
+│       │   └───snippets
+│       │           already_logged_in.html
+│       │           
+│       ├───pages
+│       │       about.html
+│       │       error.html
+│       │       FAQs.html
+│       │       feedback.html
+│       │       
+│       ├───socialaccount
+│       │   │   authentication_error.html
+│       │   │   base.html
+│       │   │   connections.html
+│       │   │   login_cancelled.html
+│       │   │   signup.html
+│       │   │   
+│       │   ├───messages
+│       │   │       account_connected.txt
+│       │   │       account_connected_other.txt
+│       │   │       account_connected_updated.txt
+│       │   │       account_disconnected.txt
+│       │   │       
+│       │   └───snippets
+│       │           login_extra.html
+│       │           provider_list.html
+│       │           
 │       └───utils
+│               _alert.html
+│               _pagination_nav.html
+│               
 ├───md_images
-│   │   header.png
-│   │
+│   │   demo.jpg
+│   │   
 │   └───apps_db
 │           mailing.jpg
 │           order.jpg
 │           shop.jpg
-│
+│           
 └───requirements
         base.txt
         development.txt
