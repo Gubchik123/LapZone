@@ -1,7 +1,1 @@
-document.querySelectorAll(".remove.btn").forEach((remove_btn) => {
-	remove_btn.addEventListener("click", function (event) {
-		if (
-			!confirm("Do you really want to delete this one?")
-		) event.preventDefault();
-	});
-});
+document.querySelectorAll(".remove.btn").forEach(e=>{e.addEventListener("click",function(e){confirm("Do you really want to delete this one?")||e.preventDefault()})});
