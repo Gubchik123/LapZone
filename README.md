@@ -48,6 +48,7 @@ The system consists of the following main functional blocks:
 ### Environment Variables
 
 To run this project, you will need to add the following environment variables:
+
 > Look at the lapzone/file_env_example.txt
 
 ### Run Locally
@@ -68,6 +69,12 @@ Install dependencies
 
 ```
   pip install -r requirements/base.txt
+```
+
+Apply migrations
+
+```
+  python lapzone/manage.py migrate
 ```
 
 Run the project
