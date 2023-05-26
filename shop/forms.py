@@ -79,16 +79,14 @@ dict_with_field_classes = {"class": "form-control w-50 mb-2"}
 class ReviewModelForm(forms.ModelForm):
     """Model form for adding review to product."""
 
-    if not settings.TESTING:
-        captcha = ReCaptchaField()
+    captcha = ReCaptchaField()
 
     class Meta:
         """Meta options for the ReviewForm."""
 
         model = Review
         fields = ("name", "body")
-        if not settings.TESTING:
-            fields = ("name", "body", "captcha")
+        fields = ("name", "body", "captcha")
         widgets = {
             "name": forms.TextInput(attrs=dict_with_field_classes),
             "body": forms.Textarea(attrs=dict_with_field_classes),
