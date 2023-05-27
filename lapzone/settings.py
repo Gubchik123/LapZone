@@ -41,7 +41,6 @@ INSTALLED_APPS = [
     "allauth.socialaccount.providers.github",
     "ckeditor",
     "ckeditor_uploader",
-    "snowpenguin.django.recaptcha3",
     # My apps
     "shop.apps.ShopConfig",
     "cart.apps.CartConfig",
@@ -173,11 +172,6 @@ EMAIL_USE_SSL = False
 EMAIL_HOST_USER = str(os.getenv("EMAIL_HOST_USER"))
 EMAIL_HOST_PASSWORD = str(os.getenv("EMAIL_HOST_PASSWORD"))
 EMAIL_BACKEND = str(os.getenv("EMAIL_BACKEND"))
-
-RECAPTCHA_PUBLIC_KEY = str(os.getenv("RECAPTCHA_PUBLIC_KEY"))
-RECAPTCHA_PRIVATE_KEY = str(os.getenv("RECAPTCHA_PRIVATE_KEY"))
-RECAPTCHA_DEFAULT_ACTION = "generic"
-RECAPTCHA_SCORE_THRESHOLD = 0.5
 
 CART_SESSION_ID = "cart"
 

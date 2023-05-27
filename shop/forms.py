@@ -1,7 +1,5 @@
 from django import forms
-from django.conf import settings
 from django.db.models import QuerySet
-from snowpenguin.django.recaptcha3.fields import ReCaptchaField
 
 from . import services
 from .models import Product, Review
@@ -79,14 +77,11 @@ dict_with_field_classes = {"class": "form-control w-50 mb-2"}
 class ReviewModelForm(forms.ModelForm):
     """Model form for adding review to product."""
 
-    captcha = ReCaptchaField()
-
     class Meta:
         """Meta options for the ReviewForm."""
 
         model = Review
         fields = ("name", "body")
-        fields = ("name", "body", "captcha")
         widgets = {
             "name": forms.TextInput(attrs=dict_with_field_classes),
             "body": forms.Textarea(attrs=dict_with_field_classes),
