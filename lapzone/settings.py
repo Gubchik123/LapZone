@@ -16,7 +16,12 @@ SECRET_KEY = str(os.getenv("SECRET_KEY"))
 
 DEBUG = False
 
-ALLOWED_HOSTS = ["127.0.0.1", "localhost"]
+ALLOWED_HOSTS = [
+    "127.0.0.1",
+    "localhost",
+    "lapzone.tech"
+    "lapzone.herokuapp.com"
+]
 
 INSTALLED_APPS = [
     # Django apps
