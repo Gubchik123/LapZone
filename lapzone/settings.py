@@ -1,6 +1,4 @@
-import logging
 import os
-import sys
 from pathlib import Path
 
 from django.contrib.messages import constants as messages
@@ -19,8 +17,8 @@ DEBUG = False
 ALLOWED_HOSTS = [
     "127.0.0.1",
     "localhost",
-    "lapzone.tech"
-    "lapzone.herokuapp.com"
+    "lapzone.tech",
+    "lapzone.herokuapp.com",
 ]
 
 INSTALLED_APPS = [
@@ -33,7 +31,6 @@ INSTALLED_APPS = [
     "django.contrib.staticfiles",
     "django.contrib.sites",
     # Third-party apps
-    "whitenoise.runserver_nostatic",
     "allauth",
     "allauth.account",
     "allauth.socialaccount",
@@ -117,9 +114,6 @@ USE_TZ = True
 
 STATIC_URL = "static/"
 STATIC_ROOT = BASE_DIR / "static"
-
-STATICFILES_STORAGE = "whitenoise.storage.CompressedManifestStaticFilesStorage"
-WHITENOISE_KEEP_ONLY_HASHED_FILES = True
 
 DEFAULT_AUTO_FIELD = "django.db.models.BigAutoField"
 
