@@ -4,9 +4,9 @@
 	<a class="w-100 opacity-1" href="{{ product_url }}">
 		<img
             loading="lazy"
-			src="{{ product.image.url }}"
 			alt="{{ product.name }} image"
 			class="img-fluid w-100 rounded"
+			src="https://raw.githubusercontent.com/Gubchik123/LapZone/production{{ product.image.url }}"
 		/>
 	</a>
 </div>
@@ -15,7 +15,7 @@
 	<hr class="table-group-divider" />
 	<h5 class="mb-2 product__title">
 		<a href="{{ product_url }}" class="text-decoration-none text-center">
-			{{ product.name |truncatechars:30 }}
+			{{ product.name }}
 		</a>
 	</h5>
 	<hr class="table-group-divider" />

@@ -36,7 +36,10 @@
 						class="opacity-1"
 						href="{{ image.product.get_absolute_url }}"
 					>
-						<img class="w-100" src="{{ image.image.url }}" />
+						<img 
+                            class="w-100" 
+                            src="https://raw.githubusercontent.com/Gubchik123/LapZone/production{{ image.image.url }}" 
+                        />
 					</a>
 				</div>
 				{% endfor %}
