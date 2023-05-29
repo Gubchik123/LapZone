@@ -8,6 +8,5 @@ venv/
 .vscode/
 *.env
 
-media/
 lapzone/static/admin/
 lapzone/static/ckeditor/
