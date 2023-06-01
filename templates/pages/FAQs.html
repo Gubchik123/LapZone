@@ -4,10 +4,6 @@
 {% block content_title %}FAQs page{% endblock %}
 
 
-{% block content %}
-    <div class="row min-vh-100 px-3 d-flex justify-content-between">
-        <div class="min-vh-100 panel-bg-color col-12 rounded">
-
-        </div>
-    </div>
-{% endblock content %} 
+{% block advanced_content %}
+{% include 'utils/_alert.html' with message="Soon" category="primary" dismissible=False only %}
+{% endblock advanced_content %} 
