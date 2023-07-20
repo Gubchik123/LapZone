@@ -1,9 +1,8 @@
-from django.conf import settings
 from django.contrib import admin
 from django.urls import path, include
-from django.conf.urls.static import static
 from django.views.generic import TemplateView
 
+from . import views
 from general.error_views import (
     CustomBadRequestView,
     CustomPermissionDeniedView,
@@ -39,4 +38,5 @@ urlpatterns = [
         TemplateView.as_view(template_name="pages/feedback.html"),
         name="feedback",
     ),
+    path("robots.txt", views.get_robots_txt, name="robots_txt"),
 ]
