@@ -1,4 +1,4 @@
-<a href="https://lapzone.tech" target="_blank"><img title="LapZone" alt="Header image" src="./lapzone/static/images/site_header.webp"></a>
+<a href="https://lapzone.tech" target="_blank"><img title="LapZone" alt="Header image" src="./static/images/site_header.webp"></a>
 
 _Internet shop for selling laptops and accessories for them_
 
