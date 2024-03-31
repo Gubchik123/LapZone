@@ -4,7 +4,7 @@
 {# Redefining content of meta tags #}
 {% block page_description %}{{ product.description |striptags|truncatewords:25 }}{% endblock %}
 {% block social_description %}{{ product.description |striptags|truncatewords:25 }}{% endblock %}
-{% block social_image %}https://raw.githubusercontent.com/Gubchik123/LapZone/production{{ product.image.url }}{% endblock %}
+{% block social_image %}https://raw.githubusercontent.com/Gubchik123/LapZone/master{{ product.image.url }}{% endblock %}
 
 {% block title %}{{ product.name }}{% endblock %} 
 {% block content_title %}{{ product.name }}{% endblock %}
@@ -34,7 +34,7 @@
 						<img
 							class="d-block w-100"
 							alt="{{ product.name }} image"
-							src="https://raw.githubusercontent.com/Gubchik123/LapZone/production{{ product.image.url }}"
+							src="https://raw.githubusercontent.com/Gubchik123/LapZone/master{{ product.image.url }}"
 						/>
 					</div>
 
@@ -43,7 +43,7 @@
 						<img
 							class="d-block w-100"
 							alt="{{ shot.name }}"
-							src="https://raw.githubusercontent.com/Gubchik123/LapZone/production{{ shot.image.url }}"
+							src="https://raw.githubusercontent.com/Gubchik123/LapZone/master{{ shot.image.url }}"
 						/>
 					</div>
 				{% endfor %}

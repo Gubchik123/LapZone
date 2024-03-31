@@ -65,7 +65,7 @@ class ModelWithImageAdminMixin:
     def get_image(self, obj: models.Product | models.ProductShot) -> SafeText:
         """Returns HTML image tag with product or product shot image url"""
         return mark_safe(
-            f"<img src='https://raw.githubusercontent.com/Gubchik123/LapZone/production{obj.image.url}' loading='lazy' width='60' height='60' />"
+            f"<img src='https://raw.githubusercontent.com/Gubchik123/LapZone/master{obj.image.url}' loading='lazy' width='60' height='60' />"
         )
 
     get_image.short_description = "Mini image"
