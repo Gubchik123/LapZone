@@ -1,0 +1,396 @@
+<!DOCTYPE html>
+{% load static %}
+<html lang="en">
+	<head>
+		<meta charset="UTF-8" />
+		<meta http-equiv="X-UA-Compatible" content="IE=edge" />
+		<meta name="viewport" content="width=device-width, initial-scale=1.0" />
+
+		<meta name="author" content="Nikita Hubariev" />
+		<meta
+			name="keywords"
+			content="LapZone, Nikita Hubariev, Shop, Laptop, IT"
+		/>
+		<meta
+			name="description"
+			content="{% block page_description %}Internet shop for selling laptops and accessories for them.{% endblock %}"
+		/>
+
+		<!-- og:title is empty and social networks will take the page title -->
+		<meta property="og:title" content="" />
+		<meta property="og:site_name" content="LapZone" />
+		<meta property="og:type" content="Internet shop" />
+		<meta property="og:url" content="{{ request.build_absolute_uri }}" />
+		<meta
+			property="og:image"
+			content="{% block social_image %}{% static 'images/site_header.webp' %}{% endblock %}"
+		/>
+		<meta
+			property="og:description"
+			content="{% block social_description %}Internet shop for selling laptops and accessories for them.{% endblock %}"
+		/>
+
+		<meta name="twitter:card" content="summary_large_image" />
+		<meta name="twitter:image:alt" content="LapZone header image" />
+
+		<title>{% block title %}{% endblock %} | LapZone</title>
+
+		<!-- Site icon -->
+		<link
+			rel="icon"
+			type="image/x-icon"
+			href="{% static 'images/logo.ico' %}"
+		/>
+
+		<!-- Bootstrap5 CSS -->
+		<link
+			rel="stylesheet"
+			crossorigin="anonymous"
+			href="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/css/bootstrap.min.css"
+			integrity="sha384-iYQeCzEYFbKjA/T2uDLTpkwGzCiq6soy8tYaI1GyVh/UjpbCx/TYkiZhlZB6+fzT"
+		/>
+
+		<!-- Google font "Inter" -->
+		<link rel="preconnect" href="https://fonts.googleapis.com" />
+		<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+		<link
+			rel="stylesheet"
+			href="https://fonts.googleapis.com/css2?family=Inter:wght@200;600&display=swap"
+		/>
+
+		<!-- General CSS file -->
+		<link
+			type="text/css"
+			rel="stylesheet"
+			href="{% static 'css/general.css' %} "
+		/>
+
+		{# My styles and CSS files #} 
+        {% block styles %}{% endblock %}
+	</head>
+	<body>
+		<div class="wrapper d-flex flex-column min-vh-100">
+			<header class="panel-bg-color">
+				<nav class="navbar content-center panel-bg-color py-0">
+					<ul class="navbar-nav list-group-horizontal">
+						<li class="nav-item me-3">
+							<a href="/" class="nav-link text-color"> Home </a>
+						</li>
+						<li class="nav-item me-3">
+							<a
+								target="_blank"
+								class="nav-link text-color"
+								href="https://itish.live"
+							>
+								Blog
+							</a>
+						</li>
+						<li class="nav-item me-3">
+							<a
+								href="{% url 'faq' %}"
+								class="nav-link text-color"
+							>
+								FAQs
+							</a>
+						</li>
+						<li class="nav-item">
+							<a
+								href="{% url 'about' %}"
+								class="nav-link text-color"
+							>
+								About
+							</a>
+						</li>
+					</ul>
+				</nav>
+
+				<nav class="navbar navbar-expand-md panel-bg-color">
+					<div class="container-fluid">
+						<a
+							class="navbar-brand text-color"
+							href="{% url 'shop:product_list' %}"
+						>
+							<h4>LapZone</h4>
+						</a>
+
+						<!-- Burger button -->
+						<button
+							type="button"
+							aria-expanded="false"
+							class="navbar-toggler"
+							data-bs-toggle="collapse"
+							aria-label="Toggle navigation"
+							aria-controls="navbarSupportedContent"
+							data-bs-target="#navbarSupportedContent"
+						>
+							<span class="navbar-toggler-icon"></span>
+						</button>
+
+						<div
+							id="navbarSupportedContent"
+							class="collapse navbar-collapse"
+						>
+							<!-- Left navbar side -->
+							<ul
+								class="navbar-nav list-group-horizontal-md me-md-auto justify-content-center"
+							>
+								<li class="nav-item me-lg-2 me-sm-4">
+									<div
+										class="search_form d-flex justify-content-center"
+									>
+										<form
+											role="search"
+											action="{% url 'shop:product_list' %}"
+											class="search d-flex align-items-center"
+										>
+											<input
+												name="q"
+												type="search"
+												aria-label="Title..."
+												placeholder="Title..."
+												class="form-control search me-2 ms-lg-3 ms-sm-0"
+												{% if request.GET.q %} value="{{ request.GET.q }}" {% endif %}
+											/>
+											<button
+												type="submit"
+												class="btn btn-success mt-1"
+											>
+												Search
+											</button>
+										</form>
+									</div>
+								</li>
+							</ul>
+							<!-- Right navbar side -->
+							<ul
+								class="navbar-nav list-group-horizontal justify-content-between align-items-center"
+							>
+								<!-- Theme toggler -->
+								<li class="nav-item me-5">
+									<div id="theme_toggler">
+										<input
+											type="checkbox"
+											id="theme_toggler_btn"
+											class="checkbox opacity-0 position-absolute"
+										/>
+										<label
+											class="label"
+											for="theme_toggler_btn"
+										>
+											<ion-icon name="sunny"></ion-icon>
+											<ion-icon name="moon"></ion-icon>
+											<div class="ball"></div>
+										</label>
+									</div>
+								</li>
+								<li class="nav-item d-flex">
+									<!-- Link to user's cart detail page -->
+									<a
+										href="{% url 'cart:detail' %}"
+										class="d-block text-decoration-none me-3 position-relative"
+									>
+										<ion-icon
+											name="cart"
+											class="pt-1"
+										></ion-icon>
+										<span
+											style="top: 5px"
+											class="position-absolute start-100 translate-middle badge rounded-pill bg-primary"
+										>
+											{{ cart|length }}
+										</span>
+									</a>
+
+									<!-- Link to customer profile page -->
+									<a
+										href="{% url 'customer:detail' %}"
+										class="d-block text-decoration-none"
+									>
+										<ion-icon
+											class="pt-1"
+											name="person-circle"
+										></ion-icon>
+									</a>
+								</li>
+							</ul>
+						</div>
+					</div>
+				</nav>
+			</header>
+
+			<!-- Full screen loader -->
+			<div
+				id="screen-loader"
+				style="z-index: 100; top: 0; left: 0"
+				class="d-none content-center h-100 w-100 position-fixed bg-dark bg-opacity-75"
+			>
+				<div
+					role="status"
+					class="spinner-border text-white"
+					style="width: 3rem; height: 3rem"
+				></div>
+			</div>
+
+			<main>
+				<div class="container-fluid">
+					<div class="row">
+						<div class="my-3 content-between">
+							<h2>{% block content_title %}{% endblock %}</h2>
+                            
+							{% block to_right_of_content_title %}{% endblock %}
+						</div>
+
+						{# Flashed messages #}
+						<div>
+						{% for message in messages %} 
+                            {% include 'utils/_alert.html' with message=message category=message.level_tag dismissible=True only %}
+						{% endfor %}
+						</div>
+					</div>
+
+					{% block advanced_content %}
+					<div
+						class="row rounded px-3 {% block content_mb_5 %}mb-5{% endblock %}"
+					>
+						<div class="panel-bg-color col-12 rounded p-3">
+							{% block content %}{% endblock %}
+						</div>
+					</div>
+					{% endblock advanced_content %}
+				</div>
+			</main>
+
+			{% block go_to_top_btn %}
+			<!-- Go to top button -->
+			<button title="Go to top" id="go-to-top-btn">
+				<ion-icon name="arrow-up-outline"></ion-icon>
+			</button>
+			{% endblock go_to_top_btn %}
+
+			<footer class="panel-bg-color pt-5 pb-4">
+				<div class="container">
+					<div class="row d-flex justify-content-between">
+						<div class="col-6 mb-3">
+							<h5>Section</h5>
+							<ul class="nav flex-column">
+								<li class="nav-item mb-2">
+									<a
+										href="/"
+										class="nav-link text-color w-25 p-0"
+									>
+										Home
+									</a>
+								</li>
+								<li class="nav-item mb-2">
+									<a
+										target="_blank"
+										class="nav-link text-color w-25 p-0"
+										href="https://itish.live"
+									>
+										Blog
+									</a>
+								</li>
+								<li class="nav-item mb-2">
+									<a
+										href="{% url 'faq' %}"
+										class="nav-link text-color w-25 p-0"
+									>
+										FAQs
+									</a>
+								</li>
+								<li class="nav-item mb-2">
+									<a
+										href="{% url 'about' %}"
+										class="nav-link text-color w-25 p-0"
+									>
+										About
+									</a>
+								</li>
+							</ul>
+						</div>
+
+						<div class="col-md-5 offset-md-1 mb-3">
+							<h5>Subscribe to our mailing</h5>
+							<p>
+								Monthly digest of what's new and exciting from
+								us.
+							</p>
+							<form
+                                method="post"
+								action="{% url 'mailing:create' %}"
+							>
+								<div
+									class="d-flex flex-column flex-sm-row w-100 gap-2"
+								>
+									{% csrf_token %} {{ mailing_form.email }}
+
+									<input
+										type="submit"
+										value="Subscribe"
+										class="loading btn btn-primary"
+									/>
+								</div>
+							</form>
+						</div>
+					</div>
+
+					<div
+						class="d-flex justify-content-between pt-4 mt-4 border-top"
+					>
+						<p>&copy; {% now 'Y' %}</p>
+						<ul class="list-unstyled d-flex">
+							<li>
+								<a
+									target="_blank"
+									href="https://www.linkedin.com/in/nikita-hubariev/"
+								>
+									<ion-icon name="logo-linkedin"></ion-icon>
+								</a>
+							</li>
+							<li class="ms-3">
+								<a
+									target="_blank"
+									href="https://github.com/Gubchik123"
+								>
+									<ion-icon name="logo-github"></ion-icon>
+								</a>
+							</li>
+							<li class="ms-3">
+								<a
+									target="_blank"
+									href="https://t.me/Gubchik123"
+								>
+									<ion-icon name="navigate-circle"></ion-icon>
+								</a>
+							</li>
+						</ul>
+					</div>
+				</div>
+			</footer>
+		</div>
+
+		<!-- Bootstrap5 script -->
+		<script
+			crossorigin="anonymous"
+			src="https://cdn.jsdelivr.net/npm/bootstrap@5.2.1/dist/js/bootstrap.bundle.min.js"
+			integrity="sha384-u1OknCvxWvY5kfmNBILK2hRnQC3Pr17a+RTT6rIHI7NnikvbZlHgTPOOmMi466C8"
+		></script>
+
+		<!-- Scripts for icons from "https://ionic.io/ionicons" -->
+		<script
+			type="module"
+			src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.esm.js"
+		></script>
+		<script
+			nomodule
+			src="https://unpkg.com/ionicons@5.5.2/dist/ionicons/ionicons.js"
+		></script>
+
+		<!-- My scripts -->
+		<script src="{% static 'js/toggle_theme.js' %} " defer></script>
+		<script src="{% static 'js/go_to_top_btn.js' %} " defer></script>
+		<script src="{% static 'js/loading_form_btn.js' %} " defer></script>
+
+		{% block scripts %}{% endblock %}
+	</body>
+</html>

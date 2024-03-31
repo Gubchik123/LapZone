@@ -1,0 +1,159 @@
+{% extends 'shop/_base.html' %} 
+{% load static %} 
+
+{% block title %}Home{% endblock %}
+{% block content_title %}Home page{% endblock %} 
+
+{% block styles %}
+<style>
+	.my-carousel .carousel-item img { max-height: 70vh; }
+
+	.white-space-nowrap { white-space: nowrap; }
+    .product__title a { white-space: normal; }
+
+    .product { min-width: 250px; }
+    @media screen and (max-width: 768px) { /* Bootstrap5 .md breakpoint */
+        .product { min-width: 200px; }
+    }
+</style>
+{% endblock styles %} 
+
+
+{% block advanced_content %}
+<div class="row px-3">
+	<div class="panel-bg-color col-12 p-0 rounded">
+		<!-- Carousel - start -->
+		<div
+			data-bs-ride="carousel"
+			id="carouselAutoplaying"
+			class="carousel my-carousel slide bg-secondary"
+		>
+			<!-- Carousel body (images) -->
+			<div class="carousel-inner">
+				{% for image in carousel_images %}
+				<div class="carousel-item" data-bs-interval="5000">
+					<a
+						class="opacity-1"
+						href="{{ image.product.get_absolute_url }}"
+					>
+						<img 
+                            class="w-100" 
+                            src="https://raw.githubusercontent.com/Gubchik123/LapZone/production{{ image.image.url }}" 
+                        />
+					</a>
+				</div>
+				{% endfor %}
+			</div>
+			<!-- Button to next image -->
+			<button
+                type="button"
+                data-bs-slide="prev"
+				class="carousel-control-prev"
+				data-bs-target="#carouselAutoplaying"
+			>
+				<span
+                    aria-hidden="true"
+					class="carousel-control-prev-icon"
+				></span>
+				<span class="visually-hidden">Previous</span>
+			</button>
+			<!-- Button to previous image -->
+			<button
+				class="carousel-control-next"
+				type="button"
+				data-bs-target="#carouselAutoplaying"
+				data-bs-slide="next"
+			>
+				<span
+					class="carousel-control-next-icon"
+					aria-hidden="true"
+				></span>
+				<span class="visually-hidden">Next</span>
+			</button>
+		</div>
+		<!-- Carousel - finish -->
+
+		<div class="px-3 pb-5">
+			<h3 class="mt-5 mb-3">Categories</h3>
+			<div class="white-space-nowrap overflow-auto">
+				<a
+					href="{% url 'shop:product_list' %}"
+					class="btn btn-dark d-inline-block border-1 border-light me-2 fs-6 px-4 py-2"
+				>
+					All products
+				</a>
+
+			{% for category in categories %}
+				<a
+					href="{{ category.get_absolute_url }}"
+					class="btn btn-dark d-inline-block border-1 border-light me-2 fs-6 px-4 py-2"
+				>
+					{{ category.name }}
+				</a>
+			{% endfor %}
+			</div>
+
+			<h3 class="mt-5 mb-3">Recently added products</h3>
+			<div
+				class="white-space-nowrap overflow-auto d-flex align-items-center"
+			>
+			{% for product in recently_added_products %}
+				<div
+					class="product d-inline-block d-flex flex-column justify-content-between rounded p-2 m-0 me-3"
+				>
+					{% include 'shop/utils/_product_card.html' with product=product liked_products=liked_products user=user cart=cart.cart only %}
+				</div>
+			{% endfor %}
+			</div>
+
+			<h3 class="mt-5 mb-3">Brands</h3>
+			<div class="white-space-nowrap overflow-auto">
+			{% for brand in brands %}
+				<a
+					href="{{ brand.get_absolute_url }}"
+					class="btn btn-dark d-inline-block border-1 border-light me-2 fs-6 px-4 py-2"
+				>
+					{{ brand.name }}
+				</a>
+			{% endfor %}
+			</div>
+
+			<h3 class="mt-5 mb-3">
+				Internet shop for selling laptops and accessories for them
+			</h3>
+			<p class="fs-5">
+				Welcome to LapZone, your one-stop-shop for laptops and
+				accessories. We offer a wide range of products to meet all your
+				computing needs. Whether you're a student, a professional, or a
+				gamer, we have something for everyone.
+			</p>
+			<p class="fs-5">
+				At LapZone, we're passionate about technology and strive to
+				provide our customers with the latest and greatest products on
+				the market. Shop with us and experience top-notch customer
+				service, fast shipping, and competitive prices.
+			</p>
+			<p class="fs-5">
+				Thank you for choosing LapZone as your go-to source for all
+				things tech.
+			</p>
+		</div>
+	</div>
+</div>
+{% endblock advanced_content %} 
+
+
+{% block scripts %} 
+{{ block.super }}
+
+<script defer>
+	// Script to add "active" class selector for first carousel item
+	let first_carousel_image = document.querySelectorAll(".carousel-item")[0];
+	first_carousel_image.classList.add("active");
+
+	// Script to replace empty links with "#" for carousel images
+	document.querySelectorAll(".carousel-item a").forEach(function (link) {
+		if (!link.href.includes("/product/")) link.href = "#";
+	});
+</script>
+{% endblock scripts %}
