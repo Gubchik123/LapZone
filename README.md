@@ -1,10 +1,10 @@
-<a href="https://lapzone.tech" target="_blank"><img title="LapZone" alt="Header image" src="./static/images/site_header.webp"></a>
+<a href="https://lapzone.store" target="_blank"><img title="LapZone" alt="Header image" src="./static/images/site_header.webp"></a>
 
 _Internet shop for selling laptops and accessories for them_
 
 ### Demo
 
-Click **<a href="https://lapzone.tech" target="_blank">here</a>** to open LapZone internet shop
+Click **<a href="https://lapzone.store" target="_blank">here</a>** to open LapZone internet shop
 
 <p><img title="Demo" alt="Demo image" src="./md_images/demo.jpg"></p>
 
